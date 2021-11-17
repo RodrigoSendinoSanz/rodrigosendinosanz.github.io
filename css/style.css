@@ -197,7 +197,7 @@ h3{
     text-transform: uppercase;
 }
 p{
-    color: #777;
+    color: #565656;
 }
 .dark p{
     color:var(--black);
