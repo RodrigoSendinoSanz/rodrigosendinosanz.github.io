@@ -684,7 +684,7 @@ p{
     }
     .navegation.active{
         left: 0;
-        width: 50%;
+        width: 100%;/*width: 50%;*/
         z-index: 1000;
     }
     .main{
