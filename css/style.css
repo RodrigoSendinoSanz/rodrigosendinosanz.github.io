@@ -686,6 +686,7 @@ p{
         left: 0;
         width: 100%;/*width: 50%;*/
         z-index: 1000;
+        scroll-margin-top: 76px;
     }
     .main{
         width: 100%;
