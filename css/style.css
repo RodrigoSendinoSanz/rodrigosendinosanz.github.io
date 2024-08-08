@@ -166,6 +166,7 @@ section{
 }
 
 .banner .content{
+    margin-top: 5rem;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -225,8 +226,7 @@ p{
 }
 
 .socialMedia{
-    position: absolute;
-    bottom: 20px;
+    position: relative;
     display: flex;
 }
 
