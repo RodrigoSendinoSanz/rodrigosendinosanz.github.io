@@ -4,9 +4,9 @@
   "display": "standalone",
   "name": "Rodrigo Sendino Sanz",
   "orientation": "any",
-  "scope": "/https://rodrigosendinosanz.github.io/",
+  "scope": "./",
   "short_name": "RSS",
-  "start_url": "/https://rodrigosendinosanz.github.io/",
+  "start_url": "./",
   "theme_color": "#000000",
   "icons": [
       {
