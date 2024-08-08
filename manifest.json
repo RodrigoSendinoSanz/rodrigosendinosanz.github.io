@@ -1,0 +1,55 @@
+{
+  "background_color": "#000000",
+  "dir": "ltr",
+  "display": "standalone",
+  "name": "Rodrigo Sendino Sanz",
+  "orientation": "any",
+  "scope": "/https://rodrigosendinosanz.github.io/",
+  "short_name": "RSS",
+  "start_url": "/https://rodrigosendinosanz.github.io/",
+  "theme_color": "#000000",
+  "icons": [
+      {
+        "src": "img/iconsphone/RSS48.png",
+        "sizes": "48x48",
+        "type": "image/png"
+      },
+      {
+        "src": "img/iconsphone/RSS72.png",
+        "sizes": "72x72",
+        "type": "image/png"
+      },
+      {
+        "src": "img/iconsphone/RSS96.png",
+        "sizes": "96x96",
+        "type": "image/png"
+      },
+      {
+        "src": "img/iconsphone/RSS144.png",
+        "sizes": "144x144",
+        "type": "image/png"
+      },
+      {
+        "src": "img/iconsphone/RSS168.png",
+        "sizes": "168x168",
+        "type": "image/png"
+      },
+      {
+        "src": "img/iconsphone/RSS192.png",
+        "sizes": "192x192",
+        "type": "image/png"
+      },
+      {
+        "src": "img/iconsphone/RSS384.png",
+        "sizes": "384x384",
+        "type": "image/png"
+      },
+      {
+        "src": "img/iconsphone/RSS512.png",
+        "sizes": "512x512",
+        "type": "image/png"
+      }
+  ],
+  "id": "id_rss",
+  "description": "Web app from Rodrigo Sendino Sanz developer"
+}
