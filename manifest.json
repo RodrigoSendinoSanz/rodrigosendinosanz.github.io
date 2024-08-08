@@ -1,9 +1,9 @@
 {
   "background_color": "#000000",
   "dir": "ltr",
-  "display": "standalone",
+  "display": "fullscreen",
   "name": "Rodrigo Sendino Sanz",
-  "orientation": "any",
+  "orientation": "portrait",
   "scope": "./",
   "short_name": "RSS",
   "start_url": "./",
