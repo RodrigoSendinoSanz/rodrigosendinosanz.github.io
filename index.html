@@ -14,7 +14,12 @@
     <link rel="stylesheet" href="./css/style.css" />
     <link rel="stylesheet" href="./css/svg.css" />
     <link rel="shortcut icon" href="./img/favicon.png" />
-    <link rel="manifest" href="/manifest.json" />
+    <link rel="manifest" href="./manifest.json" />
+    <script>
+      if ("serviceWorker" in navigator) {
+        navigator.serviceWorker.register("sw.js");
+      }
+    </script>
     <title>Rodrigo Sendino Sanz Web</title>
   </head>
   <body>
