@@ -15,7 +15,26 @@
   --white2: #fff;
 }
 
-.dark {
+
+:root {
+  --black: #333;
+  --black2: #333;
+  --white: #fff;
+  --white2: #fff;
+}
+
+/* Modo oscuro automático según la preferencia del sistema */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --black: #fff;
+    --black2: #444;
+    --white: #333;
+    --white2: #444;
+  }
+}
+
+/* Modo oscuro manual con la clase .dark */
+body.dark {
   --black: #fff;
   --black2: #444;
   --white: #333;

@@ -13,7 +13,13 @@ toggle.onclick = function () {
   navegation.classList.toggle("active");
 };
 
-// Cambiar tema
+
+// Comprobar la preferencia del sistema operativo al cargar la página
+if (window.matchMedia("(prefers-color-scheme: dark)").matches) {
+  body.classList.add("dark");
+}
+
+// Cambiar el tema manualmente con el interruptor
 themeSwitch.onclick = function () {
   body.classList.toggle("dark");
 };
