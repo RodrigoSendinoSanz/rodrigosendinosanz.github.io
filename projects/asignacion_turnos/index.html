@@ -1,0 +1,836 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Generador de Turnos de Cocina</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        .gradient-bg {
+            background: linear-gradient(135deg, #fef7ed 0%, #fef2f2 100%);
+        }
+        .gradient-orange {
+            background: linear-gradient(90deg, #f97316 0%, #dc2626 100%);
+        }
+        .gradient-red {
+            background: linear-gradient(90deg, #dc2626 0%, #f97316 100%);
+        }
+        .gradient-yellow {
+            background: linear-gradient(90deg, #eab308 0%, #f97316 100%);
+        }
+        .card-shadow {
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        }
+        .employee-card {
+            transition: all 0.2s ease-in-out;
+        }
+        .employee-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 15px -3px rgba(0, 0, 0, 0.1);
+        }
+        .btn-primary {
+            background: linear-gradient(90deg, #dc2626 0%, #f97316 100%);
+            transition: all 0.2s ease-in-out;
+        }
+        .btn-primary:hover {
+            background: linear-gradient(90deg, #b91c1c 0%, #ea580c 100%);
+            transform: translateY(-1px);
+        }
+        .role-badge-chef {
+            background-color: #fef2f2;
+            color: #991b1b;
+            border: 1px solid #fecaca;
+        }
+        .role-badge-cook {
+            background-color: #fff7ed;
+            color: #9a3412;
+            border: 1px solid #fed7aa;
+        }
+        .role-badge-assistant {
+            background-color: #fefce8;
+            color: #a16207;
+            border: 1px solid #fde68a;
+        }
+        .table-striped tbody tr:nth-child(even) {
+            background-color: #f9fafb;
+        }
+        .table-striped tbody tr:hover {
+            background-color: #f3f4f6;
+        }
+        .holiday-row {
+            background-color: #fefce8 !important;
+        }
+        .holiday-row:hover {
+            background-color: #fef3c7 !important;
+        }
+        .rule-input {
+            width: 60px;
+            display: inline-block;
+            text-align: center;
+            background-color: #fef3c7;
+            border: 2px solid #f59e0b;
+            border-radius: 6px;
+            font-weight: bold;
+            color: #92400e;
+            padding: 4px 8px;
+        }
+        .rule-input:focus {
+            outline: none;
+            border-color: #d97706;
+            box-shadow: 0 0 0 3px rgba(251, 191, 36, 0.1);
+        }
+        .rule-section {
+            background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
+            border: 1px solid #bfdbfe;
+            border-radius: 8px;
+            padding: 16px;
+            margin-bottom: 12px;
+        }
+        .role-icon-chef {
+            color: #dc2626;
+            font-size: 1.2em;
+        }
+        .role-icon-cook {
+            color: #f97316;
+            font-size: 1.2em;
+        }
+        .role-icon-assistant {
+            color: #eab308;
+            font-size: 1.2em;
+        }
+    </style>
+</head>
+<body class="gradient-bg min-h-screen">
+    <div class="container mx-auto p-6 max-w-7xl">
+        <!-- Header -->
+        <div class="text-center mb-8">
+            <div class="flex items-center justify-center gap-3 mb-4">
+                <i class="fas fa-utensils text-5xl text-red-600"></i>
+                <h1 class="text-4xl font-bold text-gray-800">Generador de Turnos de Cocina</h1>
+            </div>
+            <p class="text-gray-600 text-lg">Organiza los turnos de tu equipo de cocina de manera eficiente</p>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+            <!-- Empleados -->
+            <div class="bg-white rounded-lg card-shadow border border-orange-200">
+                <div class="gradient-orange text-white p-4 rounded-t-lg">
+                    <h2 class="text-xl font-bold flex items-center gap-2">
+                        <i class="fas fa-users"></i>
+                        Equipo de Cocina
+                    </h2>
+                </div>
+                <div class="p-6">
+                    <div id="lista-empleados" class="space-y-3 mb-4 max-h-64 overflow-y-auto">
+                        <!-- Los empleados se renderizan aquí -->
+                    </div>
+                    <div class="flex gap-2 flex-wrap">
+                        <button onclick="agregarEmpleado()" class="btn-primary text-white px-4 py-2 rounded-lg flex items-center gap-2">
+                            <i class="fas fa-plus"></i>
+                            Añadir
+                        </button>
+                        <button onclick="guardarEmpleados()" class="bg-transparent border-2 border-green-500 text-green-600 px-4 py-2 rounded-lg hover:bg-green-50 flex items-center gap-2">
+                            <i class="fas fa-save"></i>
+                            Guardar
+                        </button>
+                        <button onclick="cargarEmpleados()" class="bg-transparent border-2 border-blue-500 text-blue-600 px-4 py-2 rounded-lg hover:bg-blue-50 flex items-center gap-2">
+                            <i class="fas fa-upload"></i>
+                            Cargar
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Configuración -->
+            <div class="bg-white rounded-lg card-shadow border border-red-200">
+                <div class="gradient-red text-white p-4 rounded-t-lg">
+                    <h2 class="text-xl font-bold flex items-center gap-2">
+                        <i class="fas fa-cog"></i>
+                        Configuración
+                    </h2>
+                </div>
+                <div class="p-6 space-y-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Turnos por día</label>
+                        <select id="turnosDiarios" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-orange-500 focus:border-orange-500">
+                            <option value="2">Mañana y Tarde</option>
+                            <option value="3">Mañana, Tarde y Noche</option>
+                        </select>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Fecha inicio</label>
+                            <input type="date" id="fechaInicio" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-orange-500 focus:border-orange-500">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Fecha fin</label>
+                            <input type="date" id="fechaFin" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-orange-500 focus:border-orange-500">
+                        </div>
+                    </div>
+
+                    <div class="flex items-center space-x-2">
+                        <input type="checkbox" id="mostrarRoles" checked class="rounded border-gray-300 text-orange-600 focus:ring-orange-500">
+                        <label for="mostrarRoles" class="text-sm text-gray-700">Mostrar roles en la tabla</label>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Días Festivos -->
+        <div class="bg-white rounded-lg card-shadow border border-yellow-200 mb-6">
+            <div class="gradient-yellow text-white p-4 rounded-t-lg">
+                <h2 class="text-xl font-bold flex items-center gap-2">
+                    <i class="fas fa-calendar-alt"></i>
+                    Días Festivos
+                </h2>
+            </div>
+            <div class="p-6">
+                <div class="flex gap-3 mb-4">
+                    <input type="date" id="fecha-festivo" class="flex-1 border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-yellow-500 focus:border-yellow-500">
+                    <button onclick="agregarFestivo()" class="bg-yellow-500 hover:bg-yellow-600 text-white px-4 py-2 rounded-lg flex items-center gap-2">
+                        <i class="fas fa-plus"></i>
+                        Añadir Festivo
+                    </button>
+                </div>
+                <div id="lista-festivos" class="flex flex-wrap gap-2">
+                    <!-- Los festivos se renderizan aquí -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Reglas Configurables -->
+        <div class="bg-white rounded-lg card-shadow border border-blue-200 mb-6">
+            <div class="p-4 border-b border-gray-200">
+                <div class="flex items-center justify-between">
+                    <h2 class="text-xl font-bold flex items-center gap-2 text-blue-600">
+                        <i class="fas fa-sliders-h"></i>
+                        Reglas Configurables del Sistema
+                    </h2>
+                    <div class="flex items-center space-x-2">
+                        <input type="checkbox" id="reglasActivadas" checked class="rounded border-gray-300 text-blue-600 focus:ring-blue-500">
+                        <label for="reglasActivadas" class="text-sm text-gray-700">Aplicar reglas</label>
+                    </div>
+                </div>
+            </div>
+            <div id="reglas-content" class="p-6">
+                <!-- Regla 1: Fines de semana y festivos -->
+                <div class="rule-section">
+                    <div class="flex items-start space-x-3 mb-3">
+                        <input type="checkbox" id="regla1" checked class="mt-1 rounded border-gray-300 text-blue-600 focus:ring-blue-500">
+                        <div class="flex-1">
+                            <h3 class="font-semibold text-blue-800 mb-2 flex items-center gap-2">
+                                <i class="fas fa-calendar-week"></i>
+                                Fines de semana y festivos
+                            </h3>
+                            <div class="text-sm leading-relaxed">
+                                En turno de <strong>mañana</strong> debe haber al menos:
+                                <div class="mt-2 flex flex-wrap items-center gap-2">
+                                    <input type="number" id="regla1_chefs" value="1" min="0" max="10" class="rule-input">
+                                    <span>chef(s)/cocinero(s) y</span>
+                                    <input type="number" id="regla1_ayudantes" value="1" min="0" max="10" class="rule-input">
+                                    <span>ayudante(s)</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Regla 2: Días laborales -->
+                <div class="rule-section">
+                    <div class="flex items-start space-x-3 mb-3">
+                        <input type="checkbox" id="regla2" checked class="mt-1 rounded border-gray-300 text-blue-600 focus:ring-blue-500">
+                        <div class="flex-1">
+                            <h3 class="font-semibold text-blue-800 mb-2 flex items-center gap-2">
+                                <i class="fas fa-briefcase"></i>
+                                Días laborales
+                            </h3>
+                            <div class="text-sm leading-relaxed">
+                                El turno de <strong>mañana</strong> debe tener un chef y:
+                                <div class="mt-2 space-y-2">
+                                    <div class="flex flex-wrap items-center gap-2">
+                                        <span>• Al menos</span>
+                                        <input type="number" id="regla2_cocineros1" value="2" min="0" max="10" class="rule-input">
+                                        <span>cocinero(s) y</span>
+                                        <input type="number" id="regla2_ayudantes1" value="1" min="0" max="10" class="rule-input">
+                                        <span>ayudante(s), o</span>
+                                    </div>
+                                    <div class="flex flex-wrap items-center gap-2">
+                                        <span>• Al menos</span>
+                                        <input type="number" id="regla2_cocineros2" value="1" min="0" max="10" class="rule-input">
+                                        <span>cocinero(s) y</span>
+                                        <input type="number" id="regla2_ayudantes2" value="2" min="0" max="10" class="rule-input">
+                                        <span>ayudante(s)</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Regla 3: Turnos de tarde y noche -->
+                <div class="rule-section">
+                    <div class="flex items-start space-x-3 mb-3">
+                        <input type="checkbox" id="regla3" checked class="mt-1 rounded border-gray-300 text-blue-600 focus:ring-blue-500">
+                        <div class="flex-1">
+                            <h3 class="font-semibold text-blue-800 mb-2 flex items-center gap-2">
+                                <i class="fas fa-clock"></i>
+                                Turnos de tarde y noche
+                            </h3>
+                            <div class="text-sm leading-relaxed">
+                                <div class="flex flex-wrap items-center gap-2">
+                                    <span>Debe haber exactamente</span>
+                                    <input type="number" id="regla3_personas" value="1" min="1" max="10" class="rule-input">
+                                    <span>persona(s) por turno</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Botones de configuración de reglas -->
+                <div class="mt-4 pt-4 border-t border-gray-200">
+                    <div class="flex gap-2 flex-wrap">
+                        <button onclick="guardarReglas()" class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg flex items-center gap-2">
+                            <i class="fas fa-save"></i>
+                            Guardar Reglas
+                        </button>
+                        <button onclick="cargarReglas()" class="bg-transparent border-2 border-blue-500 text-blue-600 px-4 py-2 rounded-lg hover:bg-blue-50 flex items-center gap-2">
+                            <i class="fas fa-upload"></i>
+                            Cargar Reglas
+                        </button>
+                        <button onclick="resetearReglas()" class="bg-transparent border-2 border-gray-500 text-gray-600 px-4 py-2 rounded-lg hover:bg-gray-50 flex items-center gap-2">
+                            <i class="fas fa-undo"></i>
+                            Valores por Defecto
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Botones de acción -->
+        <div class="flex gap-4 mb-6">
+            <button onclick="generarTurnos()" class="btn-primary text-white px-6 py-3 rounded-lg text-lg flex items-center gap-2">
+                <i class="fas fa-calendar-plus"></i>
+                Generar Turnos
+            </button>
+            <button id="exportBtn" onclick="exportarTablaComoPDF()" class="bg-transparent border-2 border-gray-500 text-gray-600 px-6 py-3 rounded-lg hover:bg-gray-50 flex items-center gap-2" style="display: none;">
+                <i class="fas fa-download"></i>
+                Exportar PDF
+            </button>
+        </div>
+
+        <!-- Tabla de turnos -->
+        <div id="turnos-container" style="display: none;" class="bg-white rounded-lg card-shadow mb-6">
+            <div class="p-4 border-b border-gray-200">
+                <h2 class="text-xl font-bold text-gray-800">Turnos Generados</h2>
+            </div>
+            <div class="p-6">
+                <div class="overflow-x-auto">
+                    <table id="turnos-tabla" class="w-full border-collapse border border-gray-300 table-striped">
+                        <!-- La tabla se genera dinámicamente -->
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Resumen de reglas - ELIMINADO DE LA VISTA -->
+        <!-- <div id="resumen-reglas" class="hidden p-4 rounded-lg card-shadow">
+        </div> -->
+    </div>
+
+    <script>
+        let empleados = JSON.parse(localStorage.getItem("empleados")) || [
+            { nombre: "Chef Principal", rol: "jefe" },
+            { nombre: "Cocinero 1", rol: "cocinero" },
+            { nombre: "Cocinero 2", rol: "cocinero" },
+            { nombre: "Cocinero 3", rol: "cocinero" },
+            { nombre: "Ayudante 1", rol: "ayudante" },
+            { nombre: "Ayudante 2", rol: "ayudante" },
+            { nombre: "Ayudante 3", rol: "ayudante" }
+        ];
+
+        let fechasFestivas = [];
+
+        // Configuración por defecto de reglas
+        const reglasDefecto = {
+            regla1_chefs: 1,
+            regla1_ayudantes: 1,
+            regla2_cocineros1: 2,
+            regla2_ayudantes1: 1,
+            regla2_cocineros2: 1,
+            regla2_ayudantes2: 2,
+            regla3_personas: 1
+        };
+
+        // Event listeners
+        document.getElementById("reglasActivadas").addEventListener("change", function() {
+            const content = document.getElementById("reglas-content");
+            content.style.display = this.checked ? "block" : "none";
+        });
+
+        function getRoleIcon(rol) {
+            switch (rol) {
+                case "jefe": return '<i class="fas fa-user-tie role-icon-chef" title="Chef"></i>';
+                case "cocinero": return '<i class="fas fa-fire role-icon-cook" title="Cocinero"></i>';
+                case "ayudante": return '<i class="fas fa-hands-helping role-icon-assistant" title="Ayudante"></i>';
+                default: return '<i class="fas fa-user"></i>';
+            }
+        }
+
+        function getRoleBadgeClass(rol) {
+            switch (rol) {
+                case "jefe": return "role-badge-chef";
+                case "cocinero": return "role-badge-cook";
+                case "ayudante": return "role-badge-assistant";
+                default: return "bg-gray-100 text-gray-800 border-gray-200";
+            }
+        }
+
+        function getRoleText(rol) {
+            switch (rol) {
+                case "jefe": return "Chef";
+                case "cocinero": return "Cocinero";
+                case "ayudante": return "Ayudante";
+                default: return rol;
+            }
+        }
+
+        function agregarEmpleado() {
+            empleados.push({ nombre: "", rol: "cocinero" });
+            renderEmpleados();
+        }
+
+        function eliminarEmpleado(index) {
+            empleados.splice(index, 1);
+            renderEmpleados();
+        }
+
+        function actualizarEmpleado(index, campo, valor) {
+            empleados[index][campo] = valor;
+        }
+
+        function guardarEmpleados() {
+            localStorage.setItem("empleados", JSON.stringify(empleados));
+            mostrarNotificacion("Empleados guardados correctamente", "success");
+        }
+
+        function cargarEmpleados() {
+            const stored = localStorage.getItem("empleados");
+            if (stored) {
+                empleados = JSON.parse(stored);
+                renderEmpleados();
+                mostrarNotificacion("Empleados cargados correctamente", "success");
+            }
+        }
+
+        function guardarReglas() {
+            const reglas = {
+                regla1_chefs: parseInt(document.getElementById("regla1_chefs").value),
+                regla1_ayudantes: parseInt(document.getElementById("regla1_ayudantes").value),
+                regla2_cocineros1: parseInt(document.getElementById("regla2_cocineros1").value),
+                regla2_ayudantes1: parseInt(document.getElementById("regla2_ayudantes1").value),
+                regla2_cocineros2: parseInt(document.getElementById("regla2_cocineros2").value),
+                regla2_ayudantes2: parseInt(document.getElementById("regla2_ayudantes2").value),
+                regla3_personas: parseInt(document.getElementById("regla3_personas").value)
+            };
+            localStorage.setItem("reglasPersonalizadas", JSON.stringify(reglas));
+            mostrarNotificacion("Reglas guardadas correctamente", "success");
+        }
+
+        function cargarReglas() {
+            const stored = localStorage.getItem("reglasPersonalizadas");
+            if (stored) {
+                const reglas = JSON.parse(stored);
+                Object.keys(reglas).forEach(key => {
+                    const element = document.getElementById(key);
+                    if (element) {
+                        element.value = reglas[key];
+                    }
+                });
+                mostrarNotificacion("Reglas cargadas correctamente", "success");
+            }
+        }
+
+        function resetearReglas() {
+            Object.keys(reglasDefecto).forEach(key => {
+                const element = document.getElementById(key);
+                if (element) {
+                    element.value = reglasDefecto[key];
+                }
+            });
+            mostrarNotificacion("Reglas restablecidas a valores por defecto", "success");
+        }
+
+        function renderEmpleados() {
+            const contenedor = document.getElementById("lista-empleados");
+            contenedor.innerHTML = "";
+            
+            empleados.forEach((emp, index) => {
+                const div = document.createElement("div");
+                div.className = "employee-card flex items-center gap-3 p-3 bg-gray-50 rounded-lg";
+                div.innerHTML = `
+                    <span class="text-xl">${getRoleIcon(emp.rol)}</span>
+                    <input type="text" value="${emp.nombre}" placeholder="Nombre del empleado" 
+                           onchange="actualizarEmpleado(${index}, 'nombre', this.value)" 
+                           class="flex-1 border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-orange-500 focus:border-orange-500">
+                    <select onchange="actualizarEmpleado(${index}, 'rol', this.value)" 
+                            class="border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-orange-500 focus:border-orange-500">
+                        <option value="jefe" ${emp.rol === "jefe" ? "selected" : ""}>Chef</option>
+                        <option value="cocinero" ${emp.rol === "cocinero" ? "selected" : ""}>Cocinero</option>
+                        <option value="ayudante" ${emp.rol === "ayudante" ? "selected" : ""}>Ayudante</option>
+                    </select>
+                    <button onclick="eliminarEmpleado(${index})" 
+                            class="bg-red-500 hover:bg-red-600 text-white px-3 py-2 rounded-lg transition-colors">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                `;
+                contenedor.appendChild(div);
+            });
+        }
+
+        function agregarFestivo() {
+            const input = document.getElementById("fecha-festivo");
+            const fecha = input.value;
+            if (fecha && !fechasFestivas.includes(fecha)) {
+                fechasFestivas.push(fecha);
+                renderFestivos();
+                input.value = "";
+            }
+        }
+
+        function eliminarFestivo(index) {
+            fechasFestivas.splice(index, 1);
+            renderFestivos();
+        }
+
+        function renderFestivos() {
+            const contenedor = document.getElementById("lista-festivos");
+            contenedor.innerHTML = "";
+            
+            fechasFestivas.forEach((fecha, index) => {
+                const badge = document.createElement("span");
+                badge.className = "inline-flex items-center gap-2 bg-yellow-100 text-yellow-800 border border-yellow-300 px-3 py-1 rounded-full text-sm";
+                badge.innerHTML = `
+                    ${new Date(fecha).toLocaleDateString("es-ES")}
+                    <button onclick="eliminarFestivo(${index})" class="text-red-500 hover:text-red-700 ml-1">
+                        <i class="fas fa-times"></i>
+                    </button>
+                `;
+                contenedor.appendChild(badge);
+            });
+        }
+
+        function getRandom(arr, count) {
+            const copy = [...arr];
+            const result = [];
+            for (let i = 0; i < count && copy.length > 0; i++) {
+                const idx = Math.floor(Math.random() * copy.length);
+                result.push(copy.splice(idx, 1)[0]);
+            }
+            return result;
+        }
+
+        function obtenerConfiguracionReglas() {
+            return {
+                regla1_chefs: parseInt(document.getElementById("regla1_chefs").value) || 1,
+                regla1_ayudantes: parseInt(document.getElementById("regla1_ayudantes").value) || 1,
+                regla2_cocineros1: parseInt(document.getElementById("regla2_cocineros1").value) || 2,
+                regla2_ayudantes1: parseInt(document.getElementById("regla2_ayudantes1").value) || 1,
+                regla2_cocineros2: parseInt(document.getElementById("regla2_cocineros2").value) || 1,
+                regla2_ayudantes2: parseInt(document.getElementById("regla2_ayudantes2").value) || 2,
+                regla3_personas: parseInt(document.getElementById("regla3_personas").value) || 1
+            };
+        }
+
+        function generarTurnos() {
+            const fechaInicio = document.getElementById("fechaInicio").value;
+            const fechaFin = document.getElementById("fechaFin").value;
+            
+            if (!fechaInicio || !fechaFin) {
+                mostrarNotificacion("Por favor selecciona las fechas de inicio y fin", "error");
+                return;
+            }
+
+            const aplicarReglas = document.getElementById("reglasActivadas").checked;
+            const turnosDia = parseInt(document.getElementById("turnosDiarios").value);
+            const fechaInicioDate = new Date(fechaInicio);
+            const fechaFinDate = new Date(fechaFin);
+            const dias = Math.floor((fechaFinDate - fechaInicioDate) / (1000 * 60 * 60 * 24)) + 1;
+            
+            const jefe = empleados.find(e => e.rol === "jefe");
+            const cocineros = empleados.filter(e => e.rol === "cocinero");
+            const ayudantes = empleados.filter(e => e.rol === "ayudante");
+            const turnos = ["Mañana", "Tarde", "Noche"];
+            const festivos = fechasFestivas.map(f => new Date(f).toDateString());
+            const mostrarRoles = document.getElementById("mostrarRoles").checked;
+            const configReglas = obtenerConfiguracionReglas();
+
+            // Crear tabla
+            const tabla = document.getElementById("turnos-tabla");
+            tabla.innerHTML = "";
+            
+            // Header
+            const thead = document.createElement("thead");
+            const headerRow = document.createElement("tr");
+            headerRow.className = "bg-gray-50";
+            headerRow.innerHTML = `<th class="border border-gray-300 px-4 py-2 text-left font-semibold">Fecha</th>` + 
+                turnos.slice(0, turnosDia).map(t => `<th class="border border-gray-300 px-4 py-2 text-left font-semibold">${t}</th>`).join("");
+            thead.appendChild(headerRow);
+            tabla.appendChild(thead);
+
+            const tbody = document.createElement("tbody");
+
+            for (let i = 0; i < dias; i++) {
+                const fecha = new Date(fechaInicioDate);
+                fecha.setDate(fecha.getDate() + i);
+                const diaNombre = fecha.toLocaleDateString('es-ES', { weekday: 'long' });
+                const esFinde = diaNombre === "sábado" || diaNombre === "domingo";
+                const esFestivo = festivos.includes(fecha.toDateString());
+
+                const fila = document.createElement("tr");
+                if (esFinde || esFestivo) {
+                    fila.className = "holiday-row";
+                }
+
+                let fechaCell = `
+                    <td class="border border-gray-300 px-4 py-2 font-medium">
+                        ${diaNombre.charAt(0).toUpperCase() + diaNombre.slice(1)} ${fecha.toLocaleDateString()}
+                `;
+                
+                if (esFinde || esFestivo) {
+                    fechaCell += `<br><span class="inline-block mt-1 bg-yellow-100 text-yellow-800 border border-yellow-300 px-2 py-1 rounded-full text-xs">
+                        ${esFestivo ? "Festivo" : "Fin de semana"}
+                    </span>`;
+                }
+                fechaCell += "</td>";
+                fila.innerHTML = fechaCell;
+
+                for (let t = 0; t < turnosDia; t++) {
+                    let personal = [];
+                    const disponibles = [...cocineros, ...ayudantes];
+
+                    if (t === 0 && (esFinde || esFestivo)) {
+                        // Fin de semana o festivo - mañana (usar regla 1)
+                        const jefeOCoc = jefe ? [jefe] : cocineros;
+                        const numChefs = Math.min(configReglas.regla1_chefs, jefeOCoc.length);
+                        const numAyudantes = Math.min(configReglas.regla1_ayudantes, ayudantes.length);
+                        
+                        const chefsSeleccionados = getRandom(jefeOCoc, numChefs);
+                        const ayudantesSeleccionados = getRandom(ayudantes, numAyudantes);
+                        personal = [...chefsSeleccionados, ...ayudantesSeleccionados];
+                    } else if (t === 0) {
+                        // Día laboral - mañana (usar regla 2)
+                        const combinacion = Math.random();
+                        if (combinacion < 0.5 && cocineros.length >= configReglas.regla2_cocineros1 && ayudantes.length >= configReglas.regla2_ayudantes1) {
+                            // Opción 1: más cocineros
+                            const cocs = getRandom(cocineros, configReglas.regla2_cocineros1);
+                            const ayud = getRandom(ayudantes, configReglas.regla2_ayudantes1);
+                            personal = jefe ? [jefe, ...cocs, ...ayud] : [...cocs, ...ayud];
+                        } else if (ayudantes.length >= configReglas.regla2_ayudantes2 && cocineros.length >= configReglas.regla2_cocineros2) {
+                            // Opción 2: más ayudantes
+                            const coc = getRandom(cocineros, configReglas.regla2_cocineros2);
+                            const ayud = getRandom(ayudantes, configReglas.regla2_ayudantes2);
+                            personal = jefe ? [jefe, ...coc, ...ayud] : [...coc, ...ayud];
+                        } else {
+                            // Fallback si no hay suficiente personal
+                            personal = jefe ? [jefe] : [];
+                            if (cocineros.length > 0) personal.push(...getRandom(cocineros, 1));
+                            if (ayudantes.length > 0) personal.push(...getRandom(ayudantes, 1));
+                        }
+                    } else {
+                        // Tarde/Noche (usar regla 3)
+                        const numPersonas = Math.min(configReglas.regla3_personas, disponibles.length);
+                        personal = getRandom(disponibles, numPersonas);
+                    }
+
+                    let contenidoCelda = "";
+                    if (personal.length > 0) {
+                        contenidoCelda = personal.map(persona => {
+                            const nombre = mostrarRoles ? `${persona.nombre} (${getRoleText(persona.rol)})` : persona.nombre;
+                            return `
+                                <div class="flex items-center gap-2 mb-1">
+                                    ${getRoleIcon(persona.rol)}
+                                    <span class="text-sm">${nombre}</span>
+                                </div>
+                            `;
+                        }).join("");
+                    } else {
+                        contenidoCelda = '<span class="text-gray-400 italic">Sin asignar</span>';
+                    }
+
+                    fila.innerHTML += `<td class="border border-gray-300 px-4 py-2">${contenidoCelda}</td>`;
+                }
+
+                tbody.appendChild(fila);
+            }
+
+            tabla.appendChild(tbody);
+
+            // Mostrar tabla y botón de exportar
+            document.getElementById("turnos-container").style.display = "block";
+            document.getElementById("exportBtn").style.display = "inline-flex";
+
+            // Generar resumen de reglas SOLO EN CONSOLA
+            const resumen = testReglas(tabla, aplicarReglas, configReglas);
+            console.log("=== RESUMEN DE VALIDACIÓN DE REGLAS ===");
+            console.log(resumen);
+            console.log("=======================================");
+
+            mostrarNotificacion("Turnos generados correctamente", "success");
+        }
+
+        function testReglas(tabla, reglasActivas, configReglas) {
+            const resumen = [];
+            if (!reglasActivas) return "✅ Reglas desactivadas. No se ha evaluado el cumplimiento.";
+
+            const r1 = document.getElementById("regla1")?.checked;
+            const r2 = document.getElementById("regla2")?.checked;
+            const r3 = document.getElementById("regla3")?.checked;
+
+            for (let fila of tabla.querySelectorAll("tbody tr")) {
+                const columnas = fila.querySelectorAll("td");
+                const fechaTexto = columnas[0].innerText.split('\n')[0]; // Solo la primera línea (fecha)
+                const partes = fechaTexto.split(" ");
+                const dia = partes[0];
+                const turnosDia = Array.from(columnas).slice(1).map(td => td.innerText);
+
+                const fechaSinDia = partes.slice(1).join(" ");
+                const esFestivo = fechasFestivas.some(f => {
+                    const fechaFestiva = new Date(f).toLocaleDateString();
+                    return fechaSinDia.includes(fechaFestiva);
+                });
+
+                if (["Sábado", "Domingo"].includes(dia) || esFestivo) {
+                    if (r1 && turnosDia[0]) {
+                        // Validar regla 1
+                        const personalManiana = extraerPersonalDeTurno(turnosDia[0]);
+                        const numChefs = personalManiana.filter(p => p.rol === "jefe" || p.rol === "cocinero").length;
+                        const numAyudantes = personalManiana.filter(p => p.rol === "ayudante").length;
+                        
+                        if (numChefs < configReglas.regla1_chefs || numAyudantes < configReglas.regla1_ayudantes) {
+                            resumen.push(`❌ ${fechaTexto}: No cumple regla de fin de semana/festivo (necesita ${configReglas.regla1_chefs} chef(s) y ${configReglas.regla1_ayudantes} ayudante(s))`);
+                        }
+                    }
+                } else {
+                    if (r2 && turnosDia[0]) {
+                        // Validar regla 2
+                        const personalManiana = extraerPersonalDeTurno(turnosDia[0]);
+                        const numChefs = personalManiana.filter(p => p.rol === "jefe").length;
+                        const numCocineros = personalManiana.filter(p => p.rol === "cocinero").length;
+                        const numAyudantes = personalManiana.filter(p => p.rol === "ayudante").length;
+                        
+                        const cumpleOpcion1 = numCocineros >= configReglas.regla2_cocineros1 && numAyudantes >= configReglas.regla2_ayudantes1;
+                        const cumpleOpcion2 = numCocineros >= configReglas.regla2_cocineros2 && numAyudantes >= configReglas.regla2_ayudantes2;
+                        
+                        if (numChefs === 0) {
+                            resumen.push(`❌ ${fechaTexto}: Falta chef en turno de mañana`);
+                        }
+                        if (!cumpleOpcion1 && !cumpleOpcion2) {
+                            resumen.push(`❌ ${fechaTexto}: No cumple combinación mínima de personal en mañana`);
+                        }
+                    }
+                }
+
+                if (r3) {
+                    // Validar regla 3 para tarde y noche
+                    for (let i = 1; i < turnosDia.length; i++) {
+                        if (turnosDia[i] && turnosDia[i].trim() !== "" && !turnosDia[i].includes("Sin asignar")) {
+                            const personalTurno = extraerPersonalDeTurno(turnosDia[i]);
+                            if (personalTurno.length !== configReglas.regla3_personas) {
+                                const nombreTurno = i === 1 ? "Tarde" : "Noche";
+                                resumen.push(`❌ ${fechaTexto}: Turno de ${nombreTurno} debe tener exactamente ${configReglas.regla3_personas} persona(s)`);
+                            }
+                        }
+                    }
+                }
+            }
+
+            return resumen.length > 0
+                ? "❗ Reglas no cumplidas:\n" + resumen.join("\n")
+                : "✅ Todas las reglas seleccionadas se cumplen correctamente.";
+        }
+
+        function extraerPersonalDeTurno(textoTurno) {
+            // Función auxiliar para extraer información del personal de un turno
+            const personal = [];
+            const lineas = textoTurno.split('\n').filter(l => l.trim() !== "");
+            
+            for (let linea of lineas) {
+                if (linea.includes('(') && linea.includes(')')) {
+                    const match = linea.match(/$$([^)]+)$$/);
+                    if (match) {
+                        const rol = match[1].toLowerCase();
+                        const nombre = linea.split('(')[0].trim();
+                        personal.push({ nombre, rol });
+                    }
+                } else {
+                    // Si no hay rol explícito, intentar inferir del nombre
+                    const nombre = linea.trim();
+                    const empleado = empleados.find(e => e.nombre === nombre);
+                    if (empleado) {
+                        personal.push(empleado);
+                    }
+                }
+            }
+            
+            return personal;
+        }
+
+        // FUNCIÓN ELIMINADA - Ya no muestra resumen visual
+        // function mostrarResumenReglas(resumen) {
+        //     // Esta función ya no hace nada visualmente
+        // }
+
+        function exportarTablaComoPDF() {
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF('l', 'pt', 'a4');
+            const tabla = document.getElementById("turnos-container");
+
+            html2canvas(tabla, { scale: 2 }).then(canvas => {
+                const imgData = canvas.toDataURL("image/png");
+                const pdfWidth = doc.internal.pageSize.getWidth();
+                const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
+                
+                doc.addImage(imgData, 'PNG', 20, 40, pdfWidth - 40, pdfHeight);
+                doc.save("turnos-cocina.pdf");
+                
+                mostrarNotificacion("PDF exportado correctamente", "success");
+            });
+        }
+
+        function mostrarNotificacion(mensaje, tipo) {
+            // Crear notificación temporal
+            const notif = document.createElement("div");
+            notif.className = `fixed top-4 right-4 p-4 rounded-lg card-shadow z-50 ${
+                tipo === "success" ? "bg-green-100 text-green-800 border border-green-200" : 
+                "bg-red-100 text-red-800 border border-red-200"
+            }`;
+            notif.innerHTML = `
+                <div class="flex items-center gap-2">
+                    <i class="fas fa-${tipo === "success" ? "check-circle" : "exclamation-circle"}"></i>
+                    ${mensaje}
+                </div>
+            `;
+            
+            document.body.appendChild(notif);
+            
+            setTimeout(() => {
+                notif.remove();
+            }, 3000);
+        }
+
+        // Inicializar
+        renderEmpleados();
+        renderFestivos();
+        
+        // Cargar reglas guardadas al iniciar
+        document.addEventListener('DOMContentLoaded', function() {
+            cargarReglas();
+        });
+    </script>
+</body>
+</html>
