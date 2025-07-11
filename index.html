@@ -6,12 +6,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link
       rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css"
-      integrity="sha512-5A8nwdMOWrSz20fDsjczgUidUBR8liPYU+WymTZP1lmY9G6Oc7HlZv156XqnsgNUzTyMefFTcsFH/tnJE/+xBg=="
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+      integrity="sha512-Avb2QiuDEEvB4bZJYdft2mNjVShBftLdPG8FJ0V7irTLQ8Uo0qcPxh4Plq7G5tGm0rU+1SPhVotteLpBERwTkw=="
       crossorigin="anonymous"
       referrerpolicy="no-referrer"
     />
-    <script src="https://kit.fontawesome.com/895e73d5cd.js" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="./css/style.css" />
     <link rel="stylesheet" href="./css/svg.css" />
     <link rel="shortcut icon" href="./img/favicon.png" />
@@ -21,28 +20,31 @@
         navigator.serviceWorker.register("sw.js");
       }
     </script>
-    <title>Rodrigo Sendino Sanz Web</title>
+    <title>Rodrigo Sendino Sanz - Full Stack Developer</title>
+    <meta name="description" content="Portfolio profesional de Rodrigo Sendino Sanz - Full Stack Developer especializado en desarrollo web, Angular, Node.js y tecnologías modernas.">
   </head>
   <body>
     <div class="container">
       <div class="navegation">
         <ul>
-          <li><a href="#banner" onclick="toggleMenu();">Home</a></li>
-          <li><a href="#services" onclick="toggleMenu();">Servicios</a></li>
-          <li><a href="#project" onclick="toggleMenu();">Proyectos</a></li>
-          <li><a href="#skills" onclick="toggleMenu();">Conocimientos</a></li>
-          <li><a href="#about" onclick="toggleMenu();">Experiencia laboral</a></li>
-          <li><a href="#contact" onclick="toggleMenu();">Contacto</a></li>
+          <li><a href="#banner">Home</a></li>
+          <li><a href="#featured">Proyecto Destacado</a></li>
+          <li><a href="#services">Servicios</a></li>
+          <li><a href="#project">Proyectos</a></li>
+          <li><a href="#skills">Conocimientos</a></li>
+          <li><a href="#about">Experiencia</a></li>
+          <li><a href="#contact">Contacto</a></li>
         </ul>
         <div class="themeSwitch"></div>
       </div>
+      
       <div class="main">
         <div class="topbar">
-          <a href="#"></a>
           <div class="toggle">
             <i class="fa fa-bars"></i>
           </div>
         </div>
+        
         <!-- Banner -->
         <section class="banner" id="banner">
           <div class="content">
@@ -104,95 +106,140 @@
                 </svg>   
             </div>
             <h1>Rodrigo Sendino Sanz</h1>
-            <p>Full Stack Developer</p>
-            <a href="https://github.com/RodrigoSendinoSanz/RodrigoSendinoSanz/blob/main/CV-RodrigoSendinoSanz.pdf"  target="_blank" class="btn">Descarga mi CV</a>
+            <p>Full Stack Developer especializado en tecnologías modernas</p>
+            <div class="project-buttons">
+              <a href="https://github.com/RodrigoSendinoSanz/RodrigoSendinoSanz/blob/main/CV-RodrigoSendinoSanz.pdf" target="_blank" class="btn">Descarga mi CV</a>
+              <a href="https://rodrigosendinosanz.github.io/projects/" target="_blank" class="btn secondary">Ver Proyectos</a>
+            </div>
             <ul class="socialMedia">
               <li>
-                <a href="https://twitter.com/rodrigosendino" target="_blank"><i class="fa-brands fa-x-twitter"></i></a>
+                <a href="https://twitter.com/rodrigosendino" target="_blank" aria-label="Twitter"><i class="fab fa-x-twitter"></i></a>
               </li>
               <li>
-                <a
-                  href="https://www.linkedin.com/in/rodrigo-sendino-sanz-27a3a0100/" target="_blank"><i class="fa fa-linkedin"></i></a>
+                <a href="https://www.linkedin.com/in/rodrigo-sendino-sanz-27a3a0100/" target="_blank" aria-label="LinkedIn"><i class="fab fa-linkedin"></i></a>
               </li>
               <li>
-                <a href="https://github.com/RodrigoSendinoSanz" target="_blank"><i class="fa fa-github"></i></a>
+                <a href="https://github.com/RodrigoSendinoSanz" target="_blank" aria-label="GitHub"><i class="fab fa-github"></i></a>
               </li>
             </ul>
           </div>
         </section>
+
+        <!-- Featured Project Section -->
+        <section class="featured-project" id="featured">
+          <div class="content">
+            <div style="display: flex; align-items: center; justify-content: center; gap: 20px; margin-bottom: 20px;">
+              <img src="https://raw.githubusercontent.com/RodrigoSendinoSanz/ChefDesk/refs/heads/main/FRONTEND/public/icons/icon-96x96.png" alt="ChefDesk Icon" style="width: 60px; height: 60px; border-radius: 12px;">
+              <h3 style="margin: 0;">ChefDesk</h3>
+            </div>
+            <p>Aplicación completa de gestión gastronómica desarrollada con las últimas tecnologías</p>
+            
+            <div class="tech-stack">
+              <span class="tech-tag">Angular 19</span>
+              <span class="tech-tag">Node.js</span>
+              <span class="tech-tag">Express.js</span>
+              <span class="tech-tag">SQL</span>
+              <span class="tech-tag">Figma</span>
+              <span class="tech-tag">Aiven</span>
+              <span class="tech-tag">PWA</span>
+              <span class="tech-tag">Karma + Jasmine</span>
+              <span class="tech-tag">Cypress</span>
+              <span class="tech-tag">PDF Kit</span>
+              <span class="tech-tag">NodeMailer</span>
+              <span class="tech-tag">Bcrypt</span>
+              <span class="tech-tag">JWT</span>
+              <span class="tech-tag">Toast (ngx-sonner)</span>
+              <span class="tech-tag">FontAwesome</span>
+              <span class="tech-tag">AOS</span>
+              <span class="tech-tag">Tailwind</span>
+            </div>
+            
+            <p>Una solución integral que incluye autenticación segura, generación de PDFs, envío de emails, animaciones UI y un diseño completamente responsivo. Desplegado en Vercel y Render con base de datos en Aiven.</p>
+            
+            <div class="project-buttons">
+              <a href="https://chef-desk.vercel.app/" target="_blank" class="btn">Ver Demo</a>
+              <a href="https://github.com/RodrigoSendinoSanz/ChefDesk/" target="_blank" class="btn">Ver Código</a>
+            </div>
+          </div>
+        </section>
+        
         <!-- Services -->
         <section class="services" id="services">
           <div class="title">
             <h2>Servicios</h2>
-            <p>Estos son mis servicios</p>
+            <p>Soluciones digitales completas para tu negocio</p>
           </div>
           <div class="content">
-            <div class="serviceBox primera">
-              <img src="img/icon1.png" alt="iconodiseñoweb" />
-              <h2>Diseño web</h2>
+            <div class="serviceBox">
+              <img src="img/icon1.png" alt="Diseño web" />
+              <h2>Diseño Web</h2>
               <p>
-                Planificación, diseño, implementación y mantenimiento de sitios web. Abarcando diferentes aspectos como el diseño gráfico web, diseño de interfaz y experiencia de usuario, como la navegabilidad, interactividad, usabilidad, 
-                arquitectura de la información.
+                Diseño y desarrollo de sitios web modernos, responsivos y optimizados para SEO. 
+                Enfoque en UX/UI para maximizar la conversión y engagement de usuarios.
               </p>
             </div>
-            <div class="serviceBox segunda">
-              <img src="img/icon2.png" alt="iconodesarrolloweb" />
-              <h2>Desarrollo web</h2>
+            <div class="serviceBox">
+              <img src="img/icon2.png" alt="Desarrollo web" />
+              <h2>Desarrollo Full Stack</h2>
               <p>
-                Creación de sitios web para Internet o una intranet. Haciendo uso de tecnologías de software del lado del servidor 
-                y del cliente involucrando una combinación de procesos de base de datos con el uso de un navegador web a fin de realizar determinadas tareas o mostrar información.
+                Desarrollo completo de aplicaciones web con tecnologías modernas como Angular, React, Node.js y bases de datos SQL/NoSQL.
+                Arquitecturas escalables y mantenibles.
               </p>
             </div>
-            <div class="serviceBox tercera" >
-              <img src="img/icon3.png" alt="iconobackend" />
-              <h2>Gestión de backend</h2>
+            <div class="serviceBox">
+              <img src="img/icon3.png" alt="Backend" />
+              <h2>APIs y Backend</h2>
               <p>
-                Diseño de la lógica para que todas las acciones solicitadas en una página web sean ejecutadas de manera correcta.
-                Trabajando del lado del servidor para procesar la información recibida a través del frontend.
-                Abarcando diferentes aspectos como acciones de lógica,uso de librerías del servidor y conexión con bases de datos.
+                Desarrollo de APIs RESTful, microservicios y arquitecturas backend robustas. 
+                Integración con bases de datos, autenticación JWT y servicios en la nube.
               </p>
             </div>
-            <div class="serviceBox segunda"id="1">
-              <img src="img/icon4.png" alt="iconopublicidad" />
-              <h2>Campañas publicitarias</h2>
+            <div class="serviceBox">
+              <img src="img/icon4.png" alt="Marketing digital" />
+              <h2>Marketing Digital</h2>
               <p>
-                Diseño de estrategias ejecutadas utilizando SEO, SEM y SMO para obtener objetivos de notoriedad, ventas y comunicación de una determinada marca, usando la publicidad.
-                Con la creacion de campañas de Ads, publicidad en redes sociales, publicidad en medios de comunicación, etc.
+                Estrategias SEO/SEM, campañas en Google Ads y redes sociales. 
+                Análisis de métricas y optimización de conversiones para maximizar ROI.
               </p>
             </div>
-            <div class="serviceBox tercera" id="2">
-              <img src="img/icon5.png" alt="iconoedicionimagen" />
-              <h2>Edicion de imagen</h2>
+            <div class="serviceBox">
+              <img src="img/icon5.png" alt="Diseño gráfico" />
+              <h2>Diseño Gráfico</h2>
               <p>
-                Edición de imagenes vectoriales, editando las imagenes para que sean más legibles y que sean más atractivas.
-                Trabajando con diferentes programas de edición de imagenes, como Procreate, Illustrator, etc.
-                Elminacion de fondo, creacion de logotipos y conversion de formatos, creacion de elementos visuales.
+                Creación de identidad visual, logotipos, banners y material gráfico. 
+                Edición profesional de imágenes y contenido visual para redes sociales.
               </p>
             </div>
-            <div class="serviceBox primera" id="3">
-              <img src="img/icon6.png" alt="iconoedicionvideo" />
-              <h2>Edicion de video</h2>
+            <div class="serviceBox">
+              <img src="img/icon6.png" alt="Video" />
+              <h2>Producción Audiovisual</h2>
               <p>
-                Creación y edición de videos para diferentes formatos, como video de Youtube, video de Facebook, video de Instagram, etc.
-                Trabajando con diferentes programas de edición de videos, como SonyVegas.
-                Recortar y editar video, cambio de formato, edición de audio, edición de subtítulos.
+                Edición de video profesional, creación de contenido multimedia y 
+                producción de material promocional para diferentes plataformas digitales.
               </p>
             </div>
           </div>
         </section>
+        
         <!-- Projects -->
         <section class="project" id="project">
           <div class="title">
-            <h2>Proyectos</h2>
-            <p>
-              Estos son algunos de mis proyectos
-            </p>
+            <h2>Proyectos Destacados</h2>
+            <p>Explora mi portafolio completo de proyectos</p>
           </div>
+          
+          <!-- Mover el botón al principio y hacerlo más prominente -->
+          <div style="text-align: center; margin: 40px 0 60px 0;">
+            <a href="https://rodrigosendinosanz.github.io/projects/" target="_blank" class="btn secondary" style="font-size: 1.2em; padding: 20px 50px;">
+              Ver Todos los Proyectos
+            </a>
+            <p style="margin-top: 15px; opacity: 0.8;">Descubre más de 20 proyectos desarrollados</p>
+          </div>
+          
           <div class="content">
-            <!-- Fila1 -->
             <div class="workBx">
               <div class="imgBx">
-                <img src="img/img1.jpg" alt="codebot" />
+                <img src="img/img1.jpg" alt="C0D3_B0T" />
               </div>
               <div class="textBx">
                 <a href="https://github.com/RodrigoSendinoSanz/C0D3-B0T" target="_blank"><h3>C0D3_B0T</h3></a>
@@ -200,32 +247,31 @@
             </div>
             <div class="workBx">
               <div class="imgBx">
-                <img src="img/img2.jpg" alt="anima" />
+                <img src="img/img2.jpg" alt="ANIMA Voice Assistant" />
               </div>
               <div class="textBx">
-                <a href="https://github.com/RodrigoSendinoSanz/ANIMA_voice-assistant" target="_blank"><h3>ANIMA_voice-assistant</h3></a>
+                <a href="https://github.com/RodrigoSendinoSanz/ANIMA_voice-assistant" target="_blank"><h3>ANIMA Voice Assistant</h3></a>
               </div>
             </div>
             <div class="workBx">
               <div class="imgBx">
-                <img src="img/img3.jpg" alt="webscraping" />
+                <img src="img/img3.jpg" alt="Web Scraping" />
               </div>
               <div class="textBx">
-                <a href="https://github.com/RodrigoSendinoSanz/Web_Scraping_RodrigoSendinoSanz" target="_blank"><h3>Web scraping</h3></a>
-              </div>
-            </div>
-            <!-- Fila2 -->
-            <div class="workBx">
-              <div class="imgBx">
-                <img src="img/img4.jpg" alt="rasberry" />
-              </div>
-              <div class="textBx">
-                <a href="https://github.com/RodrigoSendinoSanz/Servidor_web_con_rasberrypi4" target="_blank"><h3>Servidor_web_con_rasberrypi4</h3></a>
+                <a href="https://github.com/RodrigoSendinoSanz/Web_Scraping_RodrigoSendinoSanz" target="_blank"><h3>Web Scraping</h3></a>
               </div>
             </div>
             <div class="workBx">
               <div class="imgBx">
-                <img src="img/img5.jpg" alt="apicoiv" />
+                <img src="img/img4.jpg" alt="Raspberry Pi Server" />
+              </div>
+              <div class="textBx">
+                <a href="https://github.com/RodrigoSendinoSanz/Servidor_web_con_rasberrypi4" target="_blank"><h3>Servidor Raspberry Pi</h3></a>
+              </div>
+            </div>
+            <div class="workBx">
+              <div class="imgBx">
+                <img src="img/img5.jpg" alt="API COVID-19" />
               </div>
               <div class="textBx">
                 <a href="https://github.com/RodrigoSendinoSanz/API_COVID-19_RodrigoSendinoSanz" target="_blank"><h3>API COVID-19</h3></a>
@@ -233,244 +279,159 @@
             </div>
             <div class="workBx">
               <div class="imgBx">
-                <img src="img/img6.jpg" alt="crudphp" />
+                <img src="img/img6.jpg" alt="CRUD PHP" />
               </div>
               <div class="textBx">
-                <a href="https://github.com/RodrigoSendinoSanz/CRUD_PHP" target="_blank"><h3>CRUD_PHP</h3></a>
-              </div>
-            </div>
-            <!-- Fila3 -->
-            <div class="workBx">
-              <div class="imgBx">
-                <img src="img/img7.jpg" alt="crudjee" />
-              </div>
-              <div class="textBx">
-                <a href="https://github.com/RodrigoSendinoSanz/CRUD_JEE" target="_blank"><h3>CRUD_JEE</h3></a>
-              </div>
-            </div>
-            <div class="workBx">
-              <div class="imgBx">
-                <img src="img/img8.jpg" alt="recursos" />
-              </div>
-              <div class="textBx">
-                <a href="https://github.com/RodrigoSendinoSanz/Recursos-Resources" target="_blank"><h3>Recursos-Resources</h3></a>
-              </div>
-            </div>
-            <div class="workBx">
-              <div class="imgBx">
-                <img src="img/img9.jpg" alt="tienda" />
-              </div>
-              <div class="textBx">
-                <a href="https://drive.google.com/file/d/15OltF5wkVrMUd-G-aWRtpTfpHcxTQu1A/view?usp=sharing" target="_blank"><h3>Freakshop</h3></a>
+                <a href="https://github.com/RodrigoSendinoSanz/CRUD_PHP" target="_blank"><h3>CRUD PHP</h3></a>
               </div>
             </div>
           </div>
         </section>
-        <!-- Conocimientos -->
+        
+        <!-- Skills -->
         <section class="skills" id="skills">
           <div class="title">
-            <h2>Conocimientos</h2>
-            <p>
-              Aqui puedes ver una lista de mis conocimientos.
-            </p>
+            <h2>Conocimientos Técnicos</h2>
+            <p>Tecnologías y herramientas que domino</p>
           </div>
           <div class="content">
-            <div class="skillsBx tercera">
-              <div class="imgBx">
-                <img src="img/skill1.png" alt="tecnologiabase" />
-              </div>
-              <h4>Tecnología base</h4>
+            <div class="skillsBx">
+              <h4><i class="fas fa-code"></i> Frontend Moderno</h4>
               <p>
-                Conocimiento en tecnología base, la que se utiliza para el desarrollo de todo el sitio web.</br>
-                <b> HTML5, CSS3, JavaScript, PHP, JAVA</b>
+                Desarrollo con las últimas tecnologías frontend incluyendo frameworks modernos y herramientas de build.
+                <br><strong>HTML5, CSS3, JavaScript ES6+, TypeScript, Angular, React, Vue.js</strong>
               </p>
             </div>
 
-            <div class="skillsBx primera">
-              <div class="imgBx">
-                <img src="img/skill2.png" alt="mean" />
-              </div>
-              <h4>M.E.A.N.</h4>
+            <div class="skillsBx">
+              <h4><i class="fas fa-server"></i> Backend & APIs</h4>
               <p>
-                Desarrollo full-stack en JavaScript, conjunto de tecnologías necesarias para el desarrollo de 
-                todas las capas de una aplicación web con JavaScript.</br>
-                <b>MongoDB, Express, Angular y Node.js.</b>
+                Desarrollo backend robusto con diferentes tecnologías y arquitecturas escalables.
+                <br><strong>Node.js, Express.js, PHP, Java, Python, APIs RESTful, GraphQL</strong>
               </p>
             </div>
 
-            <div class="skillsBx segunda">
-              <div class="imgBx">
-                <img src="img/skill3.png" alt="conocimientos" />
-              </div>
-              <h4>Conociminetos</h4>
+            <div class="skillsBx">
+              <h4><i class="fas fa-database"></i> Bases de Datos</h4>
               <p>
-                Conocimientos en el desarrollo de aplicaciones web, conocimientos en el manejo de bases de datos,
-                conocimientos en el manejo de herramientas de desarrollo:</br>
-                <b> Git, GitHub, MySQL, JEE y Bootstrap.</b>
-
+                Diseño y gestión de bases de datos relacionales y NoSQL para aplicaciones escalables.
+                <br><strong>MySQL, PostgreSQL, MongoDB, Firebase, Aiven, Supabase</strong>
               </p>
-            </div>
-            <div class="skillsBx tercera">
-              <div class="imgBx">
-                <img src="img/skill4.png" alt="frameworks" />
-              </div>
-              <h4>Frameworks</h4>
-              <p>
-                Conocimientos en el manejo de frameworks para el desarrollo de aplicaciones web y  prototipado:</br>
-                <b>Visual Studio, NetBeans,Spring, Eclipse, Sublime Text y Figma</b>
-              </p>
-              
             </div>
 
-            <div class="skillsBx primera">
-              <div class="imgBx">
-                <img src="img/skill5.png" alt="gestion" />
-              </div>
-              <h4>Gestión</h4>
+            <div class="skillsBx">
+              <h4><i class="fas fa-cloud"></i> DevOps & Cloud</h4>
               <p>
-                Conocimientos en el manejo de proyectos de gestión de proyectos web :</br>
-                <b>Subida de listings mediante Excel a Amazon,Gestión de RSS y BO en Prestashop, Creacion de campañas SEM en FacebookAds y Amazon advertising</b>
+                Despliegue y gestión de aplicaciones en la nube con herramientas modernas de CI/CD.
+                <br><strong>Vercel, Render, AWS, Docker, Git, GitHub Actions, Netlify</strong>
               </p>
             </div>
-            <div class="skillsBx segunda">
-              <div class="imgBx">
-                <img src="img/skill6.png" alt="video e imagen" />
-              </div>
-              <h4>Vídeo e imagen</h4>
+
+            <div class="skillsBx">
+              <h4><i class="fas fa-vial"></i> Testing & Quality</h4>
               <p>
-                Conocimientos en el manejo de vídeo e imagen:</br>
-                <b>Edición de videos con SonyVegas, Creación de imágenes con Procreate y Canva, Creacion de imágenes vectoriales con Adobe Illustrator</b>
+                Implementación de testing automatizado y herramientas de calidad de código.
+                <br><strong>Jest, Cypress, Karma, Jasmine, ESLint, Prettier, SonarQube</strong>
+              </p>
+            </div>
+
+            <div class="skillsBx">
+              <h4><i class="fas fa-tools"></i> Herramientas & Diseño</h4>
+              <p>
+                Uso de herramientas profesionales para diseño, prototipado y desarrollo.
+                <br><strong>Figma, Adobe Creative Suite, VS Code, Postman, Tailwind CSS</strong>
               </p>
             </div>
           </div>
         </section>
-        <!-- Work experence -->
+        
+        <!-- Experience -->
         <section class="about" id="about">
           <div class="title">
-            <h2>Experiencia laboral</h2>
+            <h2>Experiencia Profesional</h2>
+            <p>Mi trayectoria en el desarrollo web y tecnología</p>
           </div>
           <div class="content">
             <div class="textBox">
               <div class="work">
-                <b>Front Senior, Desarrollo Digital - Desarrollo Web e Innovación</b> <br>
-                <i>UNIR - UNIR - Universidad Internacional de La Rioja </i><br>
+                <h3>Front Senior - Desarrollo Digital</h3>
+                <p><strong>UNIR - Universidad Internacional de La Rioja</strong> | 2023 - Presente</p>
                 <ul>
-                    <li><strong>Diseño y desarrollo de aplicaciones web:</strong> Creación de soluciones digitales innovadoras, adaptadas a las necesidades de los usuarios y optimizadas para una experiencia fluida.</li>
-                    <li><strong>Desarrollo de plantillas de mailing personalizadas:</strong> Diseño de plantillas de correo electrónico efectivas, con enfoque en la usabilidad y conversión, utilizando las mejores prácticas de diseño responsivo.</li>
-                    <li><strong>Creación de sitios web con Webflow:</strong> Diseño y desarrollo de sitios web interactivos y visualmente atractivos, utilizando Webflow para asegurar una experiencia de usuario de alto rendimiento.</li>
-                    <li><strong>Desarrollo de landing pages con HubSpot:</strong> Creación de landing pages altamente optimizadas, diseñadas para maximizar la conversión y adaptadas a las necesidades de marketing y ventas.</li>
-                    <li><strong>Integración de APIs para funcionalidades avanzadas:</strong> Implementación de llamadas a servicios API para agregar funcionalidades dinámicas, como filtros de búsqueda avanzados y personalización en tiempo real de contenidos.</li>
-                    <li><strong>Desarrollo de módulos interactivos:</strong> Diseño y desarrollo de módulos interactivos como cards, banners y otros elementos visuales, mejorando la interactividad y la experiencia del usuario en el frontal de la web.</li>
+                  <li><strong>Desarrollo de aplicaciones web:</strong> Creación de soluciones digitales innovadoras con Angular, React y tecnologías modernas.</li>
+                  <li><strong>Plantillas de mailing personalizadas:</strong> Diseño responsivo y optimizado para conversión usando HTML/CSS avanzado.</li>
+                  <li><strong>Desarrollo con Webflow:</strong> Sitios web interactivos y visualmente atractivos con CMS personalizado.</li>
+                  <li><strong>Landing pages con HubSpot:</strong> Páginas optimizadas para marketing y ventas con integración CRM.</li>
+                  <li><strong>Integración de APIs:</strong> Desarrollo de funcionalidades avanzadas con servicios externos y APIs RESTful.</li>
+                  <li><strong>Módulos interactivos:</strong> Componentes reutilizables y sistemas de diseño escalables.</li>
                 </ul>
               </div>
-              </hr>
+              
               <div class="work">
-                <b>Gestor de E-Commerce y Redes sociales</b></br>
-                <i>ANTONIO CUELLAR - Materiales de Construcción</i></br>
+                <h3>Gestor de E-Commerce y Marketing Digital</h3>
+                <p><strong>ANTONIO CUELLAR - Materiales de Construcción</strong> | 2020 - 2023</p>
                 <ul>
-                     <li><strong>Administración y gestión de Ecommerce en Amazon:</strong> Gestión de listings y generación de informes de inventario en diversas plataformas de Amazon. (Amazon.es, Amazon.it, Amazon.de, Amazon.fr, Amazon.uk, Amazon.nl)</li>
-                     <li><strong>Creación de campañas publicitarias en Amazon Advertising:</strong> Desarrollo y gestión de campañas publicitarias en la plataforma de Amazon para mejorar la visibilidad y las ventas de productos.</li>
-                     <li><strong>Creación de campañas publicitarias para periódicos digitales y revistas:</strong> Diseño y creación de banners publicitarios para campañas en medios digitales.</li>
-                     <li><strong>Administración de Ecommerce en Prestashop:</strong> Gestión integral de la tienda online, incluyendo la actualización de productos, la optimización de la experiencia de usuario y la supervisión de las ventas.</li>
-                     <li><strong>Gestión de redes sociales:</strong> Administración de cuentas en Twitter, Facebook, Instagram y gestión de contenidos en Wordpress (Blog).</li>
-                     <li><strong>Creación de campañas publicitarias en Facebook Ads:</strong> Diseño y ejecución de campañas publicitarias en Facebook Ads, optimizando el rendimiento y la segmentación de audiencias.</li>
-                     <li><strong>Diseño y edición fotográfica y de vídeo:</strong> Creación y edición de contenido visual para diversas plataformas, incluyendo fotografía de productos y vídeos promocionales.</li>
-                     <li><strong>Creación de campañas de Email Marketing con Mailchimp:</strong> Diseño y envío de campañas de email marketing, con enfoque en la conversión y el engagement de los usuarios.</li>
-                     <li><strong>Atención a la venta:</strong> Soporte en el proceso de ventas, incluyendo la gestión de pedidos y la atención al cliente.</li>
-                     <li><strong>Atención telefónica:</strong> Soporte telefónico para clientes, resolviendo dudas y ofreciendo asistencia personalizada.</li>
-                 </ul>
+                  <li><strong>Gestión multicanal en Amazon:</strong> Administración de listings en 6 marketplaces europeos con optimización SEO.</li>
+                  <li><strong>Amazon Advertising:</strong> Creación y optimización de campañas PPC con ROI superior al 300%.</li>
+                  <li><strong>Desarrollo E-commerce:</strong> Gestión completa de tienda Prestashop con integración de sistemas de pago.</li>
+                  <li><strong>Marketing Digital:</strong> Estrategias omnicanal en redes sociales y email marketing con Mailchimp.</li>
+                  <li><strong>Facebook Ads:</strong> Campañas publicitarias segmentadas con análisis de métricas avanzado.</li>
+                  <li><strong>Producción audiovisual:</strong> Creación de contenido multimedia para diferentes plataformas.</li>
+                </ul>
               </div>
-              </hr>
+              
               <div class="study">
-                <b>Educación</b></br>
-                Ciclo Formativo de Grado Superior Desarrollo de aplicaciones WEB (2020)</br>
-                <i>Edix Educación</i></br>
-                Grado superior en Gestión de ventas y espacios comerciales (2017 - 2019)</br>
-                <i>Nuestra Señora de la Merced y San Francisco Javier</i></br>
-                Bachillerato, Diseño y artes aplicadas (2014 - 2017)</br>
-                <i>Escuela de Arte y Superior de Diseño de Burgos</i></br>
+                <h3>Formación Académica</h3>
+                <div style="margin-top: 20px;">
+                  <p><strong>Programa de Formación Permanente en Full Stack Developer</strong><br>
+                  <em>Universidad Internacional de La Rioja (UNIR)</em> | 2025</p>
+                  
+                  <p><strong>Ciclo Superior en Desarrollo de Aplicaciones Web</strong><br>
+                  <em>UNIR Formación Profesional</em> | 2020</p>
+                  
+                  <p><strong>Grado Superior en Gestión de Ventas y Espacios Comerciales</strong><br>
+                  <em>Nuestra Señora de la Merced y San Francisco Javier</em> | 2017-2019</p>
+                  
+                  <p><strong>Bachillerato en Diseño y Artes Aplicadas</strong><br>
+                  <em>Escuela de Arte y Superior de Diseño de Burgos</em> | 2014-2017</p>
+                </div>
               </div>
             </div>
             <div class="imgBx">
-              <img src="img/bg1.jpg" alt="portada" />
+              <img src="img/bg1.jpg" alt="Rodrigo Sendino Sanz" />
             </div>
           </div>
         </section>
-        <!-- Contact-->
+        
+        <!-- Contact -->
         <section class="contact" id="contact">
           <div class="title">
-            <h2>Contactemos</h2>
-            <p>
-              Contacta conmigo para cualquier duda o consulta.
-            </p>
+            <h2>Contacto</h2>
+            <p>¿Tienes un proyecto en mente? ¡Hablemos!</p>
           </div>
-          <form class="contactForm" id="contactForm" action="#banner">
+          <form class="contactForm" id="contactForm">
             <div class="row">
-              <label for="nombre">
-                <input type="text" name="name" placeholder="Nombre" required/>
-              </label>
-              <label for="apellidos">
-                <input type="text" name="surname" placeholder="Apellidos" required/>
-              </label>
+              <input type="text" name="name" placeholder="Nombre" required />
+              <input type="text" name="surname" placeholder="Apellidos" required />
             </div>
             <div class="row">
-            <label for="email">
-              <input type="email" name="email" placeholder="Email" required/>
-            </label>
-            <label for="telefono">
-              <input type="text" name="phone" placeholder="Numero de telefono"  required/>
-            </label>
+              <input type="email" name="email" placeholder="Email" required />
+              <input type="tel" name="phone" placeholder="Teléfono" required />
             </div>
             <div class="row2">
-                <textarea placeholder="Mensaje" name="message"></textarea>
+              <textarea placeholder="Cuéntame sobre tu proyecto..." name="message" required></textarea>
             </div>
             <div class="row2">
-              <input type="submit" value="Enviar" />
+              <input type="submit" value="Enviar Mensaje" style="padding-left: 20px; padding-right: 20px;" />
             </div>
           </form>
         </section>
       </div>
     </div>
+    
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <script src="/js/motionMenu.js"></script>
     <script src="https://cdn.emailjs.com/dist/email.min.js"></script>
-    <script src="/js/sendEmail.js"></script>
+    <script src="./js/motionMenu.js"></script>
+    <script src="./js/sendEmail.js"></script>
     <script src="./js/svgdraw.js"></script>
-    <script>
-    /* By Rodrigo Sendino Sanz
-                                             @@@@@@@@@@@@                                  
-                                    @@........@@@@@@@@@........@@                         
-                              @@....@@                         @@....@%                   
-                           @...@@                                   @@...@                
-                       (%..@(            @@(..............@@#           @...@             
-                     @..,@         (@...@@       @..@      .@&...@         @...@          
-                   @..@         @..@.            @..@            @@..@        @..@        
-                 @..@        @..@                @..@                @..@       @..@      
-               @..@       ,..@                   @..@                   %.@       (..%    
-              @@.....*@  /.@                     @..@                     @.@      @..@   
-                   @.@ @..@                      @..@                      @..%     @..@  
-                       @......@#                 @..@                        @.@     @..@ 
-                           @@...../@             @..@                         @.@     @..@
-                               .@......@         @..@                          ..      #.@
-                                    @......@(    @..@                          @.@     @..
-                                        @@.....(@@..@                          /.(     ...
-          @......@ @......................@ /@......@      @......................   .....
-          @......@  ......................@      @......@/ @.....................&   ,,,,,
-          @..@      #.@                          @..@@@.....(@                            
-           %.@      @.@                          @..@     @......@                        
-           @..@      @.@                         @..@         @......@*                   
-            @..       @.@                        @..@             @#.....%@               
-             @..       @.%                       @..@                 %@......            
-              @..@       @.@                     @..@                     %.@  (..@/      
-               @..@        %.@                   @..@                  %..@    @.....@    
-                 @..@        @..@                @..@                @..@       @..@      
-                   @..@         @..@@            @..@            @...@        @..@        
-                     @..@           @...@@*      @..@      @@...(@         .&..@          
-                       (*..@.             @@/............@@@            /@..,@            
-                          @@...@                                     @...@/               
-                              @@....@@                         @@....@@                   
-                                    @/.......@@@@@@@@@@@.......%@%                        
-            */
-    </script>
   </body>
 </html>
