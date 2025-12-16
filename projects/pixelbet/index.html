@@ -1,0 +1,2105 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pixel Blackjack Chip Tracker</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/png" href="../../img/logoPB.png">
+    <!-- SWEETALERT2 -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <!-- QR CODE LIBC (Generation) -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <!-- QR CODE SCANNER (html5-qrcode) -->
+    <script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
+
+    <style>
+        /* --- VARIABLES & RESET --- */
+        :root {
+            --bg-color: #0d0d12;
+            --panel-bg: #1a1a24;
+            --text-primary: #e0e0e0;
+            --text-dim: #6b6b80;
+
+            --accent-cyan: #4ff0ff;
+            --accent-red: #ff4f4f;
+            --accent-amber: #ffb84f;
+            --accent-green: #4fff86;
+            --accent-white: #ffffff;
+            --accent-black: #111111;
+
+            --font-pixel: 'VT323', monospace;
+        }
+
+        /* --- CUSTOM SCROLLBAR --- */
+        ::-webkit-scrollbar {
+            width: 12px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--bg-color);
+            border-left: 1px solid var(--panel-bg);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--panel-bg);
+            border: 1px solid var(--accent-cyan);
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--accent-cyan);
+            border-color: var(--accent-white);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-primary);
+            font-family: var(--font-pixel);
+            font-size: 20px;
+            /* height: 100vh; Removed to allow scroll */
+            min-height: 100vh;
+            overflow-y: auto;
+            /* Enable vertical scroll */
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* --- CRT OVERLAY --- */
+        .crt-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 999;
+        }
+
+        .scanlines {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to bottom, rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%);
+            background-size: 100% 4px;
+            animation: scanmove 0.3s linear infinite;
+        }
+
+        .vignette {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle, rgba(0, 0, 0, 0) 60%, rgba(0, 0, 0, 0.6) 100%);
+        }
+
+        @keyframes scanmove {
+            0% {
+                background-position: 0 0;
+            }
+
+            100% {
+                background-position: 0 4px;
+            }
+        }
+
+        /* --- LAYOUT --- */
+        .app-container {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 10px;
+            z-index: 10;
+        }
+
+        .game-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid var(--panel-bg);
+            padding-bottom: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .logo {
+            color: var(--accent-cyan);
+            text-shadow: 2px 2px 0px rgba(0, 0, 0, 0.5);
+        }
+
+        .status-indicator {
+            font-size: 1rem;
+            color: var(--accent-amber);
+        }
+
+        .status-indicator.connected {
+            color: var(--accent-green);
+        }
+
+        /* --- LOBBY --- */
+        .view {
+            display: none;
+            flex-direction: column;
+            flex: 1;
+        }
+
+        .view.active {
+            display: flex;
+        }
+
+        .lobby-controls {
+            max-width: 600px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        .input-group {
+            margin-bottom: 1rem;
+        }
+
+        .input-group label {
+            display: block;
+            color: var(--accent-cyan);
+            margin-bottom: 5px;
+        }
+
+        .input-group input,
+        textarea {
+            width: 100%;
+            background: #000;
+            border: 1px solid var(--text-primary);
+            color: var(--accent-green);
+            font-family: var(--font-pixel);
+            font-size: 1.2rem;
+            padding: 10px;
+            resize: none;
+            /* Disable resize */
+            height: 120px;
+            /* Fixed height for textareas */
+        }
+
+        .input-group input {
+            height: auto;
+            /* Inputs default height */
+        }
+
+        textarea#client-answer,
+        #client-offer,
+        textarea#host-answer {
+            margin-top: 10px;
+        }
+
+
+        .tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 1rem;
+        }
+
+        .tab-btn {
+            flex: 1;
+            padding: 10px;
+            cursor: pointer;
+            background: var(--panel-bg);
+            color: var(--text-primary);
+            border: none;
+            font-family: inherit;
+            font-size: 1.2rem;
+        }
+
+        .tab-btn.active {
+            background: var(--accent-cyan);
+            color: var(--bg-color);
+        }
+
+        .tab-panel {
+            display: none;
+            padding: 20px;
+            background: var(--panel-bg);
+        }
+
+        .tab-panel.active {
+            display: block;
+        }
+
+        .action-btn {
+            width: 100%;
+            padding: 10px;
+            margin-top: 10px;
+            cursor: pointer;
+            background: var(--accent-amber);
+            border: none;
+            font-family: inherit;
+            font-size: 1.2rem;
+        }
+
+        /* --- COMMUNITY CARDS & POT --- */
+        .players-area {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+            width: 100%;
+            padding-bottom: 250px;
+            /* Space for fixed footer */
+            overflow-y: auto;
+        }
+
+        @media (max-width: 600px) {
+            .players-area {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .table-center {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin: 20px 0;
+            gap: 15px;
+        }
+
+        .pot-display {
+            font-size: 2.5rem;
+            color: var(--accent-amber);
+            text-shadow: 0 0 10px rgba(255, 184, 79, 0.5);
+            border: 2px solid var(--accent-amber);
+            padding: 10px 30px;
+            background: #000;
+            border-radius: 50px;
+        }
+
+        .community-cards {
+            display: flex;
+            gap: 10px;
+        }
+
+        .card-slot {
+            width: 60px;
+            height: 90px;
+            border: 2px dashed var(--text-dim);
+            border-radius: 6px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 2rem;
+            color: var(--text-dim);
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .card-slot.active {
+            border: 2px solid var(--accent-cyan);
+            background: var(--accent-cyan);
+            color: black;
+            box-shadow: 0 0 10px var(--accent-cyan);
+        }
+
+        /* --- PLAYER CARDS --- */
+        .player-status {
+            font-size: 1.2rem;
+            margin-top: 5px;
+            min-height: 1.5rem;
+        }
+
+        .status-fold {
+            color: var(--text-dim);
+            text-decoration: line-through;
+        }
+
+        .status-check {
+            color: var(--accent-green);
+        }
+
+        .status-raise {
+            color: var(--accent-red);
+        }
+
+        .status-call {
+            color: var(--accent-cyan);
+        }
+
+        /* HOST CONTROLS */
+        .host-controls {
+            margin-top: 10px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 5px;
+            justify-content: center;
+            width: 100%;
+        }
+
+        .host-btn {
+            border: none;
+            padding: 8px 12px;
+            cursor: pointer;
+            font-family: inherit;
+            font-size: 1rem;
+            color: black;
+            flex: 1;
+            min-width: 120px;
+        }
+
+        /* PLAYER CONTROLS (Fixed Footer) */
+        .game-controls {
+            background: #000;
+            padding: 10px;
+            border-top: 3px solid var(--accent-cyan);
+            display: flex;
+            flex-direction: row;
+            /* Horizontal layout */
+            align-items: center;
+            justify-content: space-between;
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            z-index: 100;
+            gap: 15px;
+            box-shadow: 0 -5px 20px rgba(0, 0, 0, 0.8);
+        }
+
+        /* My Stat Box in Footer */
+        .my-stats-box {
+            background: var(--panel-bg);
+            border: 2px solid var(--accent-green);
+            padding: 10px;
+            border-radius: 8px;
+            min-width: 180px;
+            text-align: left;
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        .my-chip-total {
+            font-size: 1.5rem;
+            color: var(--accent-green);
+        }
+
+        /* CHIP BUTTONS */
+        .chip-selector {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .chip-btn {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            border: 4px dashed rgba(0, 0, 0, 0.3);
+            cursor: pointer;
+            font-family: var(--font-pixel);
+            font-weight: bold;
+            font-size: 0.8rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: black;
+            transition: transform 0.1s;
+            box-shadow: 0 4px 0 rgba(0, 0, 0, 0.5);
+            text-shadow: 1px 1px 0 rgba(255, 255, 255, 0.5);
+        }
+
+        .chip-btn:active {
+            transform: translateY(4px);
+            box-shadow: 0 0 0 rgba(0, 0, 0, 0.5);
+        }
+
+        .c1 {
+            background: #eeeeee;
+            border-color: #bbbbbb;
+        }
+
+        .c5 {
+            background: var(--accent-red);
+            border-color: #a00000;
+            color: white;
+            text-shadow: 1px 1px 0 #000;
+        }
+
+        .c10 {
+            background: var(--accent-cyan);
+            border-color: #005f73;
+            color: black;
+        }
+
+        .c25 {
+            background: var(--accent-green);
+            border-color: #008000;
+        }
+
+        .c100 {
+            background: #333333;
+            border-color: #000000;
+            color: var(--accent-amber);
+            text-shadow: 1px 1px 0 #000;
+        }
+
+        /* PLAYER CHIPS ON BOARD */
+        .chips-row {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 2px;
+            margin-top: 5px;
+            height: 25px;
+            /* Fixed height to keep layout stable */
+        }
+
+        .chip {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            border: 2px dashed rgba(0, 0, 0, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.6rem;
+            font-weight: bold;
+            color: black;
+            font-family: var(--font-pixel);
+            box-shadow: 1px 2px 0 rgba(0, 0, 0, 0.5);
+        }
+
+        .chip.white {
+            background: #eeeeee;
+            border-color: #ccc;
+        }
+
+        .chip.red {
+            background: var(--accent-red);
+            border-color: #900;
+            color: white;
+        }
+
+        .chip.blue {
+            background: var(--accent-cyan);
+            border-color: #005f73;
+        }
+
+        .chip.green {
+            background: var(--accent-green);
+            border-color: #060;
+        }
+
+        .chip.black {
+            background: #333;
+            border-color: #000;
+            color: var(--accent-amber);
+        }
+
+        /* Stack Counter styling */
+        .chip-stack-count {
+            font-family: var(--font-pixel);
+            font-size: 0.8rem;
+            color: white;
+            margin-left: 2px;
+            align-self: center;
+            text-shadow: 1px 1px 0 #000;
+        }
+
+        .action-bar {
+            display: flex;
+            gap: 10px;
+            width: 100%;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        /* --- MOBILE OPTIMIZATION --- */
+        @media (max-width: 768px) {
+            .players-area {
+                grid-template-columns: repeat(2, 1fr) !important;
+                /* Force 2 cols to override previous rules */
+                gap: 10px;
+                padding-bottom: 350px;
+                /* Increased space for tall footer */
+            }
+
+            .hand-container {
+                min-width: unset;
+                padding: 10px;
+            }
+
+            .community-cards {
+                gap: 5px;
+            }
+
+            .card-slot {
+                width: 40px;
+                height: 60px;
+                font-size: 1.5rem;
+            }
+
+            .game-controls {
+                flex-direction: column;
+                gap: 10px;
+                padding: 10px;
+            }
+
+            .my-stats-box {
+                width: 100%;
+                min-width: unset;
+                flex-direction: row;
+                align-items: center;
+                justify-content: space-between;
+                padding: 5px 10px;
+            }
+
+            .chip-selector {
+                gap: 5px;
+                justify-content: center;
+            }
+
+            .chip-btn {
+                width: 40px;
+                height: 40px;
+                font-size: 0.7rem;
+            }
+
+            .action-bar {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: 8px;
+            }
+
+            .action-btn {
+                font-size: 0.9rem;
+                padding: 10px;
+            }
+        }
+
+        .control-btn {
+            padding: 15px 10px;
+            font-size: 1.2rem;
+            cursor: pointer;
+            font-family: inherit;
+            border: none;
+            flex: 1;
+            min-width: 100px;
+            color: black;
+        }
+
+        .btn-fold {
+            background: var(--text-dim);
+            color: white;
+        }
+
+        .btn-check {
+            background: var(--accent-green);
+        }
+
+        .btn-call {
+            background: var(--accent-cyan);
+        }
+
+        .btn-raise {
+            background: var(--accent-red);
+        }
+
+        /* SWEETALERT2 PIXEL FONT OVERRIDE */
+        div:where(.swal2-container) div:where(.swal2-popup) {
+            font-family: var(--font-pixel) !important;
+            font-size: 1.2rem !important;
+        }
+
+        div:where(.swal2-container) .swal2-title {
+            font-family: var(--font-pixel) !important;
+        }
+
+        div:where(.swal2-container) .swal2-html-container {
+            font-family: var(--font-pixel) !important;
+        }
+
+        div:where(.swal2-container) .swal2-styled {
+            font-family: var(--font-pixel) !important;
+        }
+
+        /* Make confirm button text black for better readability */
+        div:where(.swal2-container) .swal2-confirm {
+            color: #000 !important;
+            font-weight: bold !important;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="crt-overlay">
+        <div class="scanlines"></div>
+        <div class="vignette"></div>
+    </div>
+
+    <main class="app-container">
+        <header class="game-header">
+            <h1 class="logo">PIXEL BET</h1>
+            <div style="display:flex; gap:10px; align-items:center;">
+                <button id="btn-exit-game" onclick="window.location.reload()" class="action-btn"
+                    style="display:none; width:auto; padding:5px 10px; font-size:1rem; background:var(--accent-red); color:white; border:1px solid white;">SALIR
+                    ✕</button>
+                <div id="connection-status" class="status-indicator">OFFLINE</div>
+            </div>
+        </header>
+
+        <!-- LOBBY -->
+        <section id="view-lobby" class="view active">
+            <div class="lobby-controls">
+                <div class="input-group">
+                    <label>NOMBRE</label>
+                    <input type="text" id="player-name-input" placeholder="Tu Nombre" maxlength="10">
+                </div>
+                <div class="tabs">
+                    <button class="tab-btn active" data-tab="host">CREAR (HOST)</button>
+                    <button class="tab-btn" data-tab="join">UNIRSE</button>
+                </div>
+                <!-- HOST -->
+                <div id="panel-host" class="tab-panel active">
+                    <div
+                        style="border:1px solid var(--accent-cyan); padding:10px; margin-bottom:15px; background:var(--bg-color)">
+                        <p style="color:var(--accent-cyan)">PASO 1: CREAR INVITACIÓN</p>
+                        <p class="instruction">Haz clic en generar y espera a que aparezca el código.</p>
+                        <button id="btn-init-host" class="action-btn"
+                            style="background:var(--accent-cyan); color:black;">GENERAR CÓDIGO DE HOST</button>
+                        <textarea id="host-offer" readonly placeholder="El código aparecerá aquí..."></textarea>
+                        <div style="display:flex; gap:5px;">
+                            <button id="btn-copy-offer" class="action-btn">COPIAR</button>
+                            <button onclick="window.app.showQR('host-offer')" class="action-btn"
+                                style="background:#fff; color:black">VER QR</button>
+                        </div>
+                    </div>
+
+                    <div style="border:1px solid var(--accent-green); padding:10px; background:var(--bg-color)">
+                        <p style="color:var(--accent-green)">PASO 2: CONFIRMAR CONEXIÓN</p>
+                        <p class="instruction">Tu amigo te enviará un código de respuesta. Pégalo aquí:</p>
+                        <textarea id="host-answer" placeholder="Pega aquí la RESPUESTA de tu amigo..."></textarea>
+                        <div style="display:flex; gap:5px;">
+                            <button id="btn-connect-host" class="action-btn"
+                                style="background:var(--accent-green); color:black;">CONECTAR JUGADOR</button>
+                            <button onclick="window.app.startQRScanner('host-answer')" class="action-btn"
+                                style="background:var(--accent-amber); color:black">ESCANEAR QR</button>
+                        </div>
+                    </div>
+                </div>
+                <!-- JOIN -->
+                <div id="panel-join" class="tab-panel">
+                    <div
+                        style="border:1px solid var(--accent-cyan); padding:10px; margin-bottom:15px; background:var(--bg-color)">
+                        <p style="color:var(--accent-cyan)">PASO 1: PEGAR INVITACIÓN</p>
+                        <p class="instruction">Pega el código que te envió el Host:</p>
+                        <textarea id="client-offer" placeholder="Pega la INVITACIÓN del host aquí..."></textarea>
+                        <div style="display:flex; gap:5px;">
+                            <button id="btn-generate-answer" class="action-btn"
+                                style="background:var(--accent-cyan); color:black;">GENERAR MI RESPUESTA</button>
+                            <button onclick="window.app.startQRScanner('client-offer')" class="action-btn"
+                                style="background:var(--accent-amber); color:black">ESCANEAR QR</button>
+                        </div>
+                    </div>
+
+                    <div style="border:1px solid var(--accent-green); padding:10px; background:var(--bg-color)">
+                        <p style="color:var(--accent-green)">PASO 2: ENVIAR AL HOST</p>
+                        <p class="instruction">Copia este código y envíaselo al Host para que lo pegue:</p>
+                        <textarea id="client-answer" readonly placeholder="Mi respuesta aparecerá aquí..."></textarea>
+                        <div style="display:flex; gap:5px;">
+                            <button id="btn-copy-answer" class="action-btn"
+                                style="background:var(--accent-green); color:black;">COPIAR</button>
+                            <button onclick="window.app.showQR('client-answer')" class="action-btn"
+                                style="background:#fff; color:black">VER QR</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- CHIP TABLE -->
+        <section id="view-game" class="view hidden">
+            <!-- HOST INVITE TOOL (Overlay) -->
+            <div id="invite-overlay" class="crt-overlay"
+                style="background:rgba(0,0,0,0.95); display:none; flex-direction:column; align-items:center; justify-content:center; padding:20px; z-index:3000; pointer-events:auto;">
+                <h2 style="color:var(--accent-cyan); margin-bottom:1rem;">INVITAR JUGADOR</h2>
+                <div
+                    style="border:1px solid var(--accent-cyan); padding:10px; width:100%; max-width:500px; background:var(--panel-bg)">
+                    <p style="color:var(--text-dim)">1. Genera código para el NUEVO jugador:</p>
+                    <button id="btn-ingame-gen" class="action-btn"
+                        style="background:var(--accent-cyan); color:black;">GENERAR CÓDIGO</button>
+                    <textarea id="ingame-offer" readonly placeholder="..." style="height:60px;"></textarea>
+                    <div style="display:flex; gap:5px;">
+                        <button id="btn-ingame-copy" class="action-btn">COPIAR</button>
+                        <button id="btn-ingame-qr" onclick="window.app.showQR('ingame-offer')" class="action-btn"
+                            style="background:#fff; color:black">VER QR</button>
+                    </div>
+
+                    <p style="color:var(--text-dim); margin-top:10px;">2. Pega su respuesta:</p>
+                    <textarea id="ingame-answer" placeholder="..." style="height:60px;"></textarea>
+                    <div style="display:flex; gap:5px;">
+                        <button id="btn-ingame-connect" class="action-btn"
+                            style="background:var(--accent-green)">CONECTAR</button>
+                        <button id="btn-ingame-scan" onclick="window.app.startQRScanner('ingame-answer')"
+                            class="action-btn" style="background:var(--accent-amber); color:black">ESCANEAR QR</button>
+                    </div>
+                </div>
+                <button id="btn-close-invite" class="action-btn"
+                    style="margin-top:20px;background:#333; width:100%; max-width:500px;">CERRAR</button>
+            </div>
+
+            <div class="game-table">
+                <!-- Center Info: Pot & Community Cards -->
+                <div class="table-center">
+                    <div style="color:var(--text-dim)">BOTE ACTUAL</div>
+                    <div id="pot-display" class="pot-display">$0</div>
+
+                    <div class="community-cards">
+                        <div id="card-1" class="card-slot">?</div>
+                        <div id="card-2" class="card-slot">?</div>
+                        <div id="card-3" class="card-slot">?</div>
+                        <div id="card-4" class="card-slot">?</div>
+                        <div id="card-5" class="card-slot">?</div>
+                    </div>
+                    <div id="phase-display" style="color:var(--accent-cyan); font-size:1.5rem;">ESPERANDO</div>
+                </div>
+
+                <div style="text-align:center; padding:10px;">
+                    <button id="btn-show-invite" class="action-btn"
+                        style="width:auto; padding:5px 20px; display:none;">+ INVITAR</button>
+                    <!-- Host Round Controls -->
+                    <div id="host-round-controls"
+                        style="display:none; margin-top:10px; gap:10px; justify-content:center;">
+                        <button id="btn-distribute-pot" onclick="window.app.hostDistributePot()" class="action-btn"
+                            style="width:auto; background:var(--accent-green); color:black; display:none;">DISTRIBUIR
+                            BOTE</button>
+                        <button id="btn-next-phase" onclick="window.app.hostNextPhase()" class="action-btn"
+                            style="width:auto; background:var(--accent-cyan); color:black">SIGUIENTE FASE >></button>
+                        <button onclick="window.app.hostResetRound()" class="action-btn"
+                            style="width:auto; background:var(--accent-red)">NUEVA MANO</button>
+                    </div>
+                </div>
+
+                <!-- Players Grid -->
+                <div class="players-area" id="players-list">
+                    <!-- Player Items injected here -->
+                </div>
+            </div>
+
+            <!-- CONTROLS FOOTER -->
+            <div class="game-controls" id="player-controls">
+
+                <!-- 1. MY INFO (Moved here) -->
+                <div id="my-player-stats" class="my-stats-box">
+                    <span style="color:var(--text-dim); font-size:0.9rem">MI JUGADOR</span>
+                    <span id="my-name-disp" style="color:white; font-weight:bold">...</span>
+                    <div id="my-chips-disp" class="my-chip-total">$0</div>
+                </div>
+
+                <!-- 2. BETTING CONTROLS -->
+                <div id="betting-ui" style="display:flex; flex-direction:column; align-items:center; flex:1;">
+
+                    <div class="chip-selector">
+                        <button class="chip-btn c1" onclick="window.app.addChip(1)">$1</button>
+                        <button class="chip-btn c5" onclick="window.app.addChip(5)">$5</button>
+                        <button class="chip-btn c10" onclick="window.app.addChip(10)">$10</button>
+                        <button class="chip-btn c25" onclick="window.app.addChip(25)">$25</button>
+                        <button class="chip-btn c100" onclick="window.app.addChip(100)">$100</button>
+                    </div>
+                </div>
+
+                <!-- 3. ACTIONS -->
+                <div style="display:flex; flex-direction:column; width:200px; gap:5px;">
+                    <div style="text-align:right; margin-bottom:5px;">
+                        <span style="color:var(--text-dim)">SUBIR: </span>
+                        <span id="my-pending-bet" style="color:var(--accent-amber); font-size:1.5rem">$0</span>
+                    </div>
+                    <div class="action-bar">
+                        <button class="control-btn btn-fold" onclick="window.app.doFold()">RETIRARSE</button>
+                        <button class="control-btn btn-check" onclick="window.app.doCheckCall()">APOSTAR /
+                            IGUALAR</button>
+                        <button class="control-btn btn-raise" onclick="window.app.doRaise()">SUBIR</button>
+                    </div>
+                    <button class="control-btn btn-clear"
+                        style="padding:5px; font-size:0.9rem; background:#333; width:100%"
+                        onclick="window.app.clearPendingBet()">X</button>
+                </div>
+            </div>
+        </section>
+        </div>
+        </section>
+
+        <!-- QR MODALS -->
+        <!-- QR MODALS -->
+        <div id="modal-qr-show" class="view hidden"
+            style="position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.9); z-index:4000; display:none; flex-direction:column; align-items:center; justify-content:center;">
+            <div style="background:white; padding:20px; border-radius:10px; text-align:center; max-width:90%;">
+                <h3 style="color:black; margin-bottom:10px; font-family:var(--font-pixel);">CÓDIGO QR</h3>
+                <div id="qr-code-container" style="display:flex; justify-content:center;"></div>
+                <p style="color:#333; margin-top:15px; font-size:1rem; line-height:1.4;">
+                    Usa <b>Google Lens</b> o tu <b>Cámara</b><br>para escanear y copiar el texto.
+                </p>
+            </div>
+            <button onclick="document.getElementById('modal-qr-show').style.display='none'" class="action-btn"
+                style="width:200px; margin-top:20px; background:var(--accent-red)">CERRAR</button>
+        </div>
+
+        <!-- QR SCANNER MODAL -->
+        <div id="modal-qr-scanner" class="view hidden"
+            style="position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.95); z-index:4000; display:none; flex-direction:column; align-items:center; justify-content:center; padding:20px;">
+            <div
+                style="background:var(--panel-bg); padding:20px; border-radius:10px; text-align:center; max-width:500px; width:100%; border:2px solid var(--accent-cyan);">
+                <h3 style="color:var(--accent-cyan); margin-bottom:10px; font-family:var(--font-pixel);">ESCANEAR QR
+                </h3>
+                <p style="color:var(--text-dim); margin-bottom:15px; font-size:0.9rem;">Apunta la cámara al código QR
+                </p>
+
+                <!-- Camera feed container -->
+                <div id="qr-reader" style="width:100%; max-width:400px; margin:0 auto;"></div>
+
+                <p id="qr-scan-status" style="color:var(--accent-amber); margin-top:10px; min-height:20px;"></p>
+            </div>
+            <button onclick="window.app.stopQRScanner()" class="action-btn"
+                style="width:200px; margin-top:20px; background:var(--accent-red)">CERRAR</button>
+        </div>
+
+    </main>
+
+    <script>
+        /**
+         * NetworkManager (Multi-Peer Edition)
+         * Supports multiple sequential connections for the Host.
+         */
+        class NetworkManager {
+            constructor() {
+                // connections: Array of { pc: RTCPeerConnection, dc: DataChannel, id: string }
+                this.peers = [];
+                this.isHost = false;
+                this.onMessage = null;
+                this.onConnectionOpen = null;
+                this.onHostDisconnect = null; // NEW callback
+
+                this.config = {
+                    iceServers: [
+                        { urls: 'stun:stun.l.google.com:19302' },
+                        { urls: 'stun:stun1.l.google.com:19302' },
+                        // Free TURN servers for better NAT traversal (PC-Mobile connections)
+                        {
+                            urls: 'turn:openrelay.metered.ca:80',
+                            username: 'openrelayproject',
+                            credential: 'openrelayproject'
+                        },
+                        {
+                            urls: 'turn:openrelay.metered.ca:443',
+                            username: 'openrelayproject',
+                            credential: 'openrelayproject'
+                        }
+                    ]
+                };
+            }
+
+            _createPeer() {
+                const pc = new RTCPeerConnection(this.config);
+                const peerObj = { pc, dc: null, id: Math.random().toString(36).substr(2, 9) };
+
+                pc.onconnectionstatechange = () => {
+                    console.log(`[${peerObj.id}] State:`, pc.connectionState);
+                };
+
+                // DETECT DISCONNECTION
+                pc.oniceconnectionstatechange = () => {
+                    console.log(`[${peerObj.id}] ICE State:`, pc.iceConnectionState);
+
+                    // Only trigger disconnect on PERMANENT failures
+                    // 'disconnected' is a TEMPORARY state during ICE negotiation and should not trigger error
+                    // 'failed' = permanent failure, connection cannot be established
+                    // 'closed' = connection was closed intentionally
+                    if (pc.iceConnectionState === 'failed' || pc.iceConnectionState === 'closed') {
+                        if (!this.isHost && this.onHostDisconnect) {
+                            this.onHostDisconnect();
+                        }
+                    }
+                };
+
+                return peerObj;
+            }
+
+            async waitForIce(pc) {
+                if (pc.iceGatheringState === 'complete') return;
+                const p = new Promise(r => {
+                    const check = () => {
+                        if (pc.iceGatheringState === 'complete') {
+                            pc.removeEventListener('icegatheringstatechange', check);
+                            r();
+                        }
+                    };
+                    pc.addEventListener('icegatheringstatechange', check);
+                });
+                // Increased timeout to 5 seconds for mobile networks
+                const t = new Promise(r => setTimeout(r, 5000));
+                return Promise.race([p, t]);
+            }
+
+            // --- HOST METHODS ---
+
+            async createHost(onSignalReady) {
+                this.isHost = true;
+
+                // Create a NEW peer for this new connection attempt
+                const peer = this._createPeer();
+                this.peers.push(peer);
+
+                // Host creates the DataChannel for this peer
+                peer.dc = peer.pc.createDataChannel("gameData");
+                this._setupDataChannel(peer.dc);
+
+                const offer = await peer.pc.createOffer();
+                await peer.pc.setLocalDescription(offer);
+
+                console.log("Waiting for ICE...");
+                await this.waitForIce(peer.pc);
+
+                onSignalReady(JSON.stringify(peer.pc.localDescription));
+            }
+
+            async finalizeHostConnection(answerSDP) {
+                // Find the most recent peer that is waiting for remote description (signalingState is 'have-local-offer')
+                // OR simply the last one added? 
+                // Serial assumption: The host follows steps 1 connection at a time.
+                const peer = this.peers.slice().reverse().find(p => p.pc.signalingState === 'have-local-offer');
+
+                if (!peer) {
+                    console.error("No pending peer connection found!");
+                    return;
+                }
+
+                const answerDesc = new RTCSessionDescription(JSON.parse(answerSDP));
+                await peer.pc.setRemoteDescription(answerDesc);
+            }
+
+            // --- CLIENT METHODS ---
+
+            async joinGame(offerSDP, onSignalReady) {
+                this.isHost = false;
+                const peer = this._createPeer();
+                this.peers = [peer]; // Client only has one connection (to Host)
+
+                peer.pc.ondatachannel = (event) => {
+                    peer.dc = event.channel;
+                    this._setupDataChannel(peer.dc);
+                };
+
+                const offerDesc = new RTCSessionDescription(JSON.parse(offerSDP));
+                await peer.pc.setRemoteDescription(offerDesc);
+
+                const answer = await peer.pc.createAnswer();
+                await peer.pc.setLocalDescription(answer);
+
+                console.log("Waiting for ICE...");
+                await this.waitForIce(peer.pc);
+
+                onSignalReady(JSON.stringify(peer.pc.localDescription));
+            }
+
+            // --- SHARED ---
+
+            shared_setupDataChannel(dc) {
+                dc.onopen = () => {
+                    console.log("✅ DataChannel OPEN - Ready to send/receive");
+                    // Trigger connection open ONLY when we can actually send data
+                    if (this.onConnectionOpen) this.onConnectionOpen(dc);
+                };
+                dc.onmessage = (event) => {
+                    console.log("📨 Message received:", event.data);
+                    const msg = JSON.parse(event.data);
+                    console.log("📨 Parsed message type:", msg.type);
+                    if (this.onMessage) this.onMessage(msg);
+                };
+            }
+
+            _setupDataChannel(dc) {
+                this.shared_setupDataChannel(dc);
+            }
+
+            send(type, payload) {
+                const msg = JSON.stringify({ type, ...payload });
+                this.peers.forEach(p => {
+                    if (p.dc && p.dc.readyState === 'open') {
+                        p.dc.send(msg);
+                    }
+                });
+            }
+        }
+
+        /**
+         * GameState - PIXEL POKER EDITION
+         * Host manages the truth.
+         */
+        class GameState {
+            constructor(networkManager, uiController) {
+                this.net = networkManager;
+                this.ui = uiController;
+
+                this.PHASES = ['PREFLOP', 'FLOP', 'TURN', 'RIVER', 'RESOLUCION'];
+
+                this.myId = Math.random().toString(36).substr(2, 9);
+                this.players = [];
+                // { id, name, chips: 550, currentBet: 0, status: 'ACTIVE'|'FOLDED'|'ALLIN', totalBetThisHand: 0 }
+
+                this.pot = 0;
+                this.phaseIndex = 0; // 0=Preflop, 1=Flop...
+
+                this.isHost = false;
+                this.pendingName = "";
+
+                this.net.onMessage = (msg) => this.handleMessage(msg);
+                this.net.onConnectionOpen = () => this.onConnected();
+                this.net.onHostDisconnect = () => this.handleHostDisconnect();
+            }
+
+            handleHostDisconnect() {
+                Swal.fire({
+                    title: '¡HOST DESCONECTADO!',
+                    text: 'El anfitrión ha cerrado la partida.',
+                    icon: 'error',
+                    background: '#1a1a24',
+                    color: '#e0e0e0',
+                    confirmButtonColor: '#ff4f4f',
+                    confirmButtonText: 'RECARGAR PÁGINA',
+                    allowOutsideClick: false,
+                    allowEscapeKey: false
+                }).then(() => {
+                    window.location.reload();
+                });
+            }
+
+            // --- SETUP ---
+            initHost(name) {
+                this.isHost = true;
+                this.addPlayer({ id: this.myId, name: name });
+                this.ui.showGame();
+                this.ui.updateLobbyStatus("ESPERANDO JUGADORES...");
+                this.ui.setHostMode(true);
+                this.broadcastState();
+            }
+
+            initClient(name) {
+                this.isHost = false;
+                this.pendingName = name;
+                this.ui.setHostMode(false);
+            }
+
+            onConnected() {
+                console.log("🔗 onConnected callback triggered. isHost:", this.isHost);
+                this.ui.updateLobbyStatus("CONECTADO");
+                if (!this.isHost) {
+                    console.log("👤 CLIENT: Sending JOIN message with name:", this.pendingName);
+                    this.net.send('JOIN', { id: this.myId, name: this.pendingName });
+                    this.ui.showGame();
+                } else {
+                    console.log("🏠 HOST: Already in game, waiting for clients");
+                }
+            }
+
+            // --- MESSAGE HANDLING ---
+            handleMessage(msg) {
+                console.log("🎮 handleMessage called. isHost:", this.isHost, "msgType:", msg.type);
+                if (this.isHost) {
+                    switch (msg.type) {
+                        case 'JOIN':
+                            console.log("🏠 HOST: Received JOIN from", msg.name, "(ID:", msg.id, ")");
+                            this.addPlayer({ id: msg.id, name: msg.name });
+                            console.log("🏠 HOST: Player added. Total players:", this.players.length);
+                            this.broadcastState();
+                            break;
+                        case 'ACTION':
+                            this.handlePlayerAction(msg.id, msg.action, msg.amount);
+                            break;
+                    }
+                } else {
+                    if (msg.type === 'STATE_UPDATE') {
+                        console.log("👤 CLIENT: Received STATE_UPDATE");
+                        this.syncState(msg.state);
+                    }
+                }
+            }
+
+            // --- CORE LOGIC (HOST) ---
+            addPlayer(data) {
+                console.log("➕ addPlayer called with:", data);
+                if (!this.players.find(p => p.id === data.id)) {
+                    // INITIAL BANKROLL: $550
+                    this.players.push({
+                        ...data,
+                        chips: 550,
+                        currentBet: 0, // Bet in the current street
+                        status: 'ACTIVE',
+                        totalBetThisHand: 0
+                    });
+                    console.log("✅ Player added successfully. Total players:", this.players.length);
+                } else {
+                    console.log("⚠️ Player already exists, skipping");
+                }
+            }
+
+            handlePlayerAction(playerId, action, amount = 0) {
+                const p = this.players.find(p => p.id === playerId);
+                if (!p) return;
+
+                if (action === 'FOLD') {
+                    p.status = 'FOLDED';
+
+                    // CHECK FOR EARLY WIN (Only 1 active player left)
+                    const activePlayers = this.players.filter(pl => pl.status !== 'FOLDED');
+                    if (activePlayers.length === 1) {
+                        const winner = activePlayers[0];
+
+                        // Collect all current bets to pot before awarding
+                        this.players.forEach(pl => {
+                            this.pot += pl.currentBet;
+                            pl.currentBet = 0;
+                        });
+
+                        // Award Pot
+                        winner.chips += this.pot;
+
+                        // Notify
+                        Swal.fire({
+                            title: `¡${winner.name} GANA!`,
+                            text: `Todos los demás se retiraron. Se lleva $${this.pot}.`,
+                            icon: 'success',
+                            background: '#1a1a24',
+                            color: '#fff',
+                            timer: 3000,
+                            showConfirmButton: false
+                        });
+
+                        this.pot = 0;
+                        this.resetRound(); // Auto-reset
+                        // broadcast handled inside resetRound
+                        return;
+                    }
+                }
+                else if (action === 'BET') {
+                    // amount is the INCREASE, not total
+                    const val = parseInt(amount);
+                    if (p.chips >= val) {
+                        p.chips -= val;
+                        p.currentBet += val;
+                        p.totalBetThisHand += val;
+                    }
+                }
+
+                this.broadcastState();
+            }
+
+            // --- HOST PHASE CONTROL ---
+            nextPhase() {
+                // 1. Enforce Betting Equality: Fold players who didn't match the highest bet
+                // (Protection: Players with 0 chips are considered ALL-IN and are not forced to fold)
+                const maxBet = Math.max(...this.players.map(p => p.currentBet), 0);
+
+                this.players.forEach(p => {
+                    if (p.status === 'ACTIVE' && p.currentBet < maxBet && p.chips > 0) {
+                        p.status = 'FOLDED';
+                    }
+                });
+
+                // 2. Collect all bets into Pot
+                this.players.forEach(p => {
+                    this.pot += p.currentBet;
+                    p.currentBet = 0;
+                });
+
+                // 3. CHECK FOR EARLY WIN (If only 1 player remains active)
+                const activePlayers = this.players.filter(pl => pl.status !== 'FOLDED');
+                if (activePlayers.length === 1) {
+                    const winner = activePlayers[0];
+                    winner.chips += this.pot;
+
+                    // Notify
+                    Swal.fire({
+                        title: `¡${winner.name} GANA!`,
+                        text: `Todos los demás se retiraron o no igualaron la apuesta. Se lleva $${this.pot}.`,
+                        icon: 'success',
+                        background: '#1a1a24',
+                        color: '#fff',
+                        timer: 4000,
+                        showConfirmButton: false
+                    });
+
+                    this.pot = 0;
+                    this.resetRound(); // Auto-reset
+                    return;
+                }
+
+                // 4. Advance Phase
+                if (this.phaseIndex < this.PHASES.length - 1) {
+                    this.phaseIndex++;
+                }
+
+                this.broadcastState();
+            }
+
+            resetRound() {
+                this.phaseIndex = 0;
+                this.pot = 0;
+
+                // Ante logic could go here if automated, but user said "Players must call ante", implies manual action?
+                // Let's stick to manual bets for now as per "Roles: Player controls bets".
+
+                this.players.forEach(p => {
+                    p.currentBet = 0;
+                    p.totalBetThisHand = 0;
+                    p.status = p.chips > 0 ? 'ACTIVE' : 'BUSTED';
+                });
+
+                this.broadcastState();
+            }
+
+            // Host manually awards pot
+            // Host manually awards pot (Single or Split)
+            distributePot(winnerIds) {
+                if (!winnerIds || winnerIds.length === 0) return;
+
+                const count = winnerIds.length;
+                const share = Math.floor(this.pot / count);
+                const remainder = this.pot % count; // Optional: Could go to first player or stay in pot.
+
+                // Distribute shares
+                winnerIds.forEach(id => {
+                    const p = this.players.find(pl => pl.id === id);
+                    if (p) {
+                        p.chips += share;
+                    }
+                });
+
+                // Handle remainder (give to first winner for simplicity, or keep?)
+                // Simple rule: Odd chip goes to the first selected.
+                if (remainder > 0) {
+                    const p = this.players.find(pl => pl.id === winnerIds[0]);
+                    if (p) p.chips += remainder;
+                }
+
+                // Reset pot VISUALLY (logic handled in next resetRound usually, but let's clear it now to show it's done)
+                this.pot = 0;
+
+                // AUTO-RESET: Start new round after distributing prizes
+                this.resetRound();
+                // resetRound already calls broadcastState, no need to call it again
+            }
+
+            // toggleWinner(id) is handled in UI local state, we just need the final call.
+
+            clearPot() {
+                this.pot = 0;
+                this.broadcastState();
+            }
+
+            // --- STATE SYNC ---
+            broadcastState() {
+                console.log("Broadcasting State", this.players);
+                const state = {
+                    players: this.players,
+                    pot: this.pot,
+                    phaseIndex: this.phaseIndex,
+                    phaseName: this.PHASES[this.phaseIndex]
+                };
+
+                // Local UI update for Host
+                this.ui.render({ ...state, isHost: this.isHost }, this.myId);
+
+                // Send to clients
+                this.net.send('STATE_UPDATE', { state });
+            }
+
+            syncState(state) {
+                this.players = state.players;
+                this.pot = state.pot;
+                this.phaseIndex = state.phaseIndex;
+                this.ui.render({ ...state, isHost: this.isHost }, this.myId);
+            }
+            // --- CLIENT ACTIONS ---
+            sendAction(action, amount = 0) {
+                if (this.isHost) {
+                    this.handlePlayerAction(this.myId, action, amount);
+                } else {
+                    this.net.send('ACTION', { id: this.myId, action, amount });
+                }
+            }
+
+            // --- SYNC ---
+            // (Replaces old broadcastState/syncState with nothing, as they are already defined above correctly)
+        }
+
+
+        /**
+         * App Controller - Chip Tracker Edition
+         */
+
+        // --- GLOBAL APP API for Button Clicks (onclick in HTML) ---
+        // Defined OUTSIDE DOMContentLoaded to ensure availability
+        window.app = {
+            localBet: 0,
+
+            // --- CHIP SELECTOR (Client) ---
+            addChip: function (val) {
+                this.localBet += val;
+                this.updateUI();
+            },
+            clearPendingBet: function () {
+                this.localBet = 0;
+                this.updateUI();
+            },
+
+            // --- GAME ACTIONS (Client) ---
+            doFold: function () {
+                if (window.game) window.game.sendAction('FOLD');
+            },
+            doCheckCall: function () {
+                if (window.game) {
+                    let amount = this.localBet;
+
+                    // Auto-Match logic if no chips selected
+                    if (amount === 0) {
+                        const state = window.game;
+                        const players = state.players;
+                        const myId = state.myId;
+
+                        const me = players.find(p => p.id === myId);
+                        if (me) {
+                            const maxBet = Math.max(...players.map(p => p.currentBet));
+                            const diff = maxBet - me.currentBet;
+                            if (diff > 0) amount = diff;
+                        }
+                    }
+
+                    window.game.sendAction('BET', amount);
+                    this.localBet = 0;
+                    this.updateUI();
+                }
+            },
+            doRaise: function () {
+                if (window.game) {
+                    const added = this.localBet;
+                    if (added <= 0) {
+                        return window.app.msg("Error", "Selecciona fichas para subir la apuesta.", "warning");
+                    }
+
+                    const state = window.game;
+                    const me = state.players.find(p => p.id === state.myId);
+                    let callAmt = 0;
+
+                    if (me) {
+                        const maxBet = Math.max(...state.players.map(p => p.currentBet));
+                        const diff = maxBet - me.currentBet;
+                        if (diff > 0) callAmt = diff;
+                    }
+
+                    // Raise means we match the call AND add the selected chips
+                    const totalToSend = callAmt + added;
+
+                    window.game.sendAction('BET', totalToSend);
+                    this.localBet = 0;
+                    this.updateUI();
+
+                    // Specific toast for raise
+                    if (callAmt > 0) {
+                        window.app.msg("Subida", `Has igualado $${callAmt} y subido $${added}.`, "success");
+                    }
+                }
+            },
+
+            // --- HOST ACTIONS ---
+            hostNextPhase: function () {
+                if (window.game) window.game.nextPhase();
+            },
+            hostResetRound: function () {
+                Swal.fire({
+                    title: '¿Nueva Mano?',
+                    text: "Esto reseteará el bote y las apuestas de la ronda.",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    background: '#1a1a24',
+                    color: '#e0e0e0',
+                    confirmButtonColor: '#4ff0ff',
+                    cancelButtonColor: '#ff4f4f',
+                    confirmButtonText: 'SÍ, RESETEAR',
+                    cancelButtonText: 'CANCELAR'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        window.game.resetRound();
+                    }
+                });
+            },
+
+            // Local state for selecting winners
+            selectedWinners: [],
+
+            toggleWinnerSelection: function (id) {
+                const idx = this.selectedWinners.indexOf(id);
+                if (idx === -1) this.selectedWinners.push(id);
+                else this.selectedWinners.splice(idx, 1);
+
+                // Re-render UI to show selection (we invoke global render or just update class?)
+                // Full render is safest to keep sync, but might flicker. 
+                // Let's just update the specific checkbox visual if possible, or re-render.
+                // Actually relying on UIController to render "checked" state based on window.app.selectedWinners is better.
+                if (window.game) window.game.ui.render(window.game, window.game.myId);
+            },
+
+            hostDistributePot: function () {
+                // Modal based selection
+                const players = window.game.players;
+                const potAmount = window.game.pot;
+
+                // Generate enhanced checkbox HTML with better styling
+                let html = `
+                    <div style="margin-bottom:15px; padding:10px; background:rgba(79,255,134,0.1); border-radius:5px;">
+                        <p style="color:var(--accent-amber); font-size:1.3rem; margin:0;">
+                            💰 BOTE: <b>$${potAmount}</b>
+                        </p>
+                    </div>
+                    <div style="text-align:left; max-height:300px; overflow-y:auto; padding:5px;">
+                `;
+
+                players.forEach(p => {
+                    const isFolded = p.status === 'FOLDED';
+                    const bgColor = isFolded ? 'rgba(255,255,255,0.03)' : 'rgba(79,255,134,0.1)';
+                    const borderColor = isFolded ? '#333' : 'var(--accent-green)';
+                    const opacity = isFolded ? '0.5' : '1';
+
+                    html += `
+                        <div style="margin:8px 0; padding:10px; background:${bgColor}; border:1px solid ${borderColor}; border-radius:5px; opacity:${opacity}; transition:all 0.2s;">
+                            <label for="winner-${p.id}" style="display:flex; align-items:center; gap:10px; cursor:pointer; font-size:1.1rem;">
+                                <input type="checkbox" id="winner-${p.id}" value="${p.id}" ${!isFolded ? 'checked' : ''} 
+                                    style="width:20px; height:20px; cursor:pointer; accent-color:var(--accent-green);">
+                                <span style="flex:1;">
+                                    <b>${p.name}</b>
+                                    <span style="color:var(--accent-amber); margin-left:10px;">$${p.chips}</span>
+                                </span>
+                            </label>
+                        </div>
+                    `;
+                });
+                html += '</div>';
+
+                Swal.fire({
+                    title: '🏆 Seleccionar Ganadores',
+                    html: html,
+                    icon: 'question',
+                    showCancelButton: true,
+                    background: '#1a1a24',
+                    color: '#e0e0e0',
+                    confirmButtonColor: '#4fff86',
+                    cancelButtonColor: '#ff4f4f',
+                    confirmButtonText: '<span style="color:#000; font-weight:bold;">DISTRIBUIR BOTE</span>',
+                    cancelButtonText: 'CANCELAR',
+                    customClass: {
+                        confirmButton: 'swal2-confirm-custom',
+                        popup: 'swal2-popup-custom'
+                    },
+                    width: '500px',
+                    preConfirm: () => {
+                        const selected = [];
+                        players.forEach(p => {
+                            const cb = document.getElementById(`winner-${p.id}`);
+                            if (cb && cb.checked) selected.push(p.id);
+                        });
+                        if (selected.length === 0) {
+                            Swal.showValidationMessage('⚠️ Selecciona al menos un jugador');
+
+                        }
+                        return selected;
+                    }
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        window.game.distributePot(result.value);
+                    }
+                });
+            },
+
+            // --- GLOBAL HELPERS FOR SWEETALERT ---
+            msg: function (title, text, icon = 'success') {
+                Swal.fire({
+                    title: title,
+                    text: text,
+                    icon: icon,
+                    background: '#1a1a24',
+                    color: '#e0e0e0',
+                    confirmButtonColor: '#4ff0ff',
+                    confirmButtonText: 'OK'
+                });
+            },
+
+            updateUI: function () {
+                const pendEl = document.getElementById('my-pending-bet');
+                if (pendEl) {
+                    if (this.localBet > 0) pendEl.innerText = `$${this.localBet}`;
+                    else pendEl.innerText = '$0';
+                }
+
+                // Check for Bankruptcy ($0 chips)
+                if (window.game) {
+                    const me = window.game.players.find(p => p.id === window.game.myId);
+                    if (me && me.chips === 0) {
+                        this.disableControls(true);
+                    } else {
+                        this.disableControls(false);
+                    }
+                }
+            },
+
+            disableControls: function (disable) {
+                const btns = document.querySelectorAll('.chip-btn, .control-btn');
+                const actionDiv = document.querySelector('.action-bar');
+
+                btns.forEach(b => {
+                    b.disabled = disable;
+                    b.style.opacity = disable ? '0.3' : '1';
+                    b.style.pointerEvents = disable ? 'none' : 'auto';
+                });
+
+                if (actionDiv) {
+                    actionDiv.style.opacity = disable ? '0.5' : '1';
+                }
+            },
+
+            // Helper to check if a player is bankrupt
+            checkBankruptcy: function (player) {
+                return player && player.chips === 0;
+            },
+
+            // --- QR CODE LOGIC ---
+            qrScanner: null,
+            scanTargetId: null,
+
+            showQR: function (sourceId) {
+                const text = document.getElementById(sourceId).value;
+                if (!text) return this.msg("Error", "No hay código para mostrar.", "error");
+
+                // Show Modal
+                document.getElementById('modal-qr-show').style.display = 'flex';
+                document.getElementById('qr-code-container').innerHTML = ""; // Clear previous
+
+                try {
+                    new QRCode(document.getElementById("qr-code-container"), {
+                        text: text,
+                        width: 256,
+                        height: 256,
+                        correctLevel: QRCode.CorrectLevel.L
+                    });
+                } catch (e) {
+                    console.error(e);
+                    this.msg("Error", "El código es demasiado largo para un QR estándar. Intenta copiar/pegar.", "error");
+                }
+            },
+
+            // --- QR SCANNER LOGIC ---
+            startQRScanner: function (targetFieldId) {
+                this.scanTargetId = targetFieldId;
+                const modal = document.getElementById('modal-qr-scanner');
+                const statusEl = document.getElementById('qr-scan-status');
+
+                modal.style.display = 'flex';
+                statusEl.textContent = 'Iniciando cámara...';
+
+                // Initialize scanner if not already created
+                if (!this.qrScanner) {
+                    this.qrScanner = new Html5Qrcode("qr-reader");
+                }
+
+                const config = {
+                    fps: 10,
+                    qrbox: { width: 250, height: 250 },
+                    aspectRatio: 1.0
+                };
+
+                this.qrScanner.start(
+                    { facingMode: "environment" }, // Use back camera on mobile
+                    config,
+                    (decodedText) => {
+                        // Success! Scanned a QR code
+                        console.log("📷 QR Scanned:", decodedText);
+                        statusEl.textContent = '✅ ¡Código escaneado!';
+
+                        // Auto-paste into target field
+                        document.getElementById(this.scanTargetId).value = decodedText;
+
+                        // Stop scanner and close modal
+                        this.stopQRScanner();
+
+                        this.msg("¡Éxito!", "Código QR escaneado y pegado automáticamente.", "success");
+                    },
+                    (errorMessage) => {
+                        // Scanning in progress, no QR found yet - this is normal
+                        // Don't show anything, just keep scanning
+                    }
+                ).catch((err) => {
+                    // Camera access denied or error
+                    console.error("QR Scanner error:", err);
+                    statusEl.textContent = '❌ Error al acceder a la cámara';
+                    this.msg("Error de Cámara",
+                        "No se pudo acceder a la cámara. Verifica los permisos del navegador.",
+                        "error");
+                    modal.style.display = 'none';
+                });
+            },
+
+            stopQRScanner: function () {
+                if (this.qrScanner && this.qrScanner.isScanning) {
+                    this.qrScanner.stop().then(() => {
+                        console.log("📷 Scanner stopped");
+                        document.getElementById('modal-qr-scanner').style.display = 'none';
+                        document.getElementById('qr-scan-status').textContent = '';
+                    }).catch((err) => {
+                        console.error("Error stopping scanner:", err);
+                        document.getElementById('modal-qr-scanner').style.display = 'none';
+                    });
+                } else {
+                    document.getElementById('modal-qr-scanner').style.display = 'none';
+                }
+            },
+        };
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const net = new NetworkManager();
+            const ui = new UIController();
+            const game = new GameState(net, ui);
+            // Expose game globally so window.app can use it
+            window.game = game;
+
+            // --- DOM REFERENCES ---
+            const d = {
+                lobby: document.getElementById('view-lobby'),
+                game: document.getElementById('view-game'),
+                name: document.getElementById('player-name-input'),
+                hostTab: document.querySelector('button[data-tab="host"]'),
+                joinTab: document.querySelector('button[data-tab="join"]'),
+                hostPanel: document.getElementById('panel-host'),
+                joinPanel: document.getElementById('panel-join'),
+
+                btnInitHost: document.getElementById('btn-init-host'), // NEW
+                hostOffer: document.getElementById('host-offer'),
+                hostAnswer: document.getElementById('host-answer'),
+                btnCopyOffer: document.getElementById('btn-copy-offer'),
+                btnConnectHost: document.getElementById('btn-connect-host'),
+
+                btnShowInvite: document.getElementById('btn-show-invite'),
+                inviteOverlay: document.getElementById('invite-overlay'),
+                btnIngameGen: document.getElementById('btn-ingame-gen'),
+                ingameOffer: document.getElementById('ingame-offer'),
+                btnIngameCopy: document.getElementById('btn-ingame-copy'),
+                ingameAnswer: document.getElementById('ingame-answer'),
+                btnIngameConnect: document.getElementById('btn-ingame-connect'),
+                btnCloseInvite: document.getElementById('btn-close-invite'),
+
+                clientOffer: document.getElementById('client-offer'),
+                clientAnswer: document.getElementById('client-answer'),
+                btnGenAnswer: document.getElementById('btn-generate-answer'),
+                btnCopyAnswer: document.getElementById('btn-copy-answer'),
+
+                betDisplay: document.getElementById('my-pending-bet') // UPDATED ID
+            };
+
+            // ... (Global API) ...
+            // DO NOT REMOVE window.app
+
+            function updateLocalBetUI() {
+                d.betDisplay.textContent = localBetAccumulator;
+            }
+
+            // --- LOBBY EVENTS ---
+            d.hostTab.addEventListener('click', () => tab('host'));
+            d.joinTab.addEventListener('click', () => tab('join'));
+
+            function tab(t) {
+                document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+                document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+                if (t === 'host') {
+                    d.hostPanel.classList.add('active');
+                    d.hostTab.classList.add('active');
+                    // initHost(); // REMOVED auto-call
+                } else {
+                    d.joinPanel.classList.add('active');
+                    d.joinTab.classList.add('active');
+                }
+            }
+
+            // NEW: Manual Trigger Lobby
+            d.btnInitHost.addEventListener('click', async () => {
+                d.hostOffer.value = "Generando código... Por favor espera...";
+                await net.createHost((offer) => {
+                    d.hostOffer.value = offer;
+                });
+            });
+
+            d.btnCopyOffer.addEventListener('click', () => {
+                navigator.clipboard.writeText(d.hostOffer.value);
+                window.app.msg("¡Copiado!", "Código corrupto en portapapeles", "success");
+            });
+
+            d.btnConnectHost.addEventListener('click', () => {
+                const answer = d.hostAnswer.value;
+                if (!answer) return window.app.msg("Falta Respuesta", "Pega la respuesta del jugador invitado", "error");
+
+                // Start Game State NOW
+                const name = d.name.value || "HOST";
+                game.initHost(name);
+
+                net.finalizeHostConnection(answer);
+            });
+
+            // --- INVITE OVERLAY EVENTS ---
+            if (d.btnShowInvite && d.inviteOverlay) {
+                d.btnShowInvite.addEventListener('click', () => {
+                    d.inviteOverlay.style.display = 'flex';
+                });
+                d.btnCloseInvite.addEventListener('click', () => {
+                    d.inviteOverlay.style.display = 'none';
+                });
+            }
+
+            if (!d.btnIngameGen) console.error("CRITICAL: btn-ingame-gen not found in DOM!");
+            else {
+                d.btnIngameGen.addEventListener('click', async () => {
+                    console.log("CLICK: In-Game Gen");
+                    // alert("Generando código..."); // Debug feedback
+                    d.ingameOffer.value = "Generando... Espera...";
+
+                    try {
+                        await net.createHost((offer) => {
+                            console.log("Offer Generated:", offer);
+                            d.ingameOffer.value = offer;
+                        });
+                    } catch (e) {
+                        console.error("GEN ERROR:", e);
+                        d.ingameOffer.value = "Error: " + e.toString();
+                    }
+                });
+            }
+
+            if (d.btnIngameCopy) {
+                d.btnIngameCopy.addEventListener('click', () => {
+                    navigator.clipboard.writeText(d.ingameOffer.value);
+                    window.app.msg("¡Copiado!", "", "success");
+                });
+            }
+
+            if (d.btnIngameConnect) {
+                d.btnIngameConnect.addEventListener('click', async () => {
+                    console.log("CLICK: In-Game Connect");
+                    const ans = d.ingameAnswer.value;
+                    if (ans) {
+                        try {
+                            await net.finalizeHostConnection(ans);
+                            window.app.msg("¡Conectado!", "Jugador añadido con éxito", "success");
+                            d.inviteOverlay.style.display = 'none';
+                            d.ingameOffer.value = '';
+                            d.ingameAnswer.value = '';
+                        } catch (e) {
+                            window.app.msg("Error", "Fallo al conectar: " + e.message, "error");
+                        }
+                    } else {
+                        window.app.msg("Falta Respuesta", "Pega la respuesta del jugador.", "warning");
+                    }
+                });
+            }
+
+            d.btnGenAnswer.addEventListener('click', async () => {
+                const name = d.name.value || "PLAYER";
+                const offer = d.clientOffer.value;
+                if (!offer) return;
+                game.initClient(name);
+                d.clientAnswer.value = "Generando respuesta...";
+                await net.joinGame(offer, (ans) => {
+                    d.clientAnswer.value = ans;
+                });
+            });
+            d.btnCopyAnswer.addEventListener('click', () => {
+                navigator.clipboard.writeText(d.clientAnswer.value);
+                window.app.msg("¡Copiado!", "Envía esto al Host", "success");
+            });
+        });
+
+        /**
+         * UI Controller
+         */
+        class UIController {
+            constructor() {
+                this.list = document.getElementById('players-list');
+                this.status = document.getElementById('connection-status');
+                this.btnInvite = document.getElementById('btn-show-invite');
+                this.btnResetAll = document.getElementById('btn-reset-all');
+            }
+
+            showGame() {
+                document.getElementById('view-lobby').classList.remove('active');
+                document.getElementById('view-game').classList.remove('hidden');
+                document.getElementById('view-game').classList.add('active');
+                document.getElementById('btn-exit-game').style.display = 'block';
+            }
+
+            updateLobbyStatus(msg) {
+                this.status.textContent = msg;
+                if (msg === 'CONECTADO') this.status.classList.add('connected');
+            }
+
+            setHostMode(isHost) {
+                const b = document.getElementById('btn-show-invite');
+                const r = document.getElementById('host-round-controls');
+                if (isHost) {
+                    if (b) b.style.display = 'inline-block';
+                    if (r) r.style.display = 'flex';
+                } else {
+                    if (b) b.style.display = 'none';
+                    if (r) r.style.display = 'none';
+                }
+            }
+
+            render(state, myId) {
+                try {
+                    // Show Invite/Reset Button if Host
+                    if (state.isHost) {
+                        if (this.btnInvite) this.btnInvite.style.display = 'inline-block';
+                        const roundCtrl = document.getElementById('host-round-controls');
+                        if (roundCtrl) roundCtrl.style.display = 'flex';
+
+                        // TOGGLE BUTTONS: Logic Enforced based on Phase Name/Index
+                        const distBtn = document.getElementById('btn-distribute-pot');
+                        const nextBtn = document.getElementById('btn-next-phase');
+
+                        // Robust check for Resolution phase (Index 4 or Name 'RESOLUCION')
+                        const isResolution = (state.phaseIndex >= 4) || (state.phaseName === 'RESOLUCION');
+
+                        if (isResolution) {
+                            // Phase Resolution: Show Distribute, Hide Next
+                            if (distBtn) distBtn.style.display = 'inline-block';
+                            if (nextBtn) nextBtn.style.display = 'none';
+                        } else {
+                            // Phase Preflop/Flop/Turn/River: Show Next, Hide Distribute
+                            if (distBtn) distBtn.style.display = 'none';
+                            if (nextBtn) nextBtn.style.display = 'inline-block';
+                        }
+                    }
+
+                    this.list.innerHTML = '';
+
+                    // Update Pot
+                    const potEl = document.getElementById('pot-display');
+                    if (potEl) potEl.innerText = 'BOTE: $' + state.pot;
+
+                    // Update Phase
+                    const phaseEl = document.getElementById('phase-display');
+                    if (phaseEl) phaseEl.innerText = state.phaseName || 'ESPERANDO';
+
+                    // Community Cards Update
+                    for (let i = 1; i <= 5; i++) {
+                        const cardEl = document.getElementById('card-' + i);
+                        if (cardEl) {
+                            let show = false;
+                            if (state.phaseIndex >= 1 && i <= 3) show = true; // Flop
+                            if (state.phaseIndex >= 2 && i <= 4) show = true; // Turn
+                            if (state.phaseIndex >= 3 && i <= 5) show = true; // River/Showdown
+
+                            if (show) {
+                                cardEl.classList.add('active');
+                                cardEl.textContent = '🂠';
+                            } else {
+                                cardEl.classList.remove('active');
+                                cardEl.textContent = '?';
+                            }
+                        }
+                    }
+
+                    console.log(`Render: Phase=${state.phaseIndex} MyID=${myId}`);
+
+                    state.players.forEach(p => {
+                        const isMe = (p.id === myId);
+
+                        // Render Chip Stacks
+                        const chipData = this.getChipData(p.chips);
+
+                        if (isMe) {
+                            // UPDATE MY FOOTER STATS
+                            const myNameEl = document.getElementById('my-name-disp');
+                            const myChipsEl = document.getElementById('my-chips-disp');
+                            if (myNameEl) myNameEl.textContent = p.name;
+                            if (myChipsEl) myChipsEl.textContent = `$${p.chips}`;
+
+                            // Check bankruptcy for self immediately on render
+                            if (p.chips === 0) window.app.disableControls(true);
+                            else window.app.disableControls(false);
+
+                            return; // Don't add me to the grid
+                        }
+
+                        // RENDER OTHERS IN GRID
+                        const el = document.createElement('div');
+                        el.className = 'hand-container';
+                        if (p.status === 'FOLDED') {
+                            el.style.opacity = '0.5';
+                            el.style.filter = 'grayscale(1)';
+                        }
+
+                        // No individual winner buttons - pot distribution is handled centrally via DISTRIBUIR BOTE
+
+                        const isHostPlayer = (state.players.indexOf(p) === 0);
+                        let statusTxt = '';
+                        if (p.status === 'FOLDED') statusTxt = '<span class="player-status status-fold" style="font-size:0.8rem">RETIRADO</span>';
+                        else if (p.chips === 0) statusTxt = '<span class="player-status status-raise" style="font-size:0.8rem; color:red">SIN FONDOS (ALL-IN)</span>';
+                        else if (p.currentBet > 0) statusTxt = `<span class="player-status status-raise" style="font-size:0.8rem">APUESTA: $${p.currentBet}</span>`;
+                        else statusTxt = `<span class="player-status status-check" style="font-size:0.8rem">PASO</span>`;
+
+                        el.innerHTML = `
+                            <div class="player-info" style="width:100%">
+                                <div class="player-name" style="font-size:1rem; justify-content:center;">
+                                    ${p.name} 
+                                    ${isHostPlayer ? '<span style="background:var(--accent-amber);color:black;font-size:0.7rem;padding:1px 3px;border-radius:2px;margin-left:5px">HOST</span>' : ''}
+                                </div>
+                                <div class="player-total" style="font-size:0.9rem">Fichas: $${p.chips}</div>
+                            </div>
+                            
+                            <div style="margin:5px 0;">${statusTxt}</div>
+                            
+                            <div class="chips-row" style="transform:scale(0.8); gap:-5px;">
+                                ${chipData.html}
+                            </div>
+                        `;
+                        this.list.appendChild(el);
+                    });
+                } catch (e) {
+                    console.error("Render Error:", e);
+                }
+            }
+
+            getChipData(totalAmount) {
+                let rem = totalAmount;
+                const blacks = Math.floor(rem / 100); rem %= 100;
+                const greens = Math.floor(rem / 25); rem %= 25;
+                const blues = Math.floor(rem / 10); rem %= 10;
+                const reds = Math.floor(rem / 5); rem %= 5;
+                const whites = rem;
+
+                let html = '';
+
+                // helper to generate stack
+                const addChips = (count, color, val) => {
+                    if (count <= 0) return '';
+                    if (count <= 5) { // Show up to 5 individually
+                        let str = '';
+                        for (let i = 0; i < count; i++) str += `<div class="chip ${color}">$${val}</div>`;
+                        return str;
+                    } else {
+                        // Stack visual: Show 1 chip with xN counter
+                        return `
+                            <div style="display:flex; align-items:center;">
+                                <div class="chip ${color}">$${val}</div>
+                                <span class="chip-stack-count">x${count}</span>
+                            </div>
+                         `;
+                    }
+                };
+
+                html += addChips(blacks, 'black', 100);
+                html += addChips(greens, 'green', 25);
+                html += addChips(blues, 'blue', 10);
+                html += addChips(reds, 'red', 5);
+                html += addChips(whites, 'white', 1);
+
+                return { html, total: totalAmount };
+            }
+        }
+
+        /*
+        # Análisis del Flujo de Código - Pixel Blackjack
+        
+        Este documento detalla la estructura y flujo de la aplicación unificada en `index.html`.
+        
+        ## Estructura General
+        
+        La aplicación sigue una arquitectura **MVC simplificada** (Model-View-Controller) orientada a eventos, contenida en clases JS:
+        
+        1.  **`NetworkManager` (Networking)**: Maneja las conexiones WebRTC (P2P).
+            *   Actúa como capa de transporte.
+            *   Soporta múltiples conexiones para el Host (Topología estrella: Host <-> Múltiples Clientes).
+        2.  **`GameState` (Model/Logic)**: Mantiene la "verdad" del juego.
+            *   Gestiona la lista de jugadores, fichas, apuestas y fase del juego.
+            *   El Host es la autoridad; los clientes solo replican el estado.
+        3.  **`UIController` (View)**: Manipula el DOM.
+            *   Dibuja la mesa, fichas y controles según el estado.
+        4.  **`window.app` (Controller/Bridge)**: Puente para eventos del DOM.
+            *   Expone funciones llamadas por `onclick` en el HTML.
+        
+        ---
+        
+        ## Flujo de Datos Principal
+        
+        ### 1. Inicialización (`DOMContentLoaded`)
+        *   Se instancian `NetworkManager`, `UIController` y `GameState`.
+        *   Se asigna `window.game` para acceso global.
+        *   Se configuran los "Event Listeners" de la Lobby (crear/unirse).
+        
+        ### 2. Conexión (WebRTC Handshake)
+        El flujo de conexión es manual (Copiar/Pegar SDP):
+        
+        **Caso HOST:**
+        1.  Usuario click "CREAR (HOST)" -> `net.createHost()`.
+        2.  `NetworkManager` crea un `RTCPeerConnection` y un `DataChannel` ('gameData').
+        3.  Genera **OFFER**. Usuario la copia y envía al amigo.
+        4.  Usuario pega la **ANSWER** del amigo -> `net.finalizeHostConnection()`.
+        5.  Conexión establecida: Se dispara `onConnectionOpen` -> `game.initHost()`.
+        
+        **Caso CLIENTE:**
+        1.  Usuario pega **OFFER** -> `net.joinGame()`.
+        2.  `NetworkManager` crea `RTCPeerConnection` (sin DataChannel propio, espera el del host).
+        3.  Genera **ANSWER**. Usuario copia y envía al Host.
+        4.  Conexión establecida: Se dispara `onConnectionOpen` -> Envia mensaje `JOIN` con su nombre.
+        
+        ### 3. Loop de Juego (Sincronización de Estado)
+        
+        El estado fluye mayormente en una dirección: **HOST -> CLIENTES**.
+        
+        *   **Acción del Cliente (ej. Apostar):**
+            1.  Cliente llama `game.placeBet(50)`.
+            2.  `game` detecta que no es Host -> envía mensaje `BET` por la red.
+            3.  Host recibe `BET` -> `game.handleMessage()`.
+            4.  Host valida y actualiza su `this.players`.
+            5.  Host invoca `this.broadcastState()` -> Envía el estado completo a TODOS.
+        
+        *   **Actualización de UI:**
+            1.  Clientes reciben `STATE_UPDATE`.
+            2.  `game.syncState()` actualiza su copia local.
+            3.  `ui.render()` redibuja toda la mesa basándose en el nuevo estado.
+        
+        ---
+        
+        ## Funciones Clave
+        
+        ### `NetworkManager`
+        *   `createHost(cb)`: Inicia proceso de Host, crea DataChannel.
+        *   `joinGame(offer, cb)`: Inicia proceso Cliente, responde a oferta.
+        *   `send(type, payload)`: Envía JSON a los pares conectados.
+        
+        ### `GameState`
+        *   `broadcastState()`: **CRÍTICO**. Serializa `players`, `phase`, etc., y lo envía a la red. Luego llama a render.
+        *   `resolvePlayer(id, result)`: Lógica de fin de ronda. Calcula pagos (WIN x2, BJ x2.5, etc.) y actualiza fichas. Solo el Host puede ejecutarlo.
+        *   `handleMessage(msg)`: Router de mensajes.
+            *   Si es Host: Procesa `BET`, `JOIN`.
+            *   Si es Cliente: Procesa `STATE_UPDATE`.
+        
+        ### `UIController`
+        *   `render(state)`: Función monolítica que borra y reconstruye la lista de jugadores.
+        *   `getChipData(amount)`: Algoritmo "Codicioso" (Greedy) para convertir un valor numérico (ej. 156) en fichas físicas (1x100, 2x25, 1x5, 1x1).
+        
+        ### `window.app`
+        *   `submitBet()`: Toma la apuesta local acumulada y la envía al `GameState`.
+        *   `addChip(val)`: Suma a la apuesta local temporal (feedback visual inmediato antes de confirmar).
+        
+        ---
+        */
+    </script>
+</body>
+
+</html>
