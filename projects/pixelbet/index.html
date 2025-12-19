@@ -885,8 +885,9 @@
                         { urls: 'stun:stun.l.google.com:19302' },
                         { urls: 'stun:stun1.l.google.com:19302' },
                         { urls: 'stun:stun2.l.google.com:19302' },
+                        { urls: 'stun:stun.google.com:19302' },
                         { urls: 'stun:stun.cloudflare.com:3478' },
-                        { urls: 'stun:iphone-stun.strato-iphone.de:3478' },
+                        { urls: 'stun:stun.t-online.de:3478' },
                         // Free TURN servers for better NAT traversal (PC-Mobile connections)
                         {
                             urls: [
@@ -909,7 +910,16 @@
                 const peerObj = { pc, dc: null, id: Math.random().toString(36).substr(2, 9), candidatesFound: 0 };
 
                 pc.onconnectionstatechange = () => {
-                    console.log(`[${peerObj.id}] State:`, pc.connectionState);
+                    console.log(`[${peerObj.id}] Connection State:`, pc.connectionState);
+                };
+
+                pc.onicegatheringstatechange = () => {
+                    console.log(`[${peerObj.id}] ICE Gathering State:`, pc.iceGatheringState);
+                };
+
+                // DIAGNOSTIC: Log errors during candidate gathering
+                pc.onicecandidateerror = (event) => {
+                    console.error(`[${peerObj.id}] ICE Candidate Error:`, event.errorCode, event.errorText, event.url);
                 };
 
                 // Log candidate gathering for debugging
@@ -917,14 +927,16 @@
                     if (event.candidate) {
                         peerObj.candidatesFound++;
                         console.log(`[${peerObj.id}] Candidate #${peerObj.candidatesFound}:`, event.candidate.type, event.candidate.candidate);
+                        // Trigger the debounce timer update if it exists
+                        if (peerObj.onNewCandidate) peerObj.onNewCandidate();
                     } else {
-                        console.log(`[${peerObj.id}] ICE Gathering Complete. Total: ${peerObj.candidatesFound}`);
+                        console.log(`[${peerObj.id}] ICE Gathering Complete. Total candidates: ${peerObj.candidatesFound}`);
                     }
                 };
 
                 // DETECT DISCONNECTION
                 pc.oniceconnectionstatechange = () => {
-                    console.log(`[${peerObj.id}] ICE State:`, pc.iceConnectionState);
+                    console.log(`[${peerObj.id}] ICE Connection State:`, pc.iceConnectionState);
 
                     if (pc.iceConnectionState === 'failed' || pc.iceConnectionState === 'closed') {
                         if (!this.isHost && this.onHostDisconnect) {
@@ -936,22 +948,41 @@
                 return peerObj;
             }
 
-            async waitForIce(pc) {
-                if (pc.iceGatheringState === 'complete') return 'complete';
-                const p = new Promise(r => {
-                    const check = () => {
-                        if (pc.iceGatheringState === 'complete') {
-                            pc.removeEventListener('icegatheringstatechange', check);
-                            r('complete');
-                        }
+            async waitForIce(peerObj) {
+                const pc = peerObj.pc;
+                if (pc.iceGatheringState === 'complete') return 'already-complete';
+
+                return new Promise(resolve => {
+                    let debounceTimer = null;
+                    const maxTimeout = setTimeout(() => finish('timeout-max'), 15000);
+
+                    const finish = (reason) => {
+                        clearTimeout(maxTimeout);
+                        if (debounceTimer) clearTimeout(debounceTimer);
+                        pc.removeEventListener('icegatheringstatechange', checkState);
+                        peerObj.onNewCandidate = null;
+                        console.log(`[${peerObj.id}] ICE Gathering finished via: ${reason} (Found: ${peerObj.candidatesFound})`);
+                        resolve(reason);
                     };
-                    pc.addEventListener('icegatheringstatechange', check);
+
+                    const checkState = () => {
+                        if (pc.iceGatheringState === 'complete') finish('gathering-complete');
+                    };
+
+                    const resetDebounce = () => {
+                        if (debounceTimer) clearTimeout(debounceTimer);
+                        // If we found at least 1 STUN/TURN candidate, 3s of silence is enough
+                        // If we only have host candidates, maybe wait a bit more? 
+                        // Let's stick to 3s for any new candidate activity.
+                        debounceTimer = setTimeout(() => {
+                            if (peerObj.candidatesFound > 0) finish('debounce-success');
+                        }, 3000);
+                    };
+
+                    pc.addEventListener('icegatheringstatechange', checkState);
+                    peerObj.onNewCandidate = resetDebounce;
+                    resetDebounce(); // Start the first debounce
                 });
-                // Increased timeout to 15 seconds for mobile networks and TURN candidates
-                const t = new Promise(r => setTimeout(() => r('timeout'), 15000));
-                const result = await Promise.race([p, t]);
-                console.log(`ICE Gathering finished via: ${result}`);
-                return result;
             }
 
             // --- HOST METHODS ---
@@ -970,8 +1001,8 @@
                 const offer = await peer.pc.createOffer();
                 await peer.pc.setLocalDescription(offer);
 
-                console.log("Waiting for ICE candidates...");
-                await this.waitForIce(peer.pc);
+                console.log("Waiting for ICE candidates (with 15s max / 3s debounce)...");
+                await this.waitForIce(peer);
 
                 // IMPORTANT: Re-read localDescription AFTER ICE gathering to ensure all candidates are included in the SDP
                 onSignalReady(JSON.stringify(peer.pc.localDescription));
@@ -979,8 +1010,6 @@
 
             async finalizeHostConnection(answerSDP) {
                 // Find the most recent peer that is waiting for remote description (signalingState is 'have-local-offer')
-                // OR simply the last one added? 
-                // Serial assumption: The host follows steps 1 connection at a time.
                 const peer = this.peers.slice().reverse().find(p => p.pc.signalingState === 'have-local-offer');
 
                 if (!peer) {
@@ -1010,8 +1039,8 @@
                 const answer = await peer.pc.createAnswer();
                 await peer.pc.setLocalDescription(answer);
 
-                console.log("Waiting for ICE candidates...");
-                await this.waitForIce(peer.pc);
+                console.log("Waiting for ICE candidates (with 15s max / 3s debounce)...");
+                await this.waitForIce(peer);
 
                 // IMPORTANT: Re-read localDescription AFTER ICE gathering to ensure all candidates are included in the SDP
                 onSignalReady(JSON.stringify(peer.pc.localDescription));
