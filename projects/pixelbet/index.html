@@ -110,6 +110,16 @@
             }
         }
 
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
         /* --- LAYOUT --- */
         .app-container {
             flex: 1;
@@ -633,6 +643,17 @@
 </head>
 
 <body>
+    <div id="connecting-overlay" class="crt-overlay"
+        style="background:rgba(0,0,0,0.8); display:none; flex-direction:column; align-items:center; justify-content:center; z-index:5000; pointer-events:auto;">
+        <div style="text-align:center;">
+            <h2 style="color:var(--accent-cyan); margin-bottom:10px;">CONECTANDO...</h2>
+            <p style="color:var(--text-dim);">Estableciendo túnel de datos seguro</p>
+            <div
+                style="margin-top:20px; border: 4px solid rgba(255,255,255,0.1); border-top: 4px solid var(--accent-cyan); border-radius: 50%; width: 40px; height: 40px; animation: spin 1s linear infinite; display:inline-block;">
+            </div>
+        </div>
+    </div>
+
     <div class="crt-overlay">
         <div class="scanlines"></div>
         <div class="vignette"></div>
@@ -713,6 +734,9 @@
                             <button onclick="window.app.showQR('client-answer')" class="action-btn"
                                 style="background:#fff; color:black">VER QR</button>
                         </div>
+                        <button id="btn-force-join" class="action-btn"
+                            style="display:none; background:var(--accent-amber); color:black; margin-top:10px;">ENTRAR A
+                            LA MESA (FORZAR)</button>
                     </div>
                 </div>
             </div>
@@ -885,10 +909,8 @@
                         { urls: 'stun:stun.l.google.com:19302' },
                         { urls: 'stun:stun1.l.google.com:19302' },
                         { urls: 'stun:stun2.l.google.com:19302' },
-                        { urls: 'stun:stun.google.com:19302' },
                         { urls: 'stun:stun.cloudflare.com:3478' },
-                        { urls: 'stun:stun.t-online.de:3478' },
-                        // Free TURN servers for better NAT traversal (PC-Mobile connections)
+                        // Free TURN servers (Metered.ca Open Relay)
                         {
                             urls: [
                                 'turn:openrelay.metered.ca:80',
@@ -1096,6 +1118,8 @@
 
                 this.isHost = false;
                 this.pendingName = "";
+                this.pendingHostEntryName = ""; // NEW
+                this.hostConnectionTimeout = null; // NEW
 
                 this.net.onMessage = (msg) => this.handleMessage(msg);
                 this.net.onConnectionOpen = () => this.onConnected();
@@ -1137,12 +1161,28 @@
             onConnected() {
                 console.log("🔗 onConnected callback triggered. isHost:", this.isHost);
                 this.ui.updateLobbyStatus("CONECTADO");
+
+                // HOST SPECIAL CASE: Enter game only on first connection
+                if (this.isHost && this.pendingHostEntryName) {
+                    console.log("🏠 FIRST PEER CONNECTED. Initializing host state...");
+                    const name = this.pendingHostEntryName;
+                    this.pendingHostEntryName = ""; // Clear flag
+                    if (this.hostConnectionTimeout) clearTimeout(this.hostConnectionTimeout);
+
+                    const overlay = document.getElementById('connecting-overlay');
+                    if (overlay) overlay.style.display = 'none';
+
+                    this.initHost(name);
+                    return;
+                }
+
                 if (!this.isHost) {
                     console.log("👤 CLIENT: Sending JOIN message with name:", this.pendingName);
                     this.net.send('JOIN', { id: this.myId, name: this.pendingName });
                     this.ui.showGame();
                 } else {
-                    console.log("🏠 HOST: Already in game, waiting for clients");
+                    console.log("🏠 HOST: New client connected, broadcasting state");
+                    this.broadcastState();
                 }
             }
 
@@ -1743,6 +1783,7 @@
                 clientAnswer: document.getElementById('client-answer'),
                 btnGenAnswer: document.getElementById('btn-generate-answer'),
                 btnCopyAnswer: document.getElementById('btn-copy-answer'),
+                btnForceJoin: document.getElementById('btn-force-join'), // NEW
 
                 betDisplay: document.getElementById('my-pending-bet') // UPDATED ID
             };
@@ -1771,6 +1812,9 @@
                 }
             }
 
+            let pendingHostName = "";
+            let hostConnectionTimeout = null;
+
             // NEW: Manual Trigger Lobby
             d.btnInitHost.addEventListener('click', async () => {
                 d.hostOffer.value = "Generando código... Por favor espera...";
@@ -1781,18 +1825,31 @@
 
             d.btnCopyOffer.addEventListener('click', () => {
                 navigator.clipboard.writeText(d.hostOffer.value);
-                window.app.msg("¡Copiado!", "Código corrupto en portapapeles", "success");
+                window.app.msg("¡Copiado!", "Código de invitación en portapapeles", "success");
             });
 
             d.btnConnectHost.addEventListener('click', () => {
                 const answer = d.hostAnswer.value;
                 if (!answer) return window.app.msg("Falta Respuesta", "Pega la respuesta del jugador invitado", "error");
 
-                // Start Game State NOW
-                const name = d.name.value || "HOST";
-                game.initHost(name);
+                game.pendingHostEntryName = d.name.value || "HOST";
 
+                // Show connecting overlay
+                const overlay = document.getElementById('connecting-overlay');
+                if (overlay) overlay.style.display = 'flex';
+
+                console.log("Host: Finalizing connection and waiting for DataChannel...");
                 net.finalizeHostConnection(answer);
+
+                // Failsafe: If no connection in 20s, show error
+                if (game.hostConnectionTimeout) clearTimeout(game.hostConnectionTimeout);
+                game.hostConnectionTimeout = setTimeout(() => {
+                    if (document.getElementById('view-lobby').classList.contains('active')) {
+                        if (overlay) overlay.style.display = 'none';
+                        window.app.msg("Error de Red", "No se pudo establecer el túnel P2P. Verifica si tu red o la del invitado están bloqueando los servidores STUN/TURN.", "error");
+                        game.pendingHostEntryName = "";
+                    }
+                }, 20000);
             });
 
             // --- INVITE OVERLAY EVENTS ---
@@ -1809,7 +1866,6 @@
             else {
                 d.btnIngameGen.addEventListener('click', async () => {
                     console.log("CLICK: In-Game Gen");
-                    // alert("Generando código..."); // Debug feedback
                     d.ingameOffer.value = "Generando... Espera...";
 
                     try {
@@ -1854,13 +1910,30 @@
             d.btnGenAnswer.addEventListener('click', async () => {
                 const name = d.name.value || "PLAYER";
                 const offer = d.clientOffer.value;
-                if (!offer) return;
+                if (!offer) return window.app.msg("Falta Invitación", "Pega el código del Host primero", "warning");
+
                 game.initClient(name);
-                d.clientAnswer.value = "Generando respuesta...";
+                d.clientAnswer.value = "Generando respuesta... Por favor ESPERA a que termine.";
+
+                // Show connecting overlay on client too
+                const overlay = document.getElementById('connecting-overlay');
+                if (overlay) overlay.style.display = 'flex';
+
                 await net.joinGame(offer, (ans) => {
                     d.clientAnswer.value = ans;
+                    if (overlay) overlay.style.display = 'none';
+                    if (d.btnForceJoin) d.btnForceJoin.style.display = 'block';
+                    window.app.msg("Respuesta Generada", "Copia el código y pásalo al Host. Si no conectas en unos segundos, pulsa el botón naranja.", "info");
                 });
             });
+
+            d.btnForceJoin.addEventListener('click', () => {
+                const name = d.name.value || "PLAYER";
+                game.initClient(name);
+                game.ui.showGame();
+                window.app.msg("Entrada Forzada", "Has entrado a la mesa. Si el Host no te ve, revisad los códigos de conexión.", "warning");
+            });
+
             d.btnCopyAnswer.addEventListener('click', () => {
                 navigator.clipboard.writeText(d.clientAnswer.value);
                 window.app.msg("¡Copiado!", "Envía esto al Host", "success");
