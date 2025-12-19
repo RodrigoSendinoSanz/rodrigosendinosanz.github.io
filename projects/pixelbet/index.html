@@ -110,44 +110,6 @@
             }
         }
 
-        @keyframes spin {
-            0% {
-                transform: rotate(0deg);
-            }
-
-            100% {
-                transform: rotate(360deg);
-            }
-        }
-
-        /* --- CUSTOM CHECKBOX PIXEL STYLE --- */
-        .pixel-checkbox {
-            appearance: none;
-            -webkit-appearance: none;
-            width: 20px;
-            height: 20px;
-            border: 2px solid var(--accent-amber);
-            background: rgba(0, 0, 0, 0.5);
-            cursor: pointer;
-            position: relative;
-            image-rendering: pixelated;
-        }
-
-        .pixel-checkbox:checked {
-            background: var(--accent-amber);
-        }
-
-        .pixel-checkbox:checked::after {
-            content: '✓';
-            position: absolute;
-            color: black;
-            font-size: 14px;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            font-weight: bold;
-        }
-
         /* --- LAYOUT --- */
         .app-container {
             flex: 1;
@@ -671,29 +633,6 @@
 </head>
 
 <body>
-    <div id="connecting-overlay" class="crt-overlay"
-        style="background:rgba(0,0,0,0.9); display:none; flex-direction:column; align-items:center; justify-content:center; z-index:5000; pointer-events:auto;">
-        <div style="text-align:center; padding: 20px;">
-            <h2 style="color:var(--accent-cyan); margin-bottom:10px;">CONECTANDO...</h2>
-            <p id="connecting-status-text" style="color:var(--text-dim);">Estableciendo túnel de datos seguro</p>
-            <div id="connecting-stats" style="color:var(--accent-amber); font-size:0.8rem; margin-top:5px;">Candidatos
-                encontrados: 0</div>
-
-            <div style="margin:20px 0;">
-                <div
-                    style="border: 4px solid rgba(255,255,255,0.1); border-top: 4px solid var(--accent-cyan); border-radius: 50%; width: 40px; height: 40px; animation: spin 1s linear infinite; display:inline-block;">
-                </div>
-            </div>
-
-            <div id="host-manual-start-panel" style="display:none; margin-top:10px;">
-                <p style="font-size:0.7rem; color:var(--text-dim); margin-bottom:10px;">¿Pasa mucho tiempo? Si el
-                    invitado dice que ya terminó de generar, puedes forzar la entrada:</p>
-                <button id="btn-host-force-start" class="action-btn"
-                    style="background:var(--accent-amber); color:black;">INICIAR PARTIDA MANUAL (SI FALLA RED)</button>
-            </div>
-        </div>
-    </div>
-
     <div class="crt-overlay">
         <div class="scanlines"></div>
         <div class="vignette"></div>
@@ -713,22 +652,9 @@
         <!-- LOBBY -->
         <section id="view-lobby" class="view active">
             <div class="lobby-controls">
-                <div class="input-group" style="margin-bottom:10px;">
-                    <label>TU NOMBRE</label>
-                    <input type="text" id="player-name-input" placeholder="Ej: Rodrigo..." maxlength="12">
-                </div>
-
-                <!-- COMPATIBILITY MODE (Hidden by default, shown on mobile/slow nets) -->
-                <div id="compatibility-section"
-                    style="display:none; margin-bottom:20px; text-align:left; background:rgba(255,165,0,0.1); padding:10px; border-radius:4px; border:1px solid rgba(255,165,0,0.3);">
-                    <label
-                        style="display:flex; align-items:center; cursor:pointer; color:var(--accent-amber); font-size:0.9rem;">
-                        <input type="checkbox" id="check-force-relay" class="pixel-checkbox" style="margin-right:12px;">
-                        MODO COMPATIBILIDAD (Solo Relay)
-                    </label>
-                    <p style="font-size:0.7rem; color:var(--text-dim); margin-top:5px; margin-left:32px;">
-                        Detectada red móvil/lenta. Actívalo si tienes problemas de conexión.
-                    </p>
+                <div class="input-group">
+                    <label>NOMBRE</label>
+                    <input type="text" id="player-name-input" placeholder="Tu Nombre" maxlength="10">
                 </div>
                 <div class="tabs">
                     <button class="tab-btn active" data-tab="host">CREAR (HOST)</button>
@@ -787,9 +713,6 @@
                             <button onclick="window.app.showQR('client-answer')" class="action-btn"
                                 style="background:#fff; color:black">VER QR</button>
                         </div>
-                        <button id="btn-force-join" class="action-btn"
-                            style="display:none; background:var(--accent-amber); color:black; margin-top:10px;">ENTRAR A
-                            LA MESA (FORZAR)</button>
                     </div>
                 </div>
             </div>
@@ -955,86 +878,43 @@
                 this.isHost = false;
                 this.onMessage = null;
                 this.onConnectionOpen = null;
-                this.onHostDisconnect = null;
-                this.config = {}; // Will be set on connection
-            }
+                this.onHostDisconnect = null; // NEW callback
 
-            updateConfig() {
-                const forceRelay = document.getElementById('check-force-relay')?.checked || false;
-                console.log("🛠️ Updating RTC Config. Force Relay:", forceRelay);
                 this.config = {
                     iceServers: [
                         { urls: 'stun:stun.l.google.com:19302' },
-                        { urls: 'stun:stun.cloudflare.com:3478' },
+                        { urls: 'stun:stun1.l.google.com:19302' },
+                        // Free TURN servers for better NAT traversal (PC-Mobile connections)
                         {
-                            urls: [
-                                'turn:relay.metered.ca:80',
-                                'turn:relay.metered.ca:443',
-                                'turn:relay.metered.ca:443?transport=tcp',
-                                'turns:relay.metered.ca:443?transport=tcp'
-                            ],
+                            urls: 'turn:openrelay.metered.ca:80',
                             username: 'openrelayproject',
                             credential: 'openrelayproject'
                         },
                         {
-                            urls: [
-                                'turn:openrelay.metered.ca:80',
-                                'turn:openrelay.metered.ca:443',
-                                'turn:openrelay.metered.ca:443?transport=tcp',
-                                'turns:openrelay.metered.ca:443?transport=tcp'
-                            ],
+                            urls: 'turn:openrelay.metered.ca:443',
                             username: 'openrelayproject',
                             credential: 'openrelayproject'
-                        },
-                        {
-                            urls: 'turn:turn.conversations.im:443',
-                            username: 'conversations',
-                            credential: 'conversations'
                         }
-                    ],
-                    iceTransportPolicy: forceRelay ? 'relay' : 'all',
-                    iceCandidatePoolSize: 10
+                    ]
                 };
             }
 
             _createPeer() {
                 const pc = new RTCPeerConnection(this.config);
-                const peerObj = { pc, dc: null, id: Math.random().toString(36).substr(2, 9), candidatesFound: 0 };
+                const peerObj = { pc, dc: null, id: Math.random().toString(36).substr(2, 9) };
 
                 pc.onconnectionstatechange = () => {
-                    console.log(`[${peerObj.id}] Connection State:`, pc.connectionState);
-                };
-
-                pc.onicegatheringstatechange = () => {
-                    console.log(`[${peerObj.id}] ICE Gathering State:`, pc.iceGatheringState);
-                };
-
-                // DIAGNOSTIC: Log errors during candidate gathering
-                pc.onicecandidateerror = (event) => {
-                    console.error(`[${peerObj.id}] ICE Candidate Error:`, event.errorCode, event.errorText, event.url);
-                };
-
-                // Log candidate gathering for debugging
-                pc.onicecandidate = (event) => {
-                    if (event.candidate) {
-                        peerObj.candidatesFound++;
-                        console.log(`[${peerObj.id}] Candidate #${peerObj.candidatesFound}:`, event.candidate.type, event.candidate.candidate);
-
-                        // UI Feedback
-                        const statsEl = document.getElementById('connecting-stats');
-                        if (statsEl) statsEl.textContent = `Candidatos encontrados: ${peerObj.candidatesFound} (${event.candidate.type})`;
-
-                        // Trigger the debounce timer update if it exists
-                        if (peerObj.onNewCandidate) peerObj.onNewCandidate();
-                    } else {
-                        console.log(`[${peerObj.id}] ICE Gathering Complete. Total candidates: ${peerObj.candidatesFound}`);
-                    }
+                    console.log(`[${peerObj.id}] State:`, pc.connectionState);
                 };
 
                 // DETECT DISCONNECTION
                 pc.oniceconnectionstatechange = () => {
-                    console.log(`[${peerObj.id}] ICE Connection State:`, pc.iceConnectionState);
+                    console.log(`[${peerObj.id}] ICE State:`, pc.iceConnectionState);
 
+                    // Only trigger disconnect on PERMANENT failures
+                    // 'disconnected' is a TEMPORARY state during ICE negotiation and should not trigger error
+                    // 'failed' = permanent failure, connection cannot be established
+                    // 'closed' = connection was closed intentionally
                     if (pc.iceConnectionState === 'failed' || pc.iceConnectionState === 'closed') {
                         if (!this.isHost && this.onHostDisconnect) {
                             this.onHostDisconnect();
@@ -1045,48 +925,26 @@
                 return peerObj;
             }
 
-            async waitForIce(peerObj) {
-                const pc = peerObj.pc;
-                if (pc.iceGatheringState === 'complete') return 'already-complete';
-
-                return new Promise(resolve => {
-                    let debounceTimer = null;
-                    const maxTimeout = setTimeout(() => finish('timeout-max'), 15000);
-
-                    const finish = (reason) => {
-                        clearTimeout(maxTimeout);
-                        if (debounceTimer) clearTimeout(debounceTimer);
-                        pc.removeEventListener('icegatheringstatechange', checkState);
-                        peerObj.onNewCandidate = null;
-                        console.log(`[${peerObj.id}] ICE Gathering finished via: ${reason} (Found: ${peerObj.candidatesFound})`);
-                        resolve(reason);
+            async waitForIce(pc) {
+                if (pc.iceGatheringState === 'complete') return;
+                const p = new Promise(r => {
+                    const check = () => {
+                        if (pc.iceGatheringState === 'complete') {
+                            pc.removeEventListener('icegatheringstatechange', check);
+                            r();
+                        }
                     };
-
-                    const checkState = () => {
-                        if (pc.iceGatheringState === 'complete') finish('gathering-complete');
-                    };
-
-                    const resetDebounce = () => {
-                        if (debounceTimer) clearTimeout(debounceTimer);
-                        // If we found at least 1 STUN/TURN candidate, 3s of silence is enough
-                        // If we only have host candidates, maybe wait a bit more? 
-                        // Let's stick to 3s for any new candidate activity.
-                        debounceTimer = setTimeout(() => {
-                            if (peerObj.candidatesFound > 0) finish('debounce-success');
-                        }, 3000);
-                    };
-
-                    pc.addEventListener('icegatheringstatechange', checkState);
-                    peerObj.onNewCandidate = resetDebounce;
-                    resetDebounce(); // Start the first debounce
+                    pc.addEventListener('icegatheringstatechange', check);
                 });
+                // Increased timeout to 5 seconds for mobile networks
+                const t = new Promise(r => setTimeout(r, 5000));
+                return Promise.race([p, t]);
             }
 
             // --- HOST METHODS ---
 
             async createHost(onSignalReady) {
                 this.isHost = true;
-                this.updateConfig(); // Refresh before peer creation
 
                 // Create a NEW peer for this new connection attempt
                 const peer = this._createPeer();
@@ -1099,15 +957,16 @@
                 const offer = await peer.pc.createOffer();
                 await peer.pc.setLocalDescription(offer);
 
-                console.log("Waiting for ICE candidates (with 15s max / 3s debounce)...");
-                await this.waitForIce(peer);
+                console.log("Waiting for ICE...");
+                await this.waitForIce(peer.pc);
 
-                // IMPORTANT: Re-read localDescription AFTER ICE gathering to ensure all candidates are included in the SDP
                 onSignalReady(JSON.stringify(peer.pc.localDescription));
             }
 
             async finalizeHostConnection(answerSDP) {
                 // Find the most recent peer that is waiting for remote description (signalingState is 'have-local-offer')
+                // OR simply the last one added? 
+                // Serial assumption: The host follows steps 1 connection at a time.
                 const peer = this.peers.slice().reverse().find(p => p.pc.signalingState === 'have-local-offer');
 
                 if (!peer) {
@@ -1123,7 +982,6 @@
 
             async joinGame(offerSDP, onSignalReady) {
                 this.isHost = false;
-                this.updateConfig(); // Refresh before peer creation
                 const peer = this._createPeer();
                 this.peers = [peer]; // Client only has one connection (to Host)
 
@@ -1138,16 +996,15 @@
                 const answer = await peer.pc.createAnswer();
                 await peer.pc.setLocalDescription(answer);
 
-                console.log("Waiting for ICE candidates (with 15s max / 3s debounce)...");
-                await this.waitForIce(peer);
+                console.log("Waiting for ICE...");
+                await this.waitForIce(peer.pc);
 
-                // IMPORTANT: Re-read localDescription AFTER ICE gathering to ensure all candidates are included in the SDP
                 onSignalReady(JSON.stringify(peer.pc.localDescription));
             }
 
             // --- SHARED ---
 
-            _setupDataChannel(dc) {
+            shared_setupDataChannel(dc) {
                 dc.onopen = () => {
                     console.log("✅ DataChannel OPEN - Ready to send/receive");
                     // Trigger connection open ONLY when we can actually send data
@@ -1159,6 +1016,10 @@
                     console.log("📨 Parsed message type:", msg.type);
                     if (this.onMessage) this.onMessage(msg);
                 };
+            }
+
+            _setupDataChannel(dc) {
+                this.shared_setupDataChannel(dc);
             }
 
             send(type, payload) {
@@ -1191,8 +1052,6 @@
 
                 this.isHost = false;
                 this.pendingName = "";
-                this.pendingHostEntryName = ""; // NEW
-                this.hostConnectionTimeout = null; // NEW
 
                 this.net.onMessage = (msg) => this.handleMessage(msg);
                 this.net.onConnectionOpen = () => this.onConnected();
@@ -1234,28 +1093,12 @@
             onConnected() {
                 console.log("🔗 onConnected callback triggered. isHost:", this.isHost);
                 this.ui.updateLobbyStatus("CONECTADO");
-
-                // HOST SPECIAL CASE: Enter game only on first connection
-                if (this.isHost && this.pendingHostEntryName) {
-                    console.log("🏠 FIRST PEER CONNECTED. Initializing host state...");
-                    const name = this.pendingHostEntryName;
-                    this.pendingHostEntryName = ""; // Clear flag
-                    if (this.hostConnectionTimeout) clearTimeout(this.hostConnectionTimeout);
-
-                    const overlay = document.getElementById('connecting-overlay');
-                    if (overlay) overlay.style.display = 'none';
-
-                    this.initHost(name);
-                    return;
-                }
-
                 if (!this.isHost) {
                     console.log("👤 CLIENT: Sending JOIN message with name:", this.pendingName);
                     this.net.send('JOIN', { id: this.myId, name: this.pendingName });
                     this.ui.showGame();
                 } else {
-                    console.log("🏠 HOST: New client connected, broadcasting state");
-                    this.broadcastState();
+                    console.log("🏠 HOST: Already in game, waiting for clients");
                 }
             }
 
@@ -1856,8 +1699,7 @@
                 clientAnswer: document.getElementById('client-answer'),
                 btnGenAnswer: document.getElementById('btn-generate-answer'),
                 btnCopyAnswer: document.getElementById('btn-copy-answer'),
-                btnForceJoin: document.getElementById('btn-force-join'), // NEW
-                btnHostForceStart: document.getElementById('btn-host-force-start'), // NEW
+
                 betDisplay: document.getElementById('my-pending-bet') // UPDATED ID
             };
 
@@ -1884,20 +1726,6 @@
                     d.joinTab.classList.add('active');
                 }
             }
-            tab('host');
-
-            // NEW: Detect Mobile Network to show Compatibility Mode
-            const conn = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
-            const isMobileBrowser = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
-            const isSlowNet = conn && (conn.effectiveType === '2g' || conn.effectiveType === '3g' || conn.saveData);
-
-            if (isMobileBrowser || isSlowNet) {
-                console.log("📱 Mobile/Slow network detected. Showing compatibility mode.");
-                document.getElementById('compatibility-section').style.display = 'block';
-            }
-
-            let pendingHostName = "";
-            let hostConnectionTimeout = null;
 
             // NEW: Manual Trigger Lobby
             d.btnInitHost.addEventListener('click', async () => {
@@ -1909,46 +1737,18 @@
 
             d.btnCopyOffer.addEventListener('click', () => {
                 navigator.clipboard.writeText(d.hostOffer.value);
-                window.app.msg("¡Copiado!", "Código de invitación en portapapeles", "success");
+                window.app.msg("¡Copiado!", "Código corrupto en portapapeles", "success");
             });
 
             d.btnConnectHost.addEventListener('click', () => {
                 const answer = d.hostAnswer.value;
                 if (!answer) return window.app.msg("Falta Respuesta", "Pega la respuesta del jugador invitado", "error");
 
-                game.pendingHostEntryName = d.name.value || "HOST";
-
-                // Show connecting overlay
-                const overlay = document.getElementById('connecting-overlay');
-                if (overlay) overlay.style.display = 'flex';
-
-                // Show Host Manual Start button after 5s
-                const manualBtn = document.getElementById('host-manual-start-panel');
-                if (manualBtn) {
-                    manualBtn.style.display = 'none'; // Reset
-                    setTimeout(() => { if (overlay && overlay.style.display === 'flex') manualBtn.style.display = 'block'; }, 5000);
-                }
-
-                console.log("Host: Finalizing connection and waiting for DataChannel...");
-                net.finalizeHostConnection(answer);
-
-                // Failsafe: If no connection in 20s, show error
-                if (game.hostConnectionTimeout) clearTimeout(game.hostConnectionTimeout);
-                game.hostConnectionTimeout = setTimeout(() => {
-                    if (document.getElementById('view-lobby').classList.contains('active')) {
-                        if (overlay) overlay.style.display = 'none';
-                        window.app.msg("Error de Red", "No se pudo establecer el túnel P2P. Verifica si tu red o la del invitado están bloqueando los servidores STUN/TURN.", "error");
-                        game.pendingHostEntryName = "";
-                    }
-                }, 20000);
-            });
-
-            d.btnHostForceStart.addEventListener('click', () => {
+                // Start Game State NOW
                 const name = d.name.value || "HOST";
                 game.initHost(name);
-                const overlay = document.getElementById('connecting-overlay');
-                if (overlay) overlay.style.display = 'none';
-                window.app.msg("Inicio Forzado", "Has entrado a la mesa manualmente. Si el invitado no aparece, revisad los códigos de conexión.", "warning");
+
+                net.finalizeHostConnection(answer);
             });
 
             // --- INVITE OVERLAY EVENTS ---
@@ -1965,6 +1765,7 @@
             else {
                 d.btnIngameGen.addEventListener('click', async () => {
                     console.log("CLICK: In-Game Gen");
+                    // alert("Generando código..."); // Debug feedback
                     d.ingameOffer.value = "Generando... Espera...";
 
                     try {
@@ -2009,30 +1810,13 @@
             d.btnGenAnswer.addEventListener('click', async () => {
                 const name = d.name.value || "PLAYER";
                 const offer = d.clientOffer.value;
-                if (!offer) return window.app.msg("Falta Invitación", "Pega el código del Host primero", "warning");
-
+                if (!offer) return;
                 game.initClient(name);
-                d.clientAnswer.value = "Generando respuesta... Por favor ESPERA a que termine.";
-
-                // Show connecting overlay on client too
-                const overlay = document.getElementById('connecting-overlay');
-                if (overlay) overlay.style.display = 'flex';
-
+                d.clientAnswer.value = "Generando respuesta...";
                 await net.joinGame(offer, (ans) => {
                     d.clientAnswer.value = ans;
-                    if (overlay) overlay.style.display = 'none';
-                    if (d.btnForceJoin) d.btnForceJoin.style.display = 'block';
-                    window.app.msg("Respuesta Generada", "Copia el código y pásalo al Host. Si no conectas en unos segundos, pulsa el botón naranja.", "info");
                 });
             });
-
-            d.btnForceJoin.addEventListener('click', () => {
-                const name = d.name.value || "PLAYER";
-                game.initClient(name);
-                game.ui.showGame();
-                window.app.msg("Entrada Forzada", "Has entrado a la mesa. Si el Host no te ve, revisad los códigos de conexión.", "warning");
-            });
-
             d.btnCopyAnswer.addEventListener('click', () => {
                 navigator.clipboard.writeText(d.clientAnswer.value);
                 window.app.msg("¡Copiado!", "Envía esto al Host", "success");
