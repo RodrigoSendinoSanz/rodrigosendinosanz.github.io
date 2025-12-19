@@ -885,21 +885,17 @@
                         { urls: 'stun:stun.l.google.com:19302' },
                         { urls: 'stun:stun1.l.google.com:19302' },
                         { urls: 'stun:stun2.l.google.com:19302' },
-                        { urls: 'stun:stun3.l.google.com:19302' },
-                        { urls: 'stun:stun4.l.google.com:19302' },
+                        { urls: 'stun:stun.cloudflare.com:3478' },
+                        { urls: 'stun:iphone-stun.strato-iphone.de:3478' },
                         // Free TURN servers for better NAT traversal (PC-Mobile connections)
                         {
-                            urls: 'turn:openrelay.metered.ca:80',
-                            username: 'openrelayproject',
-                            credential: 'openrelayproject'
-                        },
-                        {
-                            urls: 'turn:openrelay.metered.ca:443',
-                            username: 'openrelayproject',
-                            credential: 'openrelayproject'
-                        },
-                        {
-                            urls: 'turn:openrelay.metered.ca:443?transport=tcp',
+                            urls: [
+                                'turn:openrelay.metered.ca:80',
+                                'turn:openrelay.metered.ca:443',
+                                'turn:openrelay.metered.ca:443?transport=tcp',
+                                'turns:openrelay.metered.ca:443?transport=tcp',
+                                'turns:openrelay.metered.ca:443'
+                            ],
                             username: 'openrelayproject',
                             credential: 'openrelayproject'
                         }
@@ -910,7 +906,7 @@
 
             _createPeer() {
                 const pc = new RTCPeerConnection(this.config);
-                const peerObj = { pc, dc: null, id: Math.random().toString(36).substr(2, 9) };
+                const peerObj = { pc, dc: null, id: Math.random().toString(36).substr(2, 9), candidatesFound: 0 };
 
                 pc.onconnectionstatechange = () => {
                     console.log(`[${peerObj.id}] State:`, pc.connectionState);
@@ -919,9 +915,10 @@
                 // Log candidate gathering for debugging
                 pc.onicecandidate = (event) => {
                     if (event.candidate) {
-                        console.log(`[${peerObj.id}] Candidate:`, event.candidate.type, event.candidate.candidate);
+                        peerObj.candidatesFound++;
+                        console.log(`[${peerObj.id}] Candidate #${peerObj.candidatesFound}:`, event.candidate.type, event.candidate.candidate);
                     } else {
-                        console.log(`[${peerObj.id}] ICE Gathering Complete`);
+                        console.log(`[${peerObj.id}] ICE Gathering Complete. Total: ${peerObj.candidatesFound}`);
                     }
                 };
 
@@ -940,7 +937,7 @@
             }
 
             async waitForIce(pc) {
-                if (pc.iceGatheringState === 'complete') return;
+                if (pc.iceGatheringState === 'complete') return 'complete';
                 const p = new Promise(r => {
                     const check = () => {
                         if (pc.iceGatheringState === 'complete') {
@@ -950,10 +947,11 @@
                     };
                     pc.addEventListener('icegatheringstatechange', check);
                 });
-                // Increased timeout to 10 seconds for mobile networks and TURN candidates
-                const t = new Promise(r => setTimeout(() => r('timeout'), 10000));
+                // Increased timeout to 15 seconds for mobile networks and TURN candidates
+                const t = new Promise(r => setTimeout(() => r('timeout'), 15000));
                 const result = await Promise.race([p, t]);
                 console.log(`ICE Gathering finished via: ${result}`);
+                return result;
             }
 
             // --- HOST METHODS ---
@@ -972,9 +970,10 @@
                 const offer = await peer.pc.createOffer();
                 await peer.pc.setLocalDescription(offer);
 
-                console.log("Waiting for ICE...");
+                console.log("Waiting for ICE candidates...");
                 await this.waitForIce(peer.pc);
 
+                // IMPORTANT: Re-read localDescription AFTER ICE gathering to ensure all candidates are included in the SDP
                 onSignalReady(JSON.stringify(peer.pc.localDescription));
             }
 
@@ -1011,9 +1010,10 @@
                 const answer = await peer.pc.createAnswer();
                 await peer.pc.setLocalDescription(answer);
 
-                console.log("Waiting for ICE...");
+                console.log("Waiting for ICE candidates...");
                 await this.waitForIce(peer.pc);
 
+                // IMPORTANT: Re-read localDescription AFTER ICE gathering to ensure all candidates are included in the SDP
                 onSignalReady(JSON.stringify(peer.pc.localDescription));
             }
 
