@@ -120,6 +120,34 @@
             }
         }
 
+        /* --- CUSTOM CHECKBOX PIXEL STYLE --- */
+        .pixel-checkbox {
+            appearance: none;
+            -webkit-appearance: none;
+            width: 20px;
+            height: 20px;
+            border: 2px solid var(--accent-amber);
+            background: rgba(0, 0, 0, 0.5);
+            cursor: pointer;
+            position: relative;
+            image-rendering: pixelated;
+        }
+
+        .pixel-checkbox:checked {
+            background: var(--accent-amber);
+        }
+
+        .pixel-checkbox:checked::after {
+            content: '✓';
+            position: absolute;
+            color: black;
+            font-size: 14px;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-weight: bold;
+        }
+
         /* --- LAYOUT --- */
         .app-container {
             flex: 1;
@@ -644,14 +672,24 @@
 
 <body>
     <div id="connecting-overlay" class="crt-overlay"
-        style="background:rgba(0,0,0,0.8); display:none; flex-direction:column; align-items:center; justify-content:center; z-index:5000; pointer-events:auto;">
-        <div style="text-align:center;">
+        style="background:rgba(0,0,0,0.9); display:none; flex-direction:column; align-items:center; justify-content:center; z-index:5000; pointer-events:auto;">
+        <div style="text-align:center; padding: 20px;">
             <h2 style="color:var(--accent-cyan); margin-bottom:10px;">CONECTANDO...</h2>
             <p id="connecting-status-text" style="color:var(--text-dim);">Estableciendo túnel de datos seguro</p>
             <div id="connecting-stats" style="color:var(--accent-amber); font-size:0.8rem; margin-top:5px;">Candidatos
                 encontrados: 0</div>
-            <div
-                style="margin-top:20px; border: 4px solid rgba(255,255,255,0.1); border-top: 4px solid var(--accent-cyan); border-radius: 50%; width: 40px; height: 40px; animation: spin 1s linear infinite; display:inline-block;">
+
+            <div style="margin:20px 0;">
+                <div
+                    style="border: 4px solid rgba(255,255,255,0.1); border-top: 4px solid var(--accent-cyan); border-radius: 50%; width: 40px; height: 40px; animation: spin 1s linear infinite; display:inline-block;">
+                </div>
+            </div>
+
+            <div id="host-manual-start-panel" style="display:none; margin-top:10px;">
+                <p style="font-size:0.7rem; color:var(--text-dim); margin-bottom:10px;">¿Pasa mucho tiempo? Si el
+                    invitado dice que ya terminó de generar, puedes forzar la entrada:</p>
+                <button id="btn-host-force-start" class="action-btn"
+                    style="background:var(--accent-amber); color:black;">INICIAR PARTIDA MANUAL (SI FALLA RED)</button>
             </div>
         </div>
     </div>
@@ -680,17 +718,16 @@
                     <input type="text" id="player-name-input" placeholder="Ej: Rodrigo..." maxlength="12">
                 </div>
 
-                <!-- COMPATIBILITY MODE -->
-                <div
-                    style="margin-bottom:20px; text-align:left; background:rgba(255,165,0,0.1); padding:10px; border-radius:4px; border:1px solid rgba(255,165,0,0.3);">
+                <!-- COMPATIBILITY MODE (Hidden by default, shown on mobile/slow nets) -->
+                <div id="compatibility-section"
+                    style="display:none; margin-bottom:20px; text-align:left; background:rgba(255,165,0,0.1); padding:10px; border-radius:4px; border:1px solid rgba(255,165,0,0.3);">
                     <label
                         style="display:flex; align-items:center; cursor:pointer; color:var(--accent-amber); font-size:0.9rem;">
-                        <input type="checkbox" id="check-force-relay"
-                            style="margin-right:8px; width:18px; height:18px;">
+                        <input type="checkbox" id="check-force-relay" class="pixel-checkbox" style="margin-right:12px;">
                         MODO COMPATIBILIDAD (Solo Relay)
                     </label>
-                    <p style="font-size:0.7rem; color:var(--text-dim); margin-top:5px; margin-left:26px;">
-                        Actívalo si estás en una red móvil (4G/5G) y tienes problemas de conexión.
+                    <p style="font-size:0.7rem; color:var(--text-dim); margin-top:5px; margin-left:32px;">
+                        Detectada red móvil/lenta. Actívalo si tienes problemas de conexión.
                     </p>
                 </div>
                 <div class="tabs">
@@ -925,7 +962,6 @@
                 this.config = {
                     iceServers: [
                         { urls: 'stun:stun.l.google.com:19302' },
-                        { urls: 'stun:stun1.l.google.com:19302' },
                         { urls: 'stun:stun.cloudflare.com:3478' },
                         // Free TURN servers (Metered.ca Open Relay)
                         {
@@ -933,8 +969,17 @@
                                 'turn:openrelay.metered.ca:80',
                                 'turn:openrelay.metered.ca:443',
                                 'turn:openrelay.metered.ca:443?transport=tcp',
-                                'turns:openrelay.metered.ca:443?transport=tcp',
-                                'turns:openrelay.metered.ca:443'
+                                'turns:openrelay.metered.ca:443?transport=tcp'
+                            ],
+                            username: 'openrelayproject',
+                            credential: 'openrelayproject'
+                        },
+                        // Alternative Metered domain (sometimes bypasses DNS filters)
+                        {
+                            urls: [
+                                'turn:relay.metered.ca:80',
+                                'turn:relay.metered.ca:443',
+                                'turn:relay.metered.ca:443?transport=tcp'
                             ],
                             username: 'openrelayproject',
                             credential: 'openrelayproject'
@@ -1099,7 +1144,7 @@
 
             // --- SHARED ---
 
-            shared_setupDataChannel(dc) {
+            _setupDataChannel(dc) {
                 dc.onopen = () => {
                     console.log("✅ DataChannel OPEN - Ready to send/receive");
                     // Trigger connection open ONLY when we can actually send data
@@ -1111,10 +1156,6 @@
                     console.log("📨 Parsed message type:", msg.type);
                     if (this.onMessage) this.onMessage(msg);
                 };
-            }
-
-            _setupDataChannel(dc) {
-                this.shared_setupDataChannel(dc);
             }
 
             send(type, payload) {
@@ -1813,7 +1854,7 @@
                 btnGenAnswer: document.getElementById('btn-generate-answer'),
                 btnCopyAnswer: document.getElementById('btn-copy-answer'),
                 btnForceJoin: document.getElementById('btn-force-join'), // NEW
-
+                btnHostForceStart: document.getElementById('btn-host-force-start'), // NEW
                 betDisplay: document.getElementById('my-pending-bet') // UPDATED ID
             };
 
@@ -1839,6 +1880,17 @@
                     d.joinPanel.classList.add('active');
                     d.joinTab.classList.add('active');
                 }
+            }
+            tab('host');
+
+            // NEW: Detect Mobile Network to show Compatibility Mode
+            const conn = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
+            const isMobileBrowser = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+            const isSlowNet = conn && (conn.effectiveType === '2g' || conn.effectiveType === '3g' || conn.saveData);
+
+            if (isMobileBrowser || isSlowNet) {
+                console.log("📱 Mobile/Slow network detected. Showing compatibility mode.");
+                document.getElementById('compatibility-section').style.display = 'block';
             }
 
             let pendingHostName = "";
@@ -1867,6 +1919,13 @@
                 const overlay = document.getElementById('connecting-overlay');
                 if (overlay) overlay.style.display = 'flex';
 
+                // Show Host Manual Start button after 5s
+                const manualBtn = document.getElementById('host-manual-start-panel');
+                if (manualBtn) {
+                    manualBtn.style.display = 'none'; // Reset
+                    setTimeout(() => { if (overlay && overlay.style.display === 'flex') manualBtn.style.display = 'block'; }, 5000);
+                }
+
                 console.log("Host: Finalizing connection and waiting for DataChannel...");
                 net.finalizeHostConnection(answer);
 
@@ -1879,6 +1938,14 @@
                         game.pendingHostEntryName = "";
                     }
                 }, 20000);
+            });
+
+            d.btnHostForceStart.addEventListener('click', () => {
+                const name = d.name.value || "HOST";
+                game.initHost(name);
+                const overlay = document.getElementById('connecting-overlay');
+                if (overlay) overlay.style.display = 'none';
+                window.app.msg("Inicio Forzado", "Has entrado a la mesa manualmente. Si el invitado no aparece, revisad los códigos de conexión.", "warning");
             });
 
             // --- INVITE OVERLAY EVENTS ---
