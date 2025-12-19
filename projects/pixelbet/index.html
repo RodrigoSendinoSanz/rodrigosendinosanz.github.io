@@ -647,7 +647,9 @@
         style="background:rgba(0,0,0,0.8); display:none; flex-direction:column; align-items:center; justify-content:center; z-index:5000; pointer-events:auto;">
         <div style="text-align:center;">
             <h2 style="color:var(--accent-cyan); margin-bottom:10px;">CONECTANDO...</h2>
-            <p style="color:var(--text-dim);">Estableciendo túnel de datos seguro</p>
+            <p id="connecting-status-text" style="color:var(--text-dim);">Estableciendo túnel de datos seguro</p>
+            <div id="connecting-stats" style="color:var(--accent-amber); font-size:0.8rem; margin-top:5px;">Candidatos
+                encontrados: 0</div>
             <div
                 style="margin-top:20px; border: 4px solid rgba(255,255,255,0.1); border-top: 4px solid var(--accent-cyan); border-radius: 50%; width: 40px; height: 40px; animation: spin 1s linear infinite; display:inline-block;">
             </div>
@@ -673,9 +675,23 @@
         <!-- LOBBY -->
         <section id="view-lobby" class="view active">
             <div class="lobby-controls">
-                <div class="input-group">
-                    <label>NOMBRE</label>
-                    <input type="text" id="player-name-input" placeholder="Tu Nombre" maxlength="10">
+                <div class="input-group" style="margin-bottom:10px;">
+                    <label>TU NOMBRE</label>
+                    <input type="text" id="player-name-input" placeholder="Ej: Rodrigo..." maxlength="12">
+                </div>
+
+                <!-- COMPATIBILITY MODE -->
+                <div
+                    style="margin-bottom:20px; text-align:left; background:rgba(255,165,0,0.1); padding:10px; border-radius:4px; border:1px solid rgba(255,165,0,0.3);">
+                    <label
+                        style="display:flex; align-items:center; cursor:pointer; color:var(--accent-amber); font-size:0.9rem;">
+                        <input type="checkbox" id="check-force-relay"
+                            style="margin-right:8px; width:18px; height:18px;">
+                        MODO COMPATIBILIDAD (Solo Relay)
+                    </label>
+                    <p style="font-size:0.7rem; color:var(--text-dim); margin-top:5px; margin-left:26px;">
+                        Actívalo si estás en una red móvil (4G/5G) y tienes problemas de conexión.
+                    </p>
                 </div>
                 <div class="tabs">
                     <button class="tab-btn active" data-tab="host">CREAR (HOST)</button>
@@ -904,11 +920,12 @@
                 this.onConnectionOpen = null;
                 this.onHostDisconnect = null; // NEW callback
 
+                const forceRelay = document.getElementById('check-force-relay')?.checked || false;
+
                 this.config = {
                     iceServers: [
                         { urls: 'stun:stun.l.google.com:19302' },
                         { urls: 'stun:stun1.l.google.com:19302' },
-                        { urls: 'stun:stun2.l.google.com:19302' },
                         { urls: 'stun:stun.cloudflare.com:3478' },
                         // Free TURN servers (Metered.ca Open Relay)
                         {
@@ -921,8 +938,15 @@
                             ],
                             username: 'openrelayproject',
                             credential: 'openrelayproject'
+                        },
+                        // Backup TURN Server (Conversations)
+                        {
+                            urls: 'turn:turn.conversations.im:443',
+                            username: 'conversations',
+                            credential: 'conversations'
                         }
                     ],
+                    iceTransportPolicy: forceRelay ? 'relay' : 'all',
                     iceCandidatePoolSize: 10
                 };
             }
@@ -949,6 +973,11 @@
                     if (event.candidate) {
                         peerObj.candidatesFound++;
                         console.log(`[${peerObj.id}] Candidate #${peerObj.candidatesFound}:`, event.candidate.type, event.candidate.candidate);
+
+                        // UI Feedback
+                        const statsEl = document.getElementById('connecting-stats');
+                        if (statsEl) statsEl.textContent = `Candidatos encontrados: ${peerObj.candidatesFound} (${event.candidate.type})`;
+
                         // Trigger the debounce timer update if it exists
                         if (peerObj.onNewCandidate) peerObj.onNewCandidate();
                     } else {
