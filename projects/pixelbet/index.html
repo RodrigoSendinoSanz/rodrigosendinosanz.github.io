@@ -884,6 +884,9 @@
                     iceServers: [
                         { urls: 'stun:stun.l.google.com:19302' },
                         { urls: 'stun:stun1.l.google.com:19302' },
+                        { urls: 'stun:stun2.l.google.com:19302' },
+                        { urls: 'stun:stun3.l.google.com:19302' },
+                        { urls: 'stun:stun4.l.google.com:19302' },
                         // Free TURN servers for better NAT traversal (PC-Mobile connections)
                         {
                             urls: 'turn:openrelay.metered.ca:80',
@@ -894,8 +897,14 @@
                             urls: 'turn:openrelay.metered.ca:443',
                             username: 'openrelayproject',
                             credential: 'openrelayproject'
+                        },
+                        {
+                            urls: 'turn:openrelay.metered.ca:443?transport=tcp',
+                            username: 'openrelayproject',
+                            credential: 'openrelayproject'
                         }
-                    ]
+                    ],
+                    iceCandidatePoolSize: 10
                 };
             }
 
@@ -907,14 +916,19 @@
                     console.log(`[${peerObj.id}] State:`, pc.connectionState);
                 };
 
+                // Log candidate gathering for debugging
+                pc.onicecandidate = (event) => {
+                    if (event.candidate) {
+                        console.log(`[${peerObj.id}] Candidate:`, event.candidate.type, event.candidate.candidate);
+                    } else {
+                        console.log(`[${peerObj.id}] ICE Gathering Complete`);
+                    }
+                };
+
                 // DETECT DISCONNECTION
                 pc.oniceconnectionstatechange = () => {
                     console.log(`[${peerObj.id}] ICE State:`, pc.iceConnectionState);
 
-                    // Only trigger disconnect on PERMANENT failures
-                    // 'disconnected' is a TEMPORARY state during ICE negotiation and should not trigger error
-                    // 'failed' = permanent failure, connection cannot be established
-                    // 'closed' = connection was closed intentionally
                     if (pc.iceConnectionState === 'failed' || pc.iceConnectionState === 'closed') {
                         if (!this.isHost && this.onHostDisconnect) {
                             this.onHostDisconnect();
@@ -931,14 +945,15 @@
                     const check = () => {
                         if (pc.iceGatheringState === 'complete') {
                             pc.removeEventListener('icegatheringstatechange', check);
-                            r();
+                            r('complete');
                         }
                     };
                     pc.addEventListener('icegatheringstatechange', check);
                 });
-                // Increased timeout to 5 seconds for mobile networks
-                const t = new Promise(r => setTimeout(r, 5000));
-                return Promise.race([p, t]);
+                // Increased timeout to 10 seconds for mobile networks and TURN candidates
+                const t = new Promise(r => setTimeout(() => r('timeout'), 10000));
+                const result = await Promise.race([p, t]);
+                console.log(`ICE Gathering finished via: ${result}`);
             }
 
             // --- HOST METHODS ---
