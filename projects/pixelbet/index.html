@@ -3091,7 +3091,16 @@
                 this.btnResetAll = document.getElementById('btn-reset-all');
             }
 
+            closeAllModals() {
+                // Close all modals when entering the game
+                const modals = document.querySelectorAll('.view[id^="modal-"]');
+                modals.forEach(modal => {
+                    modal.style.display = 'none';
+                });
+            }
+
             showGame() {
+                this.closeAllModals();
                 document.getElementById('view-lobby').classList.remove('active');
                 document.getElementById('view-game').classList.remove('hidden');
                 document.getElementById('view-game').classList.add('active');
