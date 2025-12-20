@@ -2248,6 +2248,10 @@
                         case 'ACTION':
                             this.handlePlayerAction(msg.id, msg.action, msg.amount);
                             break;
+                        case 'PLAYER_EXIT':
+                            console.log("🏠 HOST: Received PLAYER_EXIT from", msg.id);
+                            this.handlePlayerExit(msg.id);
+                            break;
                     }
                 } else {
                     if (msg.type === 'STATE_UPDATE') {
@@ -2267,6 +2271,24 @@
                 if (this.isHost) {
                     console.log("🏠 HOST: Broadcasting exit to all peers");
                     this.net.send('HOST_EXIT', {});
+                }
+            }
+
+            handlePlayerExit(playerId) {
+                if (!this.isHost) return;
+                
+                // Encontrar y marcar jugador como LEFT
+                const player = this.players.find(p => p.id === playerId);
+                if (player) {
+                    console.log(`🏠 HOST: Jugador ${player.name} (${player.id}) ha salido de la partida`);
+                    player.status = 'LEFT';
+                    
+                    // Sumar sus fichas/apuestas actuales al bote
+                    this.pot += player.currentBet;
+                    player.currentBet = 0;
+                    
+                    // Broadcast state para que todos lo vean desaparecer
+                    this.broadcastState();
                 }
             }
 
@@ -2412,6 +2434,8 @@
             resetRound() {
                 this.phaseIndex = 0;
                 this.pot = 0;
+                // Remove players with status='LEFT' to prevent duplicates
+                this.players = this.players.filter(p => p.status !== 'LEFT');
                 this.players.forEach(p => {
                     p.currentBet = 0;
                     p.totalBetThisHand = 0;
@@ -2526,6 +2550,13 @@
                 }
             }
 
+            sendPlayerExit() {
+                if (!this.isHost) {
+                    console.log(`👤 CLIENT: Enviando PLAYER_EXIT para ${this.myId}`);
+                    this.net.send('PLAYER_EXIT', { id: this.myId });
+                }
+            }
+
             // --- SYNC ---
             // (Replaces old broadcastState/syncState with nothing, as they are already defined above correctly)
         }
@@ -2625,7 +2656,8 @@
 
             hostDistributePot: function () {
                 // Modal based selection
-                const players = window.game.players;
+                // Filter out players with status='LEFT' - they shouldn't receive pot
+                const players = window.game.players.filter(p => p.status !== 'LEFT');
                 const potAmount = window.game.pot;
 
                 // Generate enhanced checkbox HTML with better styling
@@ -2836,8 +2868,13 @@
             },
 
             exitGame: function () {
-                if (window.game && window.game.isHost) {
-                    window.game.broadcastHostExit();
+                if (window.game) {
+                    if (window.game.isHost) {
+                        window.game.broadcastHostExit();
+                    } else {
+                        // Jugador cliente: notificar al host que se va
+                        window.game.sendPlayerExit();
+                    }
                 }
                 if (this.transition) {
                     this.transition(() => {
@@ -3290,6 +3327,9 @@
                     console.log(`Render: Phase=${state.phaseIndex} MyID=${myId}`);
 
                     state.players.forEach(p => {
+                        // Saltar jugadores que han salido de la partida
+                        if (p.status === 'LEFT') return;
+
                         const isMe = (p.id === myId);
 
                         if (isMe) {
