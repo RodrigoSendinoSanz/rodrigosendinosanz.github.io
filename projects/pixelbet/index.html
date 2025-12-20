@@ -245,9 +245,12 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
+            flex-wrap: nowrap;
+            gap: 10px;
             border-bottom: 2px solid var(--panel-bg);
             padding-bottom: 0.5rem;
             margin-bottom: 1rem;
+            min-height: 50px;
         }
 
         .logo {
@@ -377,6 +380,8 @@
             align-items: center;
             gap: 12px;
             perspective: 1000px;
+            flex-shrink: 1;
+            min-width: 0;
         }
 
         .logo-chip {
@@ -1357,6 +1362,294 @@
             background-color: var(--text-dim) !important;
             color: white !important;
         }
+
+        /* ========================================
+           OPTIMIZACIONES PARA DISPOSITIVOS MÓVILES
+           ======================================== */
+
+        /* Header - Responsive */
+        @media (max-width: 768px) {
+            .game-header {
+                flex-wrap: nowrap;
+                gap: 8px;
+                padding-bottom: 8px;
+                margin-bottom: 8px;
+            }
+
+            .header-logo-container {
+                flex: 0 1 auto;
+                min-width: unset;
+                gap: 6px;
+            }
+
+            .logo {
+                font-size: 1.1rem;
+                white-space: nowrap;
+            }
+
+            .logo-chip {
+                width: 32px;
+                height: 32px;
+            }
+
+            /* Botón de sonido optimizado para móvil */
+            #sound-toggle {
+                width: auto !important;
+                padding: 6px 8px !important;
+                font-size: 1.2rem !important;
+                min-width: 40px;
+                min-height: 40px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                margin: 0 !important;
+                flex-shrink: 0;
+            }
+
+            .status-indicator {
+                font-size: 0.8rem;
+                white-space: nowrap;
+                display: none;
+            }
+        }
+
+        @media (max-width: 494px) {
+            .game-header {
+                gap: 6px;
+                padding-bottom: 6px;
+                margin-bottom: 6px;
+            }
+
+            .header-logo-container {
+                gap: 4px;
+            }
+
+            .logo {
+                font-size: 0.95rem;
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+            }
+
+            .logo-chip {
+                width: 28px;
+                height: 28px;
+            }
+
+            /* Botón de sonido ultra compacto */
+            #sound-toggle {
+                width: 38px !important;
+                height: 38px !important;
+                padding: 0 !important;
+                font-size: 1rem !important;
+                margin: 0 !important;
+                flex-shrink: 0;
+            }
+
+            .status-indicator {
+                display: none;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .game-header {
+                gap: 4px;
+            }
+
+            .header-logo-container {
+                gap: 3px;
+            }
+
+            .logo {
+                font-size: 0.9rem;
+            }
+
+            .logo-chip {
+                width: 26px;
+                height: 26px;
+            }
+
+            #sound-toggle {
+                width: 36px !important;
+                height: 36px !important;
+                font-size: 0.95rem !important;
+            }
+        }
+
+        @media (max-width: 360px) {
+            .game-header {
+                gap: 3px;
+                padding-bottom: 4px;
+                margin-bottom: 4px;
+            }
+
+            .logo {
+                font-size: 0.8rem;
+            }
+
+            .logo-chip {
+                width: 24px;
+                height: 24px;
+            }
+
+            #sound-toggle {
+                width: 34px !important;
+                height: 34px !important;
+                font-size: 0.9rem !important;
+                padding: 2px !important;
+            }
+        }
+
+        /* Botones de acción - Optimizados para toque */
+        @media (max-width: 768px) {
+            .action-btn {
+                min-height: 44px;
+                padding: 12px 10px !important;
+                font-size: 1rem;
+            }
+
+            .tab-btn {
+                min-height: 44px;
+                padding: 12px;
+                font-size: 1rem;
+                letter-spacing: 1px;
+            }
+
+            .control-btn {
+                min-height: 44px;
+                padding: 12px 8px;
+                font-size: 1rem;
+            }
+
+            .chip-btn {
+                min-height: 40px;
+                font-size: 0.8rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .action-btn {
+                min-height: 48px;
+                padding: 14px 10px !important;
+                font-size: 0.95rem;
+            }
+
+            .tab-btn {
+                min-height: 48px;
+                padding: 14px;
+                font-size: 0.9rem;
+                letter-spacing: 0.5px;
+            }
+
+            .control-btn {
+                min-height: 48px;
+                padding: 14px 6px;
+                font-size: 0.9rem;
+            }
+
+            .chip-btn {
+                min-height: 42px;
+                width: 38px;
+                height: 38px;
+                font-size: 0.7rem;
+            }
+        }
+
+        /* Optimización de sombras y efectos visuales para rendimiento */
+        @media (prefers-reduced-motion: reduce) {
+            * {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
+
+            .scanlines {
+                animation: none;
+                background: linear-gradient(to bottom, rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.15) 50%);
+            }
+        }
+
+        /* Optimización de touch feedback */
+        @media (hover: none) and (pointer: coarse) {
+            /* Dispositivos táctiles */
+            .action-btn,
+            .tab-btn,
+            .control-btn,
+            .chip-btn {
+                -webkit-touch-callout: none;
+            }
+
+            .action-btn:hover,
+            .tab-btn:hover,
+            .control-btn:hover {
+                filter: none;
+                transform: none;
+            }
+
+            .action-btn:active,
+            .tab-btn:active,
+            .control-btn:active {
+                filter: brightness(0.95);
+            }
+        }
+
+        /* Optimización de viewport para tablets y grandes pantallas */
+        @media (min-width: 1024px) {
+            .app-container {
+                max-width: 1100px;
+                padding: 15px;
+            }
+
+            .game-header {
+                padding-bottom: 1rem;
+                margin-bottom: 1.5rem;
+            }
+
+            #sound-toggle {
+                min-width: 50px;
+                min-height: 50px;
+            }
+        }
+
+        /* Asegurar legibilidad en pantallas pequeñas */
+        @media (max-width: 360px) {
+            body {
+                font-size: 16px;
+            }
+
+            .header-logo-container {
+                gap: 4px;
+            }
+
+            .logo {
+                font-size: 0.9rem;
+            }
+
+            #sound-toggle {
+                width: 40px !important;
+                height: 40px !important;
+                font-size: 1rem !important;
+            }
+        }
+
+        /* Optimización para navegadores que no soportan emojis/caracteres especiales */
+        @supports not (text-rendering: optimizeLegibility) {
+            #sound-toggle {
+                font-weight: bold;
+                letter-spacing: 1px;
+            }
+        }
+
+        /* Mejorar rendimiento en conexiones lenta */
+        @media (prefers-reduced-data: reduce) {
+            .crt-overlay {
+                display: none;
+            }
+
+            .scanlines {
+                animation: none;
+            }
+        }
     </style>
 </head>
 
@@ -1376,6 +1669,7 @@
                 <h1 class="logo">PIXEL BET</h1>
             </div>
             <div style="display:flex; gap:10px; align-items:center;">
+                <button id="sound-toggle" class="action-btn">▶</button>
                 <button id="btn-exit-game" onclick="window.app.exitGame()" class="action-btn"
                     style="display:none; width:auto; padding:5px 10px; font-size:1rem; background:var(--accent-red); color:white; border:1px solid white;">SALIR
                     ✕</button>
@@ -1588,7 +1882,7 @@
                         <button id="btn-retirarse" class="control-btn btn-retirarse"
                             onclick="window.app.doFold()">RETIRARSE</button>
                         <button id="btn-limpiar" class="control-btn btn-limpiar"
-                            onclick="window.app.clearPendingBet()">X (LIMPIAR)</button>
+                            onclick="window.app.clearPendingBet()">LIMPIAR</button>
                     </div>
                 </div>
             </div>
@@ -2765,6 +3059,7 @@
                 document.getElementById('view-game').classList.remove('hidden');
                 document.getElementById('view-game').classList.add('active');
                 document.getElementById('btn-exit-game').style.display = 'block';
+                SoundManager.playGameEntry();
             }
 
             showOverlay(title, msg) {
@@ -2984,6 +3279,7 @@
                             if (show) {
                                 cardEl.classList.add('active');
                                 cardEl.textContent = '🂠';
+                                SoundManager.playCardReveal();
                             } else {
                                 cardEl.classList.remove('active');
                                 cardEl.textContent = '?';
@@ -3282,6 +3578,223 @@
         
         ---
         */
+
+        // ============================================================================
+        // SOUND MANAGER - Sistema de Efectos de Sonido Discretos (Sin Sonido Ambiente)
+        // ============================================================================
+        const SoundManager = {
+            enabled: true,
+            initialized: false,
+            lastCardPitch: 0.9,
+            lastChipPitch: 1.0,
+
+            // URLs de sonidos
+            sounds: {
+                gameEntry: new Audio('https://assets.mixkit.co/active_storage/sfx/2573/2573-preview.mp3'),
+                actionBet: new Audio('https://assets.mixkit.co/active_storage/sfx/2870/2870-preview.mp3'),
+                resetGame: new Audio('https://assets.mixkit.co/active_storage/sfx/2771/2771-preview.mp3'),
+                cardReveal: new Audio('https://assets.mixkit.co/active_storage/sfx/2002/2002-preview.mp3'),
+                chipClick: new Audio('https://audio-previews.elements.envatousercontent.com/files/638056419/preview.mp3'),
+                playerWins: new Audio('https://assets.mixkit.co/active_storage/sfx/1999/1999-preview.mp3'),
+                uiInteraction: new Audio('https://assets.mixkit.co/active_storage/sfx/2585/2585-preview.mp3'),
+                tabSwitch: new Audio('https://assets.mixkit.co/active_storage/sfx/211/211-preview.mp3')
+            },
+
+            init() {
+                if (this.initialized) return;
+                this.initialized = true;
+
+                // Configurar volúmenes
+                this.sounds.gameEntry.volume = 0.5;
+                this.sounds.actionBet.volume = 0.4;
+                this.sounds.resetGame.volume = 0.4;
+                this.sounds.cardReveal.volume = 0.35;
+                this.sounds.chipClick.volume = 0.4;
+                this.sounds.playerWins.volume = 0.6;
+                this.sounds.uiInteraction.volume = 0.35;
+                this.sounds.tabSwitch.volume = 0.4;
+            },
+
+            toggle() {
+                this.enabled = !this.enabled;
+                
+                const btn = document.getElementById('sound-toggle');
+                if (btn) {
+                    btn.textContent = this.enabled ? '▶' : '⊗';
+                }
+            },
+
+            playSound(soundName, options = {}) {
+                if (!this.enabled || !this.initialized) return;
+                
+                const sound = this.sounds[soundName];
+                if (!sound) return;
+
+                try {
+                    sound.currentTime = 0;
+                    
+                    // Aplicar pitch/playbackRate si se especifica
+                    if (options.playbackRate !== undefined) {
+                        sound.playbackRate = options.playbackRate;
+                    } else {
+                        sound.playbackRate = 1.0;
+                    }
+
+                    sound.play().catch(() => {});
+                } catch (e) {
+                    console.error(`Error playing sound ${soundName}:`, e);
+                }
+            },
+
+            playGameEntry() {
+                this.playSound('gameEntry');
+            },
+
+            playActionBet() {
+                this.playSound('actionBet');
+            },
+
+            playResetGame() {
+                this.playSound('resetGame');
+            },
+
+            playCardReveal() {
+                if (!this.enabled || !this.initialized) return;
+                
+                // Variar pitch: 0.9 -> 1.0 -> 1.1 -> 0.9 (ciclo)
+                const pitches = [0.9, 1.0, 1.1];
+                let nextPitch = pitches[(pitches.indexOf(this.lastCardPitch) + 1) % pitches.length];
+                this.lastCardPitch = nextPitch;
+                
+                this.playSound('cardReveal', { playbackRate: nextPitch });
+            },
+
+            playChipClick() {
+                if (!this.enabled || !this.initialized) return;
+                
+                // Variación aleatoria de pitch sin repetir exactamente
+                let newPitch;
+                do {
+                    newPitch = 0.85 + Math.random() * 0.3; // Rango: 0.85 a 1.15
+                } while (Math.abs(newPitch - this.lastChipPitch) < 0.05);
+                
+                this.lastChipPitch = newPitch;
+                this.playSound('chipClick', { playbackRate: newPitch });
+            },
+
+            playPlayerWins() {
+                this.playSound('playerWins');
+            },
+
+            playUIInteraction() {
+                this.playSound('uiInteraction');
+            },
+
+            playTabSwitch() {
+                this.playSound('tabSwitch');
+            }
+        };
+
+        // Inicializar al hacer clic por primera vez
+        let soundInitialized = false;
+        document.addEventListener('click', () => {
+            if (!soundInitialized) {
+                SoundManager.init();
+                soundInitialized = true;
+            }
+        }, { capture: true });
+
+        // Toggle de sonido
+        const soundToggleBtn = document.getElementById('sound-toggle');
+        if (soundToggleBtn) {
+            soundToggleBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                SoundManager.toggle();
+                SoundManager.playUIInteraction();
+            });
+        }
+
+        // Enganchar sonido genérico para botones de UI
+        const uiButtonSelectors = [
+            '.btn-generate-answer',
+            '.action-btn',
+            '.btn-exit-game',
+            '.btn-copy-answer'
+        ];
+
+        uiButtonSelectors.forEach(selector => {
+            document.querySelectorAll(selector).forEach(btn => {
+                // Excluir sound-toggle y tab-btn que tienen sus propios listeners
+                if (!btn.id.includes('sound-toggle') && !btn.classList.contains('tab-btn')) {
+                    btn.addEventListener('click', () => {
+                        SoundManager.playUIInteraction();
+                    });
+                }
+            });
+        });
+
+        // Enganchar sonido para cambio de pestañas
+        document.querySelectorAll('.tab-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                // Reproducir el sonido cuando la pestaña se activa
+                setTimeout(() => {
+                    if (btn.classList.contains('active')) {
+                        SoundManager.playTabSwitch();
+                    }
+                }, 50);
+            });
+        });
+
+        // ============================================================================
+        // HOOKS DE EVENTOS DEL JUEGO
+        // ============================================================================
+
+        // Sonido al agregar fichas
+        document.querySelectorAll('.chip-btn').forEach(btn => {
+            btn.addEventListener('click', () => SoundManager.playChipClick());
+        });
+
+        // Sonido al presionar botones de apuesta
+        document.querySelectorAll('.control-btn').forEach(btn => {
+            btn.addEventListener('click', function(e) {
+                // Verificar que no sea el botón de limpiar (que es diferente)
+                if (!this.id.includes('limpiar')) {
+                    SoundManager.playActionBet();
+                }
+            });
+        });
+
+        // Cuando se restaura la página, enganchar dinámicamente eventos de victoria
+        // Se ejecutará cuando el DOM esté listo
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', () => {
+                setupGameSoundHooks();
+            });
+        } else {
+            setupGameSoundHooks();
+        }
+
+        function setupGameSoundHooks() {
+            // Hook para reset de juego - modificar la función window.app.hostResetRound
+            const originalHostResetRound = window.app?.hostResetRound;
+            if (originalHostResetRound) {
+                window.app.hostResetRound = function() {
+                    SoundManager.playResetGame();
+                    originalHostResetRound.call(this);
+                };
+            }
+
+            // Hook para distribución de bote (victoria)
+            const originalDistributePot = window.game?.distributePot;
+            if (originalDistributePot) {
+                window.game.distributePot = function(winners) {
+                    SoundManager.playPlayerWins();
+                    return originalDistributePot.call(this, winners);
+                };
+            }
+        }
+
+        // ============================================================================
     </script>
 </body>
 
