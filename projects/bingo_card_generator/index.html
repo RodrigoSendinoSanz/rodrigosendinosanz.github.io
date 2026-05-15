@@ -4,6 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>BingoForge - Generador de Cartones de Bingo</title>
+  <link rel="shortcut icon" href="https://rodrigosendinosanz.github.io/img/favicon.png" />
   <meta name="description" content="Generate fully customizable BINGO cards with text, numbers, icons, and PDF export. Supports 75-ball, 90-ball, and custom grids." />
   
   <!-- pdf-lib from CDN -->
@@ -554,7 +555,10 @@
 
     /* Bingo Card */
     .bingo-card {
+      position: relative;
       display: inline-block;
+      width: max-content;
+      max-width: 100%;
       border-radius: 1rem;
       overflow: hidden;
       box-shadow: 0 10px 40px rgba(0,0,0,0.1);
@@ -562,6 +566,8 @@
 
     .bingo-card-inner {
       padding: 12px;
+      width: max-content;
+      max-width: 100%;
     }
 
     .bingo-title {
@@ -770,6 +776,34 @@
     }
 
     /* ─── Utilities ─────────────────────────────────────────────────────────── */
+    @media (max-width: 480px) {
+      .preview-area {
+        padding: 1rem;
+      }
+
+      .cards-grid {
+        gap: 1rem;
+      }
+
+      .bingo-card {
+        border-radius: 0.875rem;
+      }
+
+      .bingo-card-inner {
+        padding: 10px;
+      }
+
+      .bingo-title {
+        margin-bottom: 6px;
+        letter-spacing: 0.06em;
+      }
+
+      .bingo-headers,
+      .bingo-grid {
+        gap: 2px;
+      }
+    }
+
     .hidden { display: none !important; }
     .sr-only {
       position: absolute;
@@ -1516,11 +1550,34 @@
     }
 
     // ─── Render Single Card to DOM ─────────────────────────────────────────────
+    function getPreviewContentWidth() {
+      const previewArea = document.querySelector('.preview-area');
+      if (!previewArea) return Math.max(window.innerWidth - 32, 240);
+
+      const styles = window.getComputedStyle(previewArea);
+      const paddingX = parseFloat(styles.paddingLeft || '0') + parseFloat(styles.paddingRight || '0');
+      return Math.max(previewArea.clientWidth - paddingX, 240);
+    }
+
+    function getResponsivePreviewCellSize(cols, preferredCellSize) {
+      const CARD_INNER_PADDING = window.innerWidth <= 480 ? 20 : 24;
+      const GRID_GAP = window.innerWidth <= 480 ? 2 : 3;
+      const availableWidth = getPreviewContentWidth();
+      const fittedCellSize = Math.floor((availableWidth - CARD_INNER_PADDING - ((cols - 1) * GRID_GAP)) / cols);
+      const minCellSize = cols >= 9 ? 22 : cols >= 7 ? 28 : 34;
+
+      return Math.max(minCellSize, Math.min(preferredCellSize, fittedCellSize));
+    }
+
     function renderCardDOM(card) {
       const variation = card.styleVariation;
-      const cellSize = state.cellSize;
+      const cellSize = getResponsivePreviewCellSize(card.cols, state.cellSize);
       const show75Headers = state.bingoType === '75-ball';
       const is90Ball = state.bingoType === '90-ball';
+      const gapSize = window.innerWidth <= 480 ? 2 : 3;
+      const titleFontSize = Math.max(0.78, Math.min(1, cellSize / 64));
+      const titlePaddingY = Math.max(0.4, cellSize / 160);
+      const titleMarginBottom = window.innerWidth <= 480 ? 6 : 8;
 
       let bgStyle = '';
       if (state.bgImageDataUri) {
@@ -1532,11 +1589,11 @@
       let headerHtml = '';
       if (show75Headers) {
         const headers = ['B', 'I', 'N', 'G', 'O'];
-        headerHtml = `<div class="bingo-headers" style="grid-template-columns: repeat(${card.cols}, ${cellSize}px);">
+        headerHtml = `<div class="bingo-headers" style="grid-template-columns: repeat(${card.cols}, ${cellSize}px); gap: ${gapSize}px;">
           ${headers.map(h => `<div class="bingo-header-cell" style="height: ${cellSize * 0.45}px; background: ${variation.headerColor};">${h}</div>`).join('')}
         </div>`;
       } else if (is90Ball) {
-        headerHtml = `<div class="bingo-headers" style="grid-template-columns: repeat(9, ${cellSize}px);">
+        headerHtml = `<div class="bingo-headers" style="grid-template-columns: repeat(9, ${cellSize}px); gap: ${gapSize}px;">
           ${[1,2,3,4,5,6,7,8,9].map(n => `<div class="bingo-header-cell" style="height: ${cellSize * 0.4}px; background: ${variation.headerColor};">${n}</div>`).join('')}
         </div>`;
       }
@@ -1569,9 +1626,9 @@
       return `<div class="bingo-card" style="${bgStyle} font-family: ${state.fontFamily};">
         ${state.bgImageDataUri ? `<div style="position: absolute; inset: 0; background: rgba(255,255,255,${state.overlayOpacity}); border-radius: inherit; pointer-events: none;"></div>` : ''}
         <div class="bingo-card-inner" style="position: relative; z-index: 1;">
-          <div class="bingo-title" style="background: ${variation.headerColor};">${card.title}</div>
+          <div class="bingo-title" style="background: ${variation.headerColor}; font-size: ${titleFontSize}rem; padding: ${titlePaddingY}rem 0.75rem; margin-bottom: ${titleMarginBottom}px;">${card.title}</div>
           ${headerHtml}
-          <div class="bingo-grid" style="grid-template-columns: repeat(${card.cols}, ${cellSize}px); grid-template-rows: repeat(${card.rows}, ${cellSize}px);">
+          <div class="bingo-grid" style="grid-template-columns: repeat(${card.cols}, ${cellSize}px); grid-template-rows: repeat(${card.rows}, ${cellSize}px); gap: ${gapSize}px;">
             ${cellsHtml}
           </div>
           <div class="bingo-watermark" style="color: ${variation.textColor};">#${card.id.split('-')[1]}</div>
@@ -1611,6 +1668,18 @@
     }
 
     // ─── Update UI ─────────────────────────────────────────────────────────────
+    let previewResizeFrame = null;
+
+    function rerenderCardsForViewport() {
+      if (state.cards.length === 0) return;
+      if (previewResizeFrame) cancelAnimationFrame(previewResizeFrame);
+
+      previewResizeFrame = requestAnimationFrame(() => {
+        renderCards();
+        previewResizeFrame = null;
+      });
+    }
+
     function updateUI() {
       const hasCards = state.cards.length > 0;
 
@@ -2171,6 +2240,8 @@
         document.getElementById('callProgress').textContent = `0 / ${state.callList.length}`;
         document.getElementById('calledItems').innerHTML = `<span style="color: var(--muted-fg); font-size: 0.875rem;">${t('pressToStart')}</span>`;
       });
+
+      window.addEventListener('resize', rerenderCardsForViewport);
 
       // Initial labels
       applyTranslations();
