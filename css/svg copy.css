@@ -1,0 +1,15 @@
+/* Logo paths: stroke set white for dark theme. GSAP handles the draw. */
+.logo-svg .st0 {
+  stroke: var(--fg);
+  stroke-width: 6;
+  stroke-miterlimit: 10;
+  fill: none;
+}
+
+/* Fallback (no-JS / reduced motion): show filled logo */
+@media (prefers-reduced-motion: reduce) {
+  .logo-svg .st0 {
+    stroke-dashoffset: 0 !important;
+    fill: var(--fg);
+  }
+}
