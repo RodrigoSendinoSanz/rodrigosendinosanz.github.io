@@ -1,11 +1,82 @@
 /* =========================================================
-   MAIN — cursor, debug mode, particles, glitch, nav, audio
+   MAIN — cursor, debug mode, particles, glitch, nav, audio,
+           theme toggle, pixel background
    ========================================================= */
 (function () {
   "use strict";
 
   var prefersReduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   var isFinePointer = window.matchMedia("(min-width: 1025px) and (pointer: fine)").matches;
+
+  /* ---------------- PIXEL BACKGROUND CANVAS ---------------- */
+  (function () {
+    var bgCanvas = document.querySelector(".bg-canvas");
+    if (!bgCanvas) return;
+    var bgCtx = bgCanvas.getContext("2d");
+    var CELL = 20;
+    var cols, rows;
+    var mouseX = -999, mouseY = -999;
+    var RADIUS = 130;
+
+    function sizeGrid() {
+      bgCanvas.width = window.innerWidth;
+      bgCanvas.height = window.innerHeight;
+      cols = Math.ceil(bgCanvas.width / CELL) + 1;
+      rows = Math.ceil(bgCanvas.height / CELL) + 1;
+    }
+    sizeGrid();
+    window.addEventListener("resize", sizeGrid);
+
+    document.addEventListener("mousemove", function (e) { mouseX = e.clientX; mouseY = e.clientY; });
+    document.addEventListener("touchmove", function (e) {
+      mouseX = e.touches[0].clientX; mouseY = e.touches[0].clientY;
+    }, { passive: true });
+
+    function drawGrid() {
+      bgCtx.clearRect(0, 0, bgCanvas.width, bgCanvas.height);
+      var isDebug = document.body.classList.contains("debug");
+      var isLight = document.documentElement.classList.contains("light");
+
+      for (var r = 0; r < rows; r++) {
+        for (var c = 0; c < cols; c++) {
+          var x = c * CELL;
+          var y = r * CELL;
+
+          /* base grid dot */
+          bgCtx.fillStyle = isLight ? "rgba(29,29,27,0.1)" : "rgba(243,243,236,0.055)";
+          bgCtx.fillRect(x, y, 1, 1);
+
+          /* cursor glow */
+          var dx = x - mouseX;
+          var dy = y - mouseY;
+          var dist = Math.sqrt(dx * dx + dy * dy);
+          if (dist < RADIUS) {
+            var intensity = (1 - dist / RADIUS);
+            var alpha = intensity * 0.6;
+            if (isDebug) {
+              bgCtx.fillStyle = "rgba(37,255,140," + alpha + ")";
+            } else if (isLight) {
+              bgCtx.fillStyle = "rgba(214,72,0," + (alpha * 0.7) + ")";
+            } else {
+              bgCtx.fillStyle = "rgba(255,91,4," + (alpha * 0.55) + ")";
+            }
+            bgCtx.fillRect(x - 1, y - 1, 3, 3);
+          }
+        }
+      }
+      requestAnimationFrame(drawGrid);
+    }
+    requestAnimationFrame(drawGrid);
+  })();
+
+  /* ---------------- THEME TOGGLE ---------------- */
+  var themeToggle = document.getElementById("themeToggle");
+  if (themeToggle) {
+    themeToggle.addEventListener("click", function () {
+      var isLight = document.documentElement.classList.toggle("light");
+      localStorage.setItem("rss-theme", isLight ? "light" : "dark");
+    });
+  }
 
   /* ---------------- MOBILE NAV ---------------- */
   var navToggle = document.getElementById("navToggle");
