@@ -13,7 +13,14 @@
   var prefersReduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
   /* ---------------- SVG LOGO DRAW ---------------- */
-  var paths = document.querySelectorAll(".logo-svg .svg-elem-1, .logo-svg .svg-elem-2, .logo-svg .svg-elem-3");
+  var paths = document.querySelectorAll(
+    ".brand-mark .logo-svg .svg-elem-1, " +
+      ".brand-mark .logo-svg .svg-elem-2, " +
+      ".brand-mark .logo-svg .svg-elem-3, " +
+      ".banner-logo-svg.layer-front .svg-elem-1, " +
+      ".banner-logo-svg.layer-front .svg-elem-2, " +
+      ".banner-logo-svg.layer-front .svg-elem-3"
+  );
 
   if (paths.length && !prefersReduced) {
     paths.forEach(function (path) {

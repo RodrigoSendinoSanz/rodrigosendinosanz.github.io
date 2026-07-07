@@ -427,6 +427,8 @@ body.debug .section-index { color: var(--debug); }
   border-radius: var(--radius);
 }
 .banner-title {
+  flex: 1 1 auto;
+  min-width: 0;
   font-size: clamp(3rem, 15vw, 9.5rem);
   font-weight: 700;
   line-height: 0.88;
@@ -444,6 +446,178 @@ body.debug .banner-title .outline { -webkit-text-stroke-color: var(--debug); }
   text-wrap: pretty;
 }
 .banner-actions { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 36px; }
+
+/* ---- BANNER HERO ROW ---- */
+.banner-hero-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: clamp(18px, 4vw, 64px);
+  width: 100%;
+}
+
+/* ---- 3D INTERACTIVE LOGO ---- */
+.banner-logo-3d {
+  flex: 0 0 auto;
+  width: clamp(140px, 18vw, 260px);
+  height: clamp(140px, 18vw, 260px);
+  perspective: 1000px;
+  position: relative;
+  z-index: 2;
+  margin: 0;
+}
+
+.banner-logo-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transform-style: preserve-3d;
+  transition: transform 0.08s linear;
+  will-change: transform;
+  display: grid;
+  place-items: center;
+}
+
+.banner-logo-svg {
+  width: 100%;
+  height: 100%;
+  transform-style: preserve-3d;
+  pointer-events: none;
+  overflow: visible;
+  transition: filter 0.4s ease;
+}
+
+/* 3D Stacking Positions */
+.banner-logo-svg.layer-front {
+  position: relative;
+  transform: translateZ(15px);
+  z-index: 10;
+}
+
+.banner-logo-svg.layer-mid-2 {
+  position: absolute;
+  top: 0;
+  left: 0;
+  transform: translateZ(10px);
+  z-index: 9;
+}
+
+.banner-logo-svg.layer-mid-1 {
+  position: absolute;
+  top: 0;
+  left: 0;
+  transform: translateZ(5px);
+  z-index: 8;
+}
+
+.banner-logo-svg.layer-back {
+  position: absolute;
+  top: 0;
+  left: 0;
+  transform: translateZ(0px);
+  z-index: 7;
+}
+
+/* Extrusion Color Scheme */
+.banner-logo-svg.layer-front path {
+  fill: var(--fg);
+  stroke: var(--fg);
+  stroke-width: 1px;
+}
+
+.banner-logo-svg.layer-mid-2 path {
+  fill: var(--accent) !important;
+  stroke: var(--accent) !important;
+  stroke-width: 1px !important;
+  opacity: 0.9;
+}
+
+.banner-logo-svg.layer-mid-1 path {
+  fill: var(--accent) !important;
+  stroke: var(--accent) !important;
+  stroke-width: 1.5px !important;
+  opacity: 0.75;
+}
+
+.banner-logo-svg.layer-back path {
+  fill: var(--line) !important;
+  stroke: var(--line) !important;
+  stroke-width: 2px !important;
+  filter: drop-shadow(4px 10px 16px rgba(0, 0, 0, 0.55));
+}
+
+/* Reacting to hover filter */
+.banner-logo-3d:hover .banner-logo-svg.layer-front {
+  filter: drop-shadow(0 0 25px var(--accent-soft));
+}
+
+.banner-logo-glow {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 90%;
+  height: 90%;
+  transform: translate(-50%, -50%) translateZ(-30px);
+  background: radial-gradient(circle, var(--accent-soft) 0%, transparent 70%);
+  border-radius: 50%;
+  opacity: 0;
+  transition: opacity 0.5s ease;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.banner-logo-3d:hover .banner-logo-glow {
+  opacity: 1;
+}
+
+/* Idle floating animation */
+@keyframes logo-float {
+  0%, 100% { transform: translateY(0) rotateX(0) rotateY(0); }
+  25%      { transform: translateY(-8px) rotateX(3deg) rotateY(-2deg); }
+  50%      { transform: translateY(-4px) rotateX(-2deg) rotateY(3deg); }
+  75%      { transform: translateY(-10px) rotateX(2deg) rotateY(-1deg); }
+}
+
+.banner-logo-inner.idle {
+  animation: logo-float 6s ease-in-out infinite;
+}
+
+/* Debug mode accent */
+body.debug .banner-logo-svg.layer-mid-2 path,
+body.debug .banner-logo-svg.layer-mid-1 path {
+  fill: var(--debug) !important;
+  stroke: var(--debug) !important;
+}
+body.debug .banner-logo-svg.layer-back path {
+  fill: var(--debug-soft) !important;
+  stroke: var(--debug-soft) !important;
+  filter: drop-shadow(4px 10px 16px rgba(37, 255, 140, 0.25));
+}
+body.debug .banner-logo-glow {
+  background: radial-gradient(circle, var(--debug-soft) 0%, transparent 70%);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .banner-hero-row {
+    gap: 16px;
+  }
+
+  .banner-logo-3d {
+    width: 130px;
+    height: 130px;
+  }
+}
+@media (max-width: 480px) {
+  .banner-title {
+    font-size: clamp(2.25rem, 13vw, 3.4rem);
+  }
+
+  .banner-logo-3d {
+    width: 92px;
+    height: 92px;
+  }
+}
 
 .social { list-style: none; display: flex; gap: 10px; margin-top: 40px; }
 .social a {
