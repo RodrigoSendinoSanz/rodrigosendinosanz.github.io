@@ -12,17 +12,17 @@
   --line-soft: #1c1c20;
   --fg: #f3f3ec;
   --muted: #8a8a82;
-  --accent: #ff5b04;
-  --accent-soft: rgba(255, 91, 4, 0.14);
   --debug: #25ff8c;
   --debug-soft: rgba(37, 255, 140, 0.12);
+  --accent: var(--debug);
+  --accent-soft: rgba(37, 255, 140, 0.14);
   --radius: 4px;
   --font-sans: "Space Grotesk", system-ui, sans-serif;
   --font-mono: "JetBrains Mono", ui-monospace, monospace;
   --ease: cubic-bezier(0.16, 1, 0.3, 1);
   --scrollbar-track: #111114;
-  --scrollbar-thumb: #ff5b04;
-  --bg-pixel: rgba(255, 91, 4, 0.18);
+  --scrollbar-thumb: #25ff8c;
+  --bg-pixel: rgba(37, 255, 140, 0.18);
 }
 
 /* ---- LIGHT (GameBoy / Cyber-Teal) ---- */
@@ -254,7 +254,17 @@ body.debug .dbg-guides {
   letter-spacing: 0.05em;
   cursor: pointer;
   box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.4), 0 6px 20px rgba(0, 0, 0, 0.5);
-  transition: border-color 0.2s, color 0.2s, transform 0.12s;
+  transition: border-color 0.2s, color 0.2s, transform 0.12s, opacity 0.2s, visibility 0.2s;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transform: translateY(8px);
+}
+.debug-toggle.is-visible {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+  transform: translateY(0);
 }
 .debug-toggle:active { transform: translateY(2px); }
 .debug-toggle-led {
@@ -272,7 +282,7 @@ body.debug .debug-toggle-led { background: var(--debug); box-shadow: 0 0 10px va
 .theme-toggle {
   position: fixed;
   right: 18px;
-  bottom: 70px;
+  bottom: 20px;
   z-index: 9600;
   display: inline-flex;
   align-items: center;
@@ -289,6 +299,7 @@ body.debug .debug-toggle-led { background: var(--debug); box-shadow: 0 0 10px va
 }
 .theme-toggle:active { transform: translateY(2px); }
 .theme-toggle:hover { border-color: var(--accent); }
+html:not(.light) .theme-toggle:hover { border-color: var(--debug); }
 .theme-toggle-track {
   width: 32px;
   height: 16px;
@@ -297,7 +308,7 @@ body.debug .debug-toggle-led { background: var(--debug); box-shadow: 0 0 10px va
   border-radius: 0;
   position: relative;
   image-rendering: pixelated;
-  transition: background 0.2s;
+  transition: background 0.2s, border-color 0.2s;
 }
 .theme-toggle-thumb {
   position: absolute;
@@ -309,7 +320,9 @@ body.debug .debug-toggle-led { background: var(--debug); box-shadow: 0 0 10px va
   transition: transform 0.2s, background 0.2s;
 }
 html.light .theme-toggle-track { background: var(--accent); border-color: var(--accent); }
+html:not(.light) .theme-toggle-track { background: var(--debug); border-color: var(--debug); }
 html.light .theme-toggle-thumb { transform: translateX(16px); background: var(--fg); }
+html:not(.light) .theme-toggle-thumb { transform: translateX(16px); background: var(--bg); }
 .theme-toggle-icons { display: flex; gap: 6px; font-size: 0.75rem; }
 .theme-toggle-icons .fa-moon { display: block; }
 .theme-toggle-icons .fa-sun { display: none; }
@@ -487,63 +500,19 @@ body.debug .banner-title .outline { -webkit-text-stroke-color: var(--debug); }
   transition: filter 0.4s ease;
 }
 
-/* 3D Stacking Positions */
+/* Single-layer logo treatment */
 .banner-logo-svg.layer-front {
   position: relative;
-  transform: translateZ(15px);
+  transform: translateZ(0);
   z-index: 10;
 }
 
-.banner-logo-svg.layer-mid-2 {
-  position: absolute;
-  top: 0;
-  left: 0;
-  transform: translateZ(10px);
-  z-index: 9;
-}
-
-.banner-logo-svg.layer-mid-1 {
-  position: absolute;
-  top: 0;
-  left: 0;
-  transform: translateZ(5px);
-  z-index: 8;
-}
-
-.banner-logo-svg.layer-back {
-  position: absolute;
-  top: 0;
-  left: 0;
-  transform: translateZ(0px);
-  z-index: 7;
-}
-
-/* Extrusion Color Scheme */
 .banner-logo-svg.layer-front path {
   fill: var(--fg);
   stroke: var(--fg);
   stroke-width: 1px;
-}
-
-.banner-logo-svg.layer-mid-2 path {
-  fill: var(--accent) !important;
-  stroke: var(--accent) !important;
-  stroke-width: 1px !important;
-  opacity: 0.9;
-}
-
-.banner-logo-svg.layer-mid-1 path {
-  fill: var(--accent) !important;
-  stroke: var(--accent) !important;
-  stroke-width: 1.5px !important;
-  opacity: 0.75;
-}
-
-.banner-logo-svg.layer-back path {
-  fill: var(--line) !important;
-  stroke: var(--line) !important;
-  stroke-width: 2px !important;
-  filter: drop-shadow(4px 10px 16px rgba(0, 0, 0, 0.55));
+  stroke-linecap: round;
+  stroke-linejoin: round;
 }
 
 /* Reacting to hover filter */
@@ -570,16 +539,36 @@ body.debug .banner-title .outline { -webkit-text-stroke-color: var(--debug); }
   opacity: 1;
 }
 
-/* Idle floating animation */
+/* Idle floating animation - subtle */
 @keyframes logo-float {
-  0%, 100% { transform: translateY(0) rotateX(0) rotateY(0); }
-  25%      { transform: translateY(-8px) rotateX(3deg) rotateY(-2deg); }
-  50%      { transform: translateY(-4px) rotateX(-2deg) rotateY(3deg); }
-  75%      { transform: translateY(-10px) rotateX(2deg) rotateY(-1deg); }
+  0%, 100% { transform: translateY(0); }
+  50%      { transform: translateY(-2px); }
 }
 
 .banner-logo-inner.idle {
-  animation: logo-float 6s ease-in-out infinite;
+  animation: logo-float 8s ease-in-out infinite;
+}
+
+/* Border/shadow layer for 3D effect */
+.banner-logo-svg-border {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  transform: translateZ(-8px) scale(1.08) translateY(6px);
+  opacity: 0;
+  pointer-events: none;
+  z-index: -1;
+}
+
+.banner-logo-svg-border path {
+  fill: none;
+  stroke: var(--accent-soft);
+  stroke-width: 1.5px;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  opacity: 0.6;
 }
 
 /* Debug mode accent */
@@ -881,7 +870,7 @@ body.debug .contact-form textarea:focus {
   pointer-events: none;
 }
 [data-glitch].glitching::before { color: var(--accent); transform: translate(-3px, 1px); clip-path: inset(0 0 55% 0); opacity: 0.85; }
-[data-glitch].glitching::after { color: var(--debug); transform: translate(3px, -1px); clip-path: inset(55% 0 0 0); opacity: 0.85; }
+[data-glitch].glitching::after { color: var(--accent); transform: translate(3px, -1px); clip-path: inset(55% 0 0 0); opacity: 0.85; }
 
 .fx-hidden { opacity: 0; transform: translateY(28px); }
 
@@ -917,7 +906,7 @@ body.debug .contact-form textarea:focus {
   .work-card { width: 100%; }
 
   .debug-toggle { right: 12px; bottom: 12px; padding: 9px 11px; font-size: 0.62rem; }
-  .theme-toggle { right: 12px; bottom: 62px; padding: 7px 10px; font-size: 0.62rem; }
+  .theme-toggle { right: 12px; bottom: 12px; padding: 7px 10px; font-size: 0.62rem; }
   .banner-scroll { display: none; }
 }
 

@@ -14,26 +14,9 @@
   if (!inner) return;
 
   const banner = document.getElementById("banner");
-  const frontLayer = inner.querySelector(".banner-logo-svg.layer-front");
 
-  if (frontLayer && !inner.querySelector(".banner-logo-svg.layer-mid-2")) {
-    [
-      ["layer-back", true],
-      ["layer-mid-1", true],
-      ["layer-mid-2", true],
-    ].forEach(function (layerConfig) {
-      const clone = frontLayer.cloneNode(true);
-      clone.classList.remove("layer-front");
-      clone.classList.add(layerConfig[0]);
-      clone.setAttribute("aria-hidden", String(layerConfig[1]));
-      clone.removeAttribute("aria-label");
-      clone.querySelectorAll("path").forEach(function (path) {
-        path.style.strokeDasharray = "";
-        path.style.strokeDashoffset = "0";
-        path.style.fill = "";
-      });
-      inner.insertBefore(clone, frontLayer);
-    });
+  if (window.initBannerLogoDraw) {
+    window.initBannerLogoDraw();
   }
 
   // --- Configuration ---
