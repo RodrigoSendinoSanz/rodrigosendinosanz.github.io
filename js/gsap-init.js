@@ -13,87 +13,48 @@
   var prefersReduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
   /* ---------------- SVG LOGO DRAW ---------------- */
-  function initBannerLogoDraw() {
-    var paths = Array.from(
-      document.querySelectorAll(
-        ".brand-mark .logo-svg .svg-elem-1, " +
-          ".brand-mark .logo-svg .svg-elem-2, " +
-          ".brand-mark .logo-svg .svg-elem-3, " +
-          ".banner-logo-inner .banner-logo-svg .svg-elem-1, " +
-          ".banner-logo-inner .banner-logo-svg .svg-elem-2, " +
-          ".banner-logo-inner .banner-logo-svg .svg-elem-3, " +
-          ".banner-logo-svg-border .svg-border-elem-1, " +
-          ".banner-logo-svg-border .svg-border-elem-2, " +
-          ".banner-logo-svg-border .svg-border-elem-3"
-      )
-    );
+  var paths = document.querySelectorAll(".logo-svg .svg-elem-1, .logo-svg .svg-elem-2, .logo-svg .svg-elem-3");
 
-    if (!paths.length) return;
-    if (document.documentElement.getAttribute("data-logo-draw-animated") === "true") return;
-
-    document.documentElement.setAttribute("data-logo-draw-animated", "true");
-
-    if (!prefersReduced) {
-      var bannerLogoSvgs = document.querySelectorAll(".banner-logo-inner .banner-logo-svg, .banner-logo-svg-border");
-      bannerLogoSvgs.forEach(function (svg) {
-        gsap.set(svg, { opacity: 0 });
+  if (paths.length && !prefersReduced) {
+    paths.forEach(function (path) {
+      var len = path.getTotalLength ? path.getTotalLength() : 2000;
+      gsap.set(path, {
+        strokeDasharray: len,
+        strokeDashoffset: len,
+        fill: "transparent",
       });
+    });
 
-      paths.forEach(function (path) {
-        var len = path.getTotalLength ? path.getTotalLength() : 2000;
-        gsap.set(path, {
-          strokeDasharray: len,
-          strokeDashoffset: len,
-          fill: "transparent",
-          strokeLinecap: "round",
-          strokeLinejoin: "round",
-        });
-      });
+    var tl = gsap.timeline({ delay: 0.2 });
 
-      var tl = gsap.timeline({ delay: 0.15 });
-
-      tl.to(bannerLogoSvgs, {
-        opacity: 1,
-        duration: 5,
-        ease: "power2.out",
-        stagger: 0.25,
-      });
-
-      paths.forEach(function (path, i) {
-        var len = path.getTotalLength ? path.getTotalLength() : 2000;
-        tl.to(
-          path,
-          {
-            strokeDashoffset: 0,
-            duration: 1.05,
-            ease: "power2.inOut",
-          },
-          i * 0.18
-        );
-      });
-
+    paths.forEach(function (path, i) {
+      var len = path.getTotalLength ? path.getTotalLength() : 2000;
       tl.to(
-        paths,
+        path,
         {
-          fill: "var(--fg)",
-          duration: 0.5,
-          ease: "power1.in",
-          stagger: 0.08,
+          strokeDashoffset: 0,
+          duration: 1.2,
+          ease: "power2.inOut",
         },
-        "-=0.3"
+        i * 0.3
       );
-    } else {
-      paths.forEach(function (path) {
-        gsap.set(path, { strokeDashoffset: 0, fill: "var(--fg)" });
-      });
-    }
+    });
+
+    tl.to(
+      paths,
+      {
+        fill: "var(--fg)",
+        duration: 0.6,
+        ease: "power1.in",
+        stagger: 0.1,
+      },
+      "-=0.4"
+    );
+  } else {
+    paths.forEach(function (path) {
+      gsap.set(path, { strokeDashoffset: 0, fill: "var(--fg)" });
+    });
   }
-
-  window.requestAnimationFrame(function () {
-    window.setTimeout(initBannerLogoDraw, 60);
-  });
-
-  window.initBannerLogoDraw = initBannerLogoDraw;
 
   /* ---------------- SCROLL REVEALS ---------------- */
   if (ScrollTrigger && !prefersReduced) {

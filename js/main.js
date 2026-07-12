@@ -58,7 +58,7 @@
             } else if (isLight) {
               bgCtx.fillStyle = "rgba(214,72,0," + (alpha * 0.7) + ")";
             } else {
-              bgCtx.fillStyle = "rgba(37,255,140," + (alpha * 0.55) + ")";
+              bgCtx.fillStyle = "rgba(255,91,4," + (alpha * 0.55) + ")";
             }
             bgCtx.fillRect(x - 1, y - 1, 3, 3);
           }
@@ -192,54 +192,19 @@
 
   /* ---------------- DEBUG MODE TOGGLE ---------------- */
   var debugToggle = document.getElementById("debugToggle");
-  var debugTags = [];
-  var originalConsole = window.console || {};
-  var consoleMethods = ["log", "info", "warn", "debug", "error"];
-
-  function setConsoleVisibility(enabled) {
-    if (!originalConsole) return;
-    consoleMethods.forEach(function (method) {
-      if (!originalConsole[method]) return;
-      window.console[method] = enabled ? originalConsole[method].bind(console) : function () {};
-    });
-  }
-
-  setConsoleVisibility(false);
-
-  function setDebugState(on) {
-    document.body.classList.toggle("debug", on);
-    if (debugToggle) {
+  if (debugToggle) {
+    debugToggle.addEventListener("click", function () {
+      var on = document.body.classList.toggle("debug");
       debugToggle.setAttribute("aria-pressed", on ? "true" : "false");
       var stateEl = debugToggle.querySelector("[data-state]");
       if (stateEl) stateEl.textContent = on ? "ON" : "OFF";
-      debugToggle.classList.toggle("is-visible", on);
-    }
-    if (on) mountDebugTags();
-    else clearDebugTags();
-    setConsoleVisibility(on);
-    window.__debugEnabled = on;
-  }
-
-  if (debugToggle) {
-    debugToggle.addEventListener("click", function () {
-      setDebugState(!document.body.classList.contains("debug"));
       clickSound();
+      if (on) mountDebugTags();
+      else clearDebugTags();
     });
   }
 
-  window.debug = function (force) {
-    var nextState = typeof force === "boolean" ? force : !document.body.classList.contains("debug");
-    setDebugState(nextState);
-    return nextState;
-  };
-  window.toggleDebug = window.debug;
-  window.debugConsole = function (method) {
-    if (!window.console || !window.console[method]) return;
-    if (!document.body.classList.contains("debug") && !window.__debugEnabled) return;
-    var args = Array.prototype.slice.call(arguments, 1);
-    window.console[method].apply(window.console, args);
-  };
-
+  var debugTags = [];
   function mountDebugTags() {
     clearDebugTags();
     var labels = ["Render: GPU", "FPS: 60", "GSAP: Active", "Layout: Bento", "Layer: z-index", "Paint: ✓"];
