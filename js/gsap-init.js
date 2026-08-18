@@ -150,34 +150,38 @@
     window.matchMedia("(max-width: 768px)").matches;
 
   if (!isTouch && ScrollTrigger && !prefersReduced) {
-    var track = document.getElementById("projectTrack");
-    if (track) {
+    var projectSection = document.querySelector("#project");
+    var track = projectSection ? projectSection.querySelector("#projectTrack") : null;
+    var projectPin = projectSection ? projectSection.querySelector(".project-pin") : null;
+
+    if (projectSection && track && projectPin) {
       var cards = track.querySelectorAll(".work-card");
       var totalCards = cards.length;
 
-      /* Wait for layout to settle */
-      ScrollTrigger.refresh();
-
       var getScrollAmount = function () {
         var trackW = track.scrollWidth;
-        var viewW = track.parentElement.offsetWidth;
-        return -(trackW - viewW);
+        var viewW = projectPin.offsetWidth;
+        return -Math.max(0, trackW - viewW);
       };
 
       gsap.to(track, {
         x: getScrollAmount,
         ease: "none",
         scrollTrigger: {
-          trigger: ".project-pin",
+          trigger: projectPin,
           start: "top top",
           end: function () {
             return "+=" + Math.abs(getScrollAmount());
           },
           pin: true,
+          pinSpacing: true,
           scrub: 1,
           invalidateOnRefresh: true,
         },
       });
+
+      /* Measure the stable section after creating the pin. */
+      ScrollTrigger.refresh();
     }
   }
 
