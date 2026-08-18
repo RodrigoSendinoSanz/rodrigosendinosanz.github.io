@@ -589,22 +589,32 @@ body.debug .banner-logo-glow {
 /* Responsive adjustments */
 @media (max-width: 768px) {
   .banner-hero-row {
+    flex-direction: column-reverse;
+    align-items: stretch;
     gap: 16px;
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .banner-title,
+  .banner-logo-3d,
+  .banner-logo-inner {
+    width: 100%;
+    max-width: 100%;
   }
 
   .banner-logo-3d {
-    width: 130px;
-    height: 130px;
+    height: auto;
+    aspect-ratio: 1;
+  }
+
+  .banner-logo-inner {
+    height: 100%;
   }
 }
 @media (max-width: 480px) {
   .banner-title {
     font-size: clamp(2.25rem, 13vw, 3.4rem);
-  }
-
-  .banner-logo-3d {
-    width: 92px;
-    height: 92px;
   }
 }
 
