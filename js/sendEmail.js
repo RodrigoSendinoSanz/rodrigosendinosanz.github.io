@@ -24,9 +24,7 @@
             text: "No se ha podido enviar el correo",
             icon: "error"
         });
-        if (window.debugConsole) {
-          window.debugConsole('error', 'Error:', error);
-        }
+        console.error('Error:', error);
       }
     );
   });
