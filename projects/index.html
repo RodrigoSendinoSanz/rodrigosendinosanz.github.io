@@ -342,7 +342,7 @@
             <span class="tech-tag">LocalStorage</span>
             <span class="tech-tag">CSS Grid</span>
           </div>
-          <span class="project-link" aria-disabled="true">En desarrollo</span>
+          <button class="project-link" aria-disabled="true" disabled>En desarrollo</button>
         </article>
 
         <article class="project-card is-soon" data-fx>
@@ -359,7 +359,7 @@
             <span class="tech-tag">Web Fonts</span>
             <span class="tech-tag">File API</span>
           </div>
-          <span class="project-link" aria-disabled="true">En desarrollo</span>
+          <button class="project-link" aria-disabled="true" disabled>En desarrollo</button>
         </article>
 
         <article class="project-card is-soon" data-fx>
@@ -375,7 +375,7 @@
             <span class="tech-tag">Canvas</span>
             <span class="tech-tag">PNG</span>
           </div>
-          <span class="project-link" aria-disabled="true">En desarrollo</span>
+          <button class="project-link" aria-disabled="true" disabled>En desarrollo</button>
         </article>
       </div>
     </section>
@@ -383,5 +383,44 @@
 </div>
 
 <script src="../js/main.js"></script>
+
+<!-- Fallback cursor initializer: ensure cursor element is visible and running on pages where main.js didn't initialize it -->
+<script>
+  (function () {
+    try {
+      var cursor = document.querySelector('.cursor');
+      if (!cursor) return;
+      if (getComputedStyle(cursor).display === 'none') cursor.style.display = 'block';
+      if (document.body.classList.contains('no-cursor')) return;
+
+      if (window.__cursorFallbackInitialized) return;
+      // Lightweight fallback that follows mouse and applies hover states
+      var mx = window.innerWidth / 2, my = window.innerHeight / 2;
+      var cx = mx, cy = my;
+      document.addEventListener('mousemove', function (e) { mx = e.clientX; my = e.clientY; });
+
+      // Add hover handlers for interactive elements if not already present
+      function attachHoverHandlers() {
+        document.querySelectorAll('a, button, input, textarea, [data-fx]').forEach(function (el) {
+          el.addEventListener('mouseenter', function () { cursor.classList.add('is-hover'); });
+          el.addEventListener('mouseleave', function () { cursor.classList.remove('is-hover'); });
+        });
+      }
+
+      attachHoverHandlers();
+
+      function loop() {
+        cx += (mx - cx) * 0.2;
+        cy += (my - cy) * 0.2;
+        cursor.style.transform = 'translate(' + cx + 'px,' + cy + 'px)';
+        requestAnimationFrame(loop);
+      }
+      requestAnimationFrame(loop);
+      window.__cursorFallbackInitialized = true;
+    } catch (e) {
+      console.warn('cursor fallback failed', e);
+    }
+  })();
+</script>
 </body>
 </html>
