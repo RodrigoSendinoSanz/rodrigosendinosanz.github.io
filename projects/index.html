@@ -22,143 +22,112 @@
         })();
     </script>
     <style>
-        * {
+        body.projects-page {
             margin: 0;
             padding: 0;
-            box-sizing: border-box;
-        }
-
-        body.projects-page {
-            font-family: var(--font-sans, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif);
-            background: var(--bg, #0a0a0b);
-            color: var(--fg, #f3f3ec);
-            line-height: 1.6;
-            padding: 2rem 1rem;
+            background: var(--bg);
+            color: var(--fg);
+            overflow-x: hidden;
             transition: background-color 0.35s ease, color 0.35s ease;
         }
 
-        .container {
-            max-width: 1200px;
+        body.projects-page .page {
+            padding-top: 110px;
+        }
+
+        .projects-shell {
+            position: relative;
+            z-index: 1;
+        }
+
+        .projects-intro {
+            max-width: 1180px;
             margin: 0 auto;
-        }
-
-        .header {
-            text-align: center;
-            margin-bottom: 4rem;
-        }
-
-        .header h1 {
-            font-size: 2.5rem;
-            font-weight: 300;
-            color: #2c2c2c;
-            margin-bottom: 0.5rem;
-            letter-spacing: -0.02em;
-        }
-
-        .header p {
-            font-size: 1.1rem;
-            color: #666;
-            font-weight: 400;
-        }
-
-        .back-link {
-            position: absolute;
-            top: 2rem;
-            left: 2rem;
-            color: #666;
-            text-decoration: none;
-            font-size: 0.9rem;
-            transition: color 0.3s ease;
-        }
-
-        .back-link:hover {
-            color: #2c2c2c;
+            padding: 60px 20px 90px;
         }
 
         .projects-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-            gap: 2rem;
-            margin-top: 2rem;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 28px;
+            margin-top: 32px;
         }
 
         .project-card {
-            background: white;
-            border: 1px solid #e8e8e8;
-            border-radius: 8px;
-            padding: 2rem;
-            transition: all 0.3s ease;
             position: relative;
-            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            min-height: 100%;
+            padding: 22px 22px 20px;
+            background: rgba(17, 17, 20, 0.6);
+            border: 1px solid var(--line);
+            border-radius: var(--radius);
+            box-shadow: inset 0 0 0 1px rgba(255,255,255,0.02);
+            transition: transform 0.25s var(--ease), border-color 0.25s ease, box-shadow 0.25s ease;
+        }
+
+        html.light .project-card {
+            background: rgba(255, 255, 255, 0.5);
         }
 
         .project-card:hover {
             transform: translateY(-4px);
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
-            border-color: #d0d0d0;
+            border-color: var(--accent);
+            box-shadow: 0 18px 32px rgba(0, 0, 0, 0.08);
         }
 
-        .project-card.available {
-            border-left: 4px solid #2c2c2c;
+        .project-card.is-soon {
+            opacity: 0.78;
         }
 
-        .project-card.coming-soon {
-            border-left: 4px solid #999;
-            opacity: 0.8;
-        }
-
-        .project-card.coming-soon::after {
+        .project-card.is-soon::after {
             content: 'Próximamente';
             position: absolute;
-            top: 1rem;
-            right: 1rem;
-            background: #f0f0f0;
-            color: #666;
-            padding: 0.25rem 0.75rem;
-            border-radius: 12px;
-            font-size: 0.75rem;
-            font-weight: 500;
+            top: 14px;
+            right: 14px;
+            font-family: var(--font-mono);
+            font-size: 0.62rem;
+            letter-spacing: 0.08em;
             text-transform: uppercase;
-            letter-spacing: 0.5px;
+            padding: 4px 8px;
+            border: 1px solid var(--line);
+            background: rgba(255,255,255,0.04);
+            color: var(--muted);
         }
 
         .project-status {
             display: inline-block;
-            padding: 0.25rem 0.75rem;
-            border-radius: 12px;
-            font-size: 0.75rem;
-            font-weight: 500;
+            align-self: flex-start;
+            padding: 6px 10px;
+            border: 1px solid var(--line);
+            background: rgba(255,255,255,0.02);
+            color: var(--muted);
+            font-family: var(--font-mono);
+            font-size: 0.62rem;
+            letter-spacing: 0.08em;
             text-transform: uppercase;
-            letter-spacing: 0.5px;
-            margin-bottom: 1rem;
         }
 
         .status-live {
-            background: #e8f5e8;
-            color: #2d5a2d;
-        }
-
-        .status-development {
-            background: #f0f0f0;
-            color: #666;
+            color: var(--accent);
+            border-color: var(--accent-soft);
         }
 
         .project-icon {
-            width: 48px;
-            height: 48px;
-            border-radius: 8px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-bottom: 1.5rem;
-            background: #f8f8f8;
-            border: 1px solid #e8e8e8;
+            width: 54px;
+            height: 54px;
+            display: grid;
+            place-items: center;
+            border: 1px solid var(--line);
+            background: var(--bg-2);
+            border-radius: var(--radius);
         }
 
         .project-icon svg {
-            width: 24px;
-            height: 24px;
-            stroke: #666;
+            width: 22px;
+            height: 22px;
+            stroke: var(--fg);
             fill: none;
             stroke-width: 1.5;
             stroke-linecap: round;
@@ -166,382 +135,253 @@
         }
 
         .project-title {
-            font-size: 1.4rem;
-            font-weight: 500;
-            margin-bottom: 1rem;
-            color: #2c2c2c;
-            letter-spacing: -0.01em;
+            margin: 0;
+            font-size: clamp(1.4rem, 1.6vw, 1.8rem);
+            line-height: 1.2;
+            letter-spacing: -0.03em;
         }
 
         .project-description {
-            font-size: 0.95rem;
-            line-height: 1.6;
-            color: #666;
-            margin-bottom: 1.5rem;
+            margin: 0;
+            color: var(--muted);
+            font-size: 0.96rem;
         }
 
         .project-tech {
             display: flex;
             flex-wrap: wrap;
-            gap: 0.5rem;
-            margin-bottom: 2rem;
+            gap: 8px;
+            margin-top: auto;
         }
 
         .tech-tag {
-            background: #f8f8f8;
-            color: #666;
-            padding: 0.25rem 0.75rem;
-            border-radius: 4px;
-            font-size: 0.8rem;
-            font-weight: 400;
-            border: 1px solid #e8e8e8;
+            padding: 6px 8px;
+            border: 1px solid var(--line);
+            border-radius: 999px;
+            background: rgba(255,255,255,0.02);
+            color: var(--muted);
+            font-family: var(--font-mono);
+            font-size: 0.65rem;
+            letter-spacing: 0.04em;
         }
 
         .project-link {
             display: inline-flex;
             align-items: center;
-            gap: 0.5rem;
-            background: #2c2c2c;
-            color: white;
-            padding: 0.75rem 1.5rem;
-            border-radius: 4px;
-            text-decoration: none;
-            font-weight: 500;
-            font-size: 0.9rem;
-            transition: all 0.3s ease;
-            border: none;
-            cursor: pointer;
+            justify-content: center;
+            gap: 8px;
+            width: fit-content;
+            margin-top: 10px;
+            padding: 0.8rem 1.2rem;
+            border: 1px solid var(--line);
+            background: var(--bg-2);
+            color: var(--fg);
+            font-family: var(--font-mono);
+            font-size: 0.72rem;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            transition: transform 0.2s ease, border-color 0.2s ease, background 0.2s ease;
         }
 
         .project-link:hover {
-            background: #1a1a1a;
-            transform: translateX(2px);
-        }
-
-        .project-link.disabled {
-            background: #e8e8e8;
-            color: #999;
-            cursor: not-allowed;
-            pointer-events: none;
-        }
-
-        .project-link.disabled:hover {
-            transform: none;
-        }
-
-        .divider {
-            height: 1px;
-            background: #e8e8e8;
-            margin: 3rem 0;
+            transform: translateX(3px);
+            border-color: var(--accent);
+            background: var(--accent-soft);
         }
 
         @media (max-width: 768px) {
-            .back-link {
-                position: relative;
-                top: 0;
-                left: 0;
-                margin-bottom: 2rem;
-                display: block;
-            }
-
-            .header h1 {
-                font-size: 2rem;
-            }
-
-            .projects-grid {
-                grid-template-columns: 1fr;
-                gap: 1.5rem;
-            }
-
-            .project-card {
-                padding: 1.5rem;
+            .projects-intro {
+                padding-top: 30px;
             }
         }
 
-        @media (max-width: 480px) {
-            body {
-                padding: 1rem 0.5rem;
-            }
-
-            .header h1 {
-                font-size: 1.8rem;
-            }
-
-            .header p {
-                font-size: 1rem;
-            }
+        /* Fix: ensure the custom cursor is shown on desktop for the projects page */
+        @media (min-width: 1025px) and (pointer: fine) {
+            .cursor { display: block !important; }
+            body:not(.no-cursor) { cursor: none !important; }
         }
 
-        /* Dark mode toggle styles (matching main site) */
-        .theme-toggle {
-            position: fixed;
-            bottom: 2rem;
-            left: 2rem;
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            background: #2c2c2c;
-            border: none;
-            color: white;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1rem;
-            transition: all 0.3s ease;
+        /* Make "Próximamente" project links look and behave disabled */
+        .project-card.is-soon .project-link,
+        .project-card.is-soon .project-link[aria-disabled="true"] {
+            pointer-events: none;
+            opacity: 0.65;
+            border-color: var(--line-soft);
+            background: transparent;
+            color: var(--muted);
+            cursor: default;
         }
+        .project-card.is-soon .project-status { color: var(--muted); border-color: var(--line-soft); }
 
-        .theme-toggle:hover {
-            transform: scale(1.1);
-        }
-
-        /* Dark mode styles */
-        @media (prefers-color-scheme: dark) {
-            body {
-                background-color: #1a1a1a;
-                color: #e8e8e8;
-            }
-
-            .project-card {
-                background: #2c2c2c;
-                border-color: #404040;
-            }
-
-            .project-card:hover {
-                border-color: #606060;
-            }
-
-            .project-icon {
-                background: #404040;
-                border-color: #606060;
-            }
-
-            .tech-tag {
-                background: #404040;
-                border-color: #606060;
-                color: #ccc;
-            }
-
-            .project-link {
-                background: #e8e8e8;
-                color: #2c2c2c;
-            }
-
-            .project-link:hover {
-                background: #f8f8f8;
-            }
-
-            .project-icon svg {
-                stroke: #ccc;
-            }
-        }
     </style>
 </head>
 
 <body class="projects-page">
-    <a href="https://rodrigosendinosanz.github.io/" class="back-link">← Volver al inicio</a>
+<canvas class="bg-canvas" aria-hidden="true"></canvas>
+<div class="fx-grain" aria-hidden="true"></div>
+<div class="fx-scanlines" aria-hidden="true"></div>
+<div class="dbg-guides" aria-hidden="true">
+  <span class="dbg-guide dbg-guide-x"></span>
+  <span class="dbg-guide dbg-guide-y"></span>
+  <span class="dbg-coords">X:0 Y:0</span>
+</div>
+<div class="cursor" aria-hidden="true">
+  <span class="cursor-ring"></span>
+  <span class="cursor-dot"></span>
+  <span class="cursor-ruler">px</span>
+</div>
+<canvas class="fx-canvas" aria-hidden="true"></canvas>
+<button class="debug-toggle" id="debugToggle" type="button" aria-pressed="false" aria-label="Activar modo depurador">
+  <span class="debug-toggle-led"></span>
+  <span class="debug-toggle-label">DEBUG&nbsp;MODE: <strong data-state>OFF</strong></span>
+</button>
+<button class="theme-toggle" id="themeToggle" type="button" aria-label="Cambiar tema claro/oscuro">
+  <span class="theme-toggle-track">
+    <span class="theme-toggle-thumb"></span>
+  </span>
+  <span class="theme-toggle-icons"><i class="fa-solid fa-moon" aria-hidden="true"></i><i class="fa-solid fa-sun" aria-hidden="true"></i></span>
+</button>
 
-    <div class="container">
-        <header class="header">
-            <h1>Proyectos</h1>
-            <p>Desarrollos y aplicaciones web</p>
-        </header>
-
-        <div class="projects-grid">
-            <!-- Proyecto Actual -->
-            <div class="project-card available">
-                <div class="project-status status-live">En vivo</div>
-                <div class="project-icon">
-                    <svg viewBox="0 0 24 24">
-                        <rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
-                        <line x1="16" y1="2" x2="16" y2="6" />
-                        <line x1="8" y1="2" x2="8" y2="6" />
-                        <line x1="3" y1="10" x2="21" y2="10" />
-                        <path d="M8 14h.01" />
-                        <path d="M12 14h.01" />
-                        <path d="M16 14h.01" />
-                        <path d="M8 18h.01" />
-                        <path d="M12 18h.01" />
-                        <path d="M16 18h.01" />
-                    </svg>
-                </div>
-                <h3 class="project-title">Asignación de Turnos</h3>
-                <p class="project-description">
-                    Sistema para gestionar y asignar turnos de trabajo de manera eficiente.
-                    Permite organizar horarios y distribuir responsabilidades entre equipos de trabajo.
-                </p>
-                <div class="project-tech">
-                    <span class="tech-tag">HTML5</span>
-                    <span class="tech-tag">CSS3</span>
-                    <span class="tech-tag">JavaScript</span>
-                    <span class="tech-tag">LocalStorage</span>
-                </div>
-                <a href="https://rodrigosendinosanz.github.io/projects/asignacion_turnos/" class="project-link"
-                    target="_blank">
-                    Ver Proyecto →
-                </a>
-            </div>
-
-            <!-- pixel_bet -->
-            <div class="project-card available">
-                <div class="project-status status-live">En vivo</div>
-                <div class="project-icon">
-                    <svg viewBox="0 0 24 24">
-                        <circle cx="12" cy="12" r="8" />
-                        <path d="M12 6v12" />
-                        <path d="M7 9l10 6" />
-                        <path d="M7 15l10-6" />
-                        <circle cx="8" cy="8" r="1.5" />
-                        <circle cx="16" cy="8" r="1.5" />
-                        <circle cx="16" cy="16" r="1.5" />
-                        <circle cx="8" cy="16" r="1.5" />
-                    </svg>
-                </div>
-                <h3 class="project-title">pixel_bet</h3>
-                <p class="project-description">
-                    Juego de póker multijugador peer-to-peer usando WebRTC para conexiones directas sin servidor.
-                    Incluye escáner QR para conectar dispositivos, sistema de apuestas con fichas, y gestión completa de
-                    partidas.
-                </p>
-                <div class="project-tech">
-                    <span class="tech-tag">HTML5</span>
-                    <span class="tech-tag">CSS3</span>
-                    <span class="tech-tag">JavaScript</span>
-                    <span class="tech-tag">WebRTC</span>
-                    <span class="tech-tag">P2P</span>
-                    <span class="tech-tag">QR Scanner</span>
-                    <span class="tech-tag">SweetAlert2</span>
-                </div>
-                <a href="https://rodrigosendinosanz.github.io/projects/pixel_bet/" class="project-link" target="_blank">
-                    Ver Proyecto →
-                </a>
-            </div>
-
-            <!-- bingo_card_generator -->
-            <div class="project-card available">
-                <div class="project-status status-live">En vivo</div>
-                <div class="project-icon">
-                    <svg viewBox="0 0 24 24">
-                        <rect x="3" y="3" width="18" height="18" rx="2" ry="2" />
-                        <line x1="3" y1="9" x2="21" y2="9" />
-                        <line x1="9" y1="3" x2="9" y2="21" />
-                        <line x1="15" y1="3" x2="15" y2="21" />
-                        <path d="M6 6h.01" />
-                        <path d="M12 12h.01" />
-                        <path d="M18 18h.01" />
-                    </svg>
-                </div>
-                <h3 class="project-title">bingo_card_generator</h3>
-                <p class="project-description">
-                    Generador de cartones de bingo personalizables con soporte para modos 75 bolas, 90 bolas y
-                    tableros personalizados. Incluye exportación a PDF, estilos visuales y opciones de iconos.
-                </p>
-                <div class="project-tech">
-                    <span class="tech-tag">HTML5</span>
-                    <span class="tech-tag">CSS3</span>
-                    <span class="tech-tag">JavaScript</span>
-                    <span class="tech-tag">pdf-lib</span>
-                    <span class="tech-tag">PDF Export</span>
-                    <span class="tech-tag">i18n</span>
-                </div>
-                <a href="https://rodrigosendinosanz.github.io/projects/bingo_card_generator/" class="project-link"
-                    target="_blank">
-                    Ver Proyecto →
-                </a>
-            </div>
-
-            <!-- Proyectos Futuros -->
-            <div class="project-card coming-soon">
-                <div class="project-status status-development">En desarrollo</div>
-                <div class="project-icon">
-                    <svg viewBox="0 0 24 24">
-                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
-                        <polyline points="14,2 14,8 20,8" />
-                        <line x1="16" y1="13" x2="8" y2="13" />
-                        <line x1="16" y1="17" x2="8" y2="17" />
-                        <polyline points="10,9 9,9 8,9" />
-                    </svg>
-                </div>
-                <h3 class="project-title">Generador de Facturas</h3>
-                <p class="project-description">
-                    Aplicación web para crear, gestionar y generar facturas profesionales.
-                    Incluye plantillas personalizables y exportación directa a PDF.
-                </p>
-                <div class="project-tech">
-                    <span class="tech-tag">React</span>
-                    <span class="tech-tag">PDF.js</span>
-                    <span class="tech-tag">LocalStorage</span>
-                    <span class="tech-tag">CSS Grid</span>
-                </div>
-                <button class="project-link disabled">
-                    Próximamente
-                </button>
-            </div>
-
-            <div class="project-card coming-soon">
-                <div class="project-status status-development">En desarrollo</div>
-                <div class="project-icon">
-                    <svg viewBox="0 0 24 24">
-                        <polyline points="4,7 4,4 20,4 20,7" />
-                        <line x1="9" y1="20" x2="15" y2="20" />
-                        <line x1="12" y1="4" x2="12" y2="20" />
-                        <path d="M8 12h8" />
-                    </svg>
-                </div>
-                <h3 class="project-title">Tipografías a SVG</h3>
-                <p class="project-description">
-                    Herramienta para convertir texto con diferentes tipografías a archivos SVG vectoriales.
-                    Ideal para diseñadores y desarrolladores que necesitan gráficos escalables.
-                </p>
-                <div class="project-tech">
-                    <span class="tech-tag">Canvas API</span>
-                    <span class="tech-tag">SVG</span>
-                    <span class="tech-tag">Web Fonts</span>
-                    <span class="tech-tag">File API</span>
-                </div>
-                <button class="project-link disabled">
-                    Próximamente
-                </button>
-            </div>
-
-            <div class="project-card coming-soon">
-                <div class="project-status status-development">En desarrollo</div>
-                <div class="project-icon">
-                    <svg viewBox="0 0 24 24">
-                        <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
-                        <circle cx="12" cy="16" r="1" />
-                        <path d="M7 11V7a5 5 0 0 1 10 0v4" />
-                    </svg>
-                </div>
-                <h3 class="project-title">Mensajes Encriptados</h3>
-                <p class="project-description">
-                    Aplicación para ocultar mensajes secretos dentro de imágenes usando codificación Base64.
-                    Perfecto para comunicación segura y técnicas de steganografía digital.
-                </p>
-                <div class="project-tech">
-                    <span class="tech-tag">Canvas</span>
-                    <span class="tech-tag">Base64</span>
-                    <span class="tech-tag">Crypto API</span>
-                    <span class="tech-tag">File Reader</span>
-                </div>
-                <button class="project-link disabled">
-                    Próximamente
-                </button>
-            </div>
-        </div>
-    </div>
-
-    <button class="theme-toggle" onclick="toggleTheme()" title="Cambiar tema">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
+<div class="projects-shell">
+  <header class="site-header" id="top">
+    <a href="https://rodrigosendinosanz.github.io/" class="brand" aria-label="Rodrigo Sendino Sanz — inicio">
+      <span class="brand-mark">
+        <svg version="1.1" viewBox="0 0 1247.3 1247.4" class="logo-svg" role="img" aria-label="Logo Rodrigo Sendino Sanz">
+          <path class="st0 svg-elem-1" d="M241.6,531.9h20.1l201.8,0.2c19.6,0,39.2,0.1,58.8-0.1c3.2,0,3.9,0.8,3.9,4.2c-0.2,13.5,0.2,27.1,0.2,40.6c0,1.3,0,2.7,0,5H267.2c9.6,78.8,38.1,148.2,89.1,206.3c67.1,76.5,151.1,119,252.4,125.3v-4.7V583.6c0-1.4-0.4-2.8-0.1-4.1c1.6-6.6-2.1-9.3-7-12.1c-12-6.6-23.7-13.6-35.4-20.6c-30.1-18-60.2-36.1-90.3-54c-29-17.2-58.2-34.3-87.3-51.4c-31.9-18.9-63.8-37.9-95.7-56.9l-16.1-9.7c31.5-68.2,77-124.1,138.5-165c85.9-57.1,179.9-78.5,280.8-59.6c111,20.9,198.2,81.1,259.2,178.5c47.5,75.9,66.5,160.1,58.1,251.1H733.5c0-1.1,0-2.6,0-4.2c-0.1-13.4-0.2-26.8-0.2-40.2c0-2.2,0.2-3.5,3-3.5c45.4,0.2,90.8,0.2,136.3,0.2c37.8,0,75.7,0,113.5,0h5.2c-2.9-90.6-32.7-169.8-90.9-237.2C833.2,217.2,748.1,177,647.1,169v5c0.1,88.6,0.2,177.2,0.3,265.8c0,32.6,0.2,65.1,0.2,97.6c0,3.5,1.2,5.4,4.1,7.1c17.5,10.2,34.9,20.4,52.4,30.7c23.4,13.9,46.8,27.6,70.2,41.5c16.1,9.4,32.1,18.8,48.1,28.3c18.6,11.1,37.2,22.4,55.8,33.5c20.5,12.1,41.2,24.2,61.6,36.3c9.4,5.5,18.5,11.2,28.4,17.1c-3.7,6.7-7,13.4-10.9,19.7c-11.8,19.2-25.2,37.2-40.1,54.1c-9.4,10.7-19.1,21.4-29.7,30.9c-12.9,11.6-26.6,22.3-40.5,32.6c-38.4,28.3-81.3,46.1-126.8,58.2c-22,5.8-44.4,9-66.9,10.8c-1.4,0.1-2.8,1.1-4.2,1.6c-1.1,0.4-2.2,1.1-3.4,1.1c-10.6,0-21.3,0-31.9-0.2c-1.7-0.1-3.3-1.1-5-1.6c-1.1-0.3-2.2-0.6-3.4-0.7c-19.3-2.7-38.9-4.3-58.1-8.3c-22.5-4.6-44.2-12.1-65.5-20.8c-23.7-9.7-46.4-21.4-67.5-36.3c-15.2-10.7-29.3-23.1-43.5-35.3c-9.7-8.3-18.9-17.2-27.4-26.7c-15.7-17.6-29.5-36.7-42-56.8c-11.4-18.5-21.3-37.9-29.7-58c-14.6-34.6-24-71.4-27.7-109c-1.8-17.3-2.1-34.8-3-52.3C241.1,533.9,241.4,532.9,241.6,531.9z M318.8,346.9L608,518.3V169.9c-36.9,0.1-102.8,14.4-159.6,48C394.8,249.7,351.3,292.2,318.8,346.9L318.8,346.9z M922.4,760.9l0.1-2.3L648.1,594.5v319.3C762.3,905.1,853.4,853.8,922.4,760.9L922.4,760.9z"/>
         </svg>
+      </span>
+      <span class="brand-text">
+        <span class="brand-name">RODRIGO SENDINO</span>
+        <span class="brand-role">FULL&nbsp;STACK&nbsp;DEV</span>
+      </span>
+    </a>
+
+    <nav class="site-nav" id="siteNav" aria-label="Navegación principal">
+      <a href="https://rodrigosendinosanz.github.io/#featured" data-link>01 / Destacado</a>
+      <a href="https://rodrigosendinosanz.github.io/#services" data-link>02 / Servicios</a>
+      <a href="https://rodrigosendinosanz.github.io/#project" data-link>03 / Proyectos</a>
+      <a href="https://rodrigosendinosanz.github.io/#skills" data-link>04 / Stack</a>
+      <a href="https://rodrigosendinosanz.github.io/#about" data-link>05 / Experiencia</a>
+      <a href="https://rodrigosendinosanz.github.io/#contact" data-link>06 / Contacto</a>
+    </nav>
+
+    <button class="nav-toggle" id="navToggle" type="button" aria-expanded="false" aria-label="Abrir menú">
+      <span></span><span></span><span></span>
     </button>
+  </header>
 
-    <script>
-        function toggleTheme() {
-            document.body.style.filter = document.body.style.filter === 'invert(1)' ? '' : 'invert(1)';
-        }
-    </script>
+  <main class="page">
+    <section class="section projects-intro">
+      <div class="section-head">
+        <span class="section-index">PORTFOLIO</span>
+        <h2 class="section-title">Proyectos</h2>
+        <p class="section-sub">Desarrollos, prototipos y aplicaciones web con enfoque productivo, visual y escalable.</p>
+      </div>
+
+      <div class="projects-grid">
+        <article class="project-card available" data-fx>
+          <div class="project-status status-live">En vivo</div>
+          <div class="project-icon">
+            <svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2" ry="2" /><line x1="16" y1="2" x2="16" y2="6" /><line x1="8" y1="2" x2="8" y2="6" /><line x1="3" y1="10" x2="21" y2="10" /><path d="M8 14h.01" /><path d="M12 14h.01" /><path d="M16 14h.01" /><path d="M8 18h.01" /><path d="M12 18h.01" /><path d="M16 18h.01" /></svg>
+          </div>
+          <h3 class="project-title">Asignación de Turnos</h3>
+          <p class="project-description">Sistema para gestionar y asignar turnos de trabajo de manera eficiente, con organización de horarios y reparto de responsabilidades.</p>
+          <div class="project-tech">
+            <span class="tech-tag">HTML5</span>
+            <span class="tech-tag">CSS3</span>
+            <span class="tech-tag">JavaScript</span>
+            <span class="tech-tag">LocalStorage</span>
+          </div>
+          <a href="https://rodrigosendinosanz.github.io/projects/asignacion_turnos/" class="project-link" target="_blank" rel="noopener" data-fx>Ver Proyecto</a>
+        </article>
+
+        <article class="project-card available" data-fx>
+          <div class="project-status status-live">En vivo</div>
+          <div class="project-icon">
+            <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8" /><path d="M12 6v12" /><path d="M7 9l10 6" /><path d="M7 15l10-6" /><circle cx="8" cy="8" r="1.5" /><circle cx="16" cy="8" r="1.5" /><circle cx="16" cy="16" r="1.5" /><circle cx="8" cy="16" r="1.5" /></svg>
+          </div>
+          <h3 class="project-title">pixel_bet</h3>
+          <p class="project-description">Juego de póker multijugador peer-to-peer con WebRTC, escáner QR, fichas y gestión completa de partidas sin depender de un servidor central.</p>
+          <div class="project-tech">
+            <span class="tech-tag">HTML5</span>
+            <span class="tech-tag">CSS3</span>
+            <span class="tech-tag">JavaScript</span>
+            <span class="tech-tag">WebRTC</span>
+            <span class="tech-tag">P2P</span>
+            <span class="tech-tag">SweetAlert2</span>
+          </div>
+          <a href="https://rodrigosendinosanz.github.io/projects/pixel_bet/" class="project-link" target="_blank" rel="noopener" data-fx>Ver Proyecto</a>
+        </article>
+
+        <article class="project-card available" data-fx>
+          <div class="project-status status-live">En vivo</div>
+          <div class="project-icon">
+            <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2" ry="2" /><line x1="3" y1="9" x2="21" y2="9" /><line x1="9" y1="3" x2="9" y2="21" /><line x1="15" y1="3" x2="15" y2="21" /><path d="M6 6h.01" /><path d="M12 12h.01" /><path d="M18 18h.01" /></svg>
+          </div>
+          <h3 class="project-title">bingo_card_generator</h3>
+          <p class="project-description">Generador de cartones de bingo editable con soporte para 75 y 90 bolas, diseño personalizable y exportación rápida para uso práctico.</p>
+          <div class="project-tech">
+            <span class="tech-tag">HTML5</span>
+            <span class="tech-tag">CSS3</span>
+            <span class="tech-tag">JavaScript</span>
+            <span class="tech-tag">Canvas</span>
+          </div>
+          <a href="https://rodrigosendinosanz.github.io/projects/bingo_card_generator/" class="project-link" target="_blank" rel="noopener" data-fx>Ver Proyecto</a>
+        </article>
+
+        <article class="project-card is-soon" data-fx>
+          <div class="project-status">Próximamente</div>
+          <div class="project-icon">
+            <svg viewBox="0 0 24 24"><path d="M8 3h8l5 5v10a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2z" /><path d="M9 9h6" /><path d="M9 13h6" /><path d="M9 17h4" /><path d="M16 3v5h5" /></svg>
+          </div>
+          <h3 class="project-title">Generador de Facturas</h3>
+          <p class="project-description">Aplicación web para crear, gestionar y generar facturas profesionales. Incluye plantillas personalizables y exportación directa a PDF.</p>
+          <div class="project-tech">
+            <span class="tech-tag">React</span>
+            <span class="tech-tag">PDF.js</span>
+            <span class="tech-tag">LocalStorage</span>
+            <span class="tech-tag">CSS Grid</span>
+          </div>
+          <span class="project-link" aria-disabled="true">En desarrollo</span>
+        </article>
+
+        <article class="project-card is-soon" data-fx>
+          <div class="project-status">Próximamente</div>
+          <div class="project-icon">
+            <svg viewBox="0 0 24 24"><path d="M5 18V6h14v12" /><path d="M9 9h6" /><path d="M9 13h6" /><path d="M9 17h4" /><path d="M3 18h18" /></svg>
+          </div>
+          <h3 class="project-title">Tipografías a SVG</h3>
+          <p class="project-description">Herramienta para convertir texto con diferentes tipografías a archivos SVG vectoriales. Ideal para diseñadores y desarrolladores que necesitan gráficos escalables.</p>
+          <div class="project-tech">
+            <span class="tech-tag">Canvas</span>
+            <span class="tech-tag">API</span>
+            <span class="tech-tag">SVG</span>
+            <span class="tech-tag">Web Fonts</span>
+            <span class="tech-tag">File API</span>
+          </div>
+          <span class="project-link" aria-disabled="true">En desarrollo</span>
+        </article>
+
+        <article class="project-card is-soon" data-fx>
+          <div class="project-status">Próximamente</div>
+          <div class="project-icon">
+            <svg viewBox="0 0 24 24"><path d="M4 8a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V8z" /><path d="M7 9h10v6H7z" /><path d="M9 7V5h6v2" /></svg>
+          </div>
+          <h3 class="project-title">Mensajes Encriptados</h3>
+          <p class="project-description">Aplicación para ocultar mensajes secretos dentro de imágenes usando codificación Base64. Perfecto para comunicación segura y técnicas de esteganografía.</p>
+          <div class="project-tech">
+            <span class="tech-tag">JavaScript</span>
+            <span class="tech-tag">Base64</span>
+            <span class="tech-tag">Canvas</span>
+            <span class="tech-tag">PNG</span>
+          </div>
+          <span class="project-link" aria-disabled="true">En desarrollo</span>
+        </article>
+      </div>
+    </section>
+  </main>
+</div>
+
+<script src="../js/main.js"></script>
 </body>
-
 </html>
