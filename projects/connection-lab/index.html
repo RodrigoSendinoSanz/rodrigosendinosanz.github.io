@@ -827,7 +827,7 @@
       }
       function speedMarkup(value) {
         if (Number.isFinite(value)) return `${formatted(value, value < 10 ? 2 : 1)}<span class="metric-unit"> Mbps</span>`;
-        return animating ? pendingMarkup('midiendo') : '<small>no medido</small>';
+        return animating ? '<i class="fa-solid fa-circle-notch fa-spin" aria-hidden="true"></i>' : '<small>no medido</small>';
       }
       function latencyMarkup(value, metric) {
         if (Number.isFinite(value)) return metricMarkup(formatted(value), 'ms', scoreMetric(metric, value));
