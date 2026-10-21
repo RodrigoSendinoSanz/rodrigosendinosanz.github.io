@@ -1,0 +1,1043 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="theme-color" content="#090c12" />
+  <meta name="description" content="Mide la velocidad de descarga y subida, latencia y estabilidad de tu conexión a Internet." />
+  <link rel="shortcut icon" href="https://rodrigosendinosanz.github.io/img/favicon.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" integrity="sha512-Avb2QiuDEEvB4bZJYdft2mNjVShBftLdPG8FJ0V7irTLQ8Uo0qcPxh4Plq7G5tGm0rU+1SPhVotteLpBERwTkw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <title>Connection Lab — Rodrigo Sendino</title>
+  <style>
+    :root{color-scheme:dark;--bg:#090c12;--panel:#111722;--panel-2:#151d29;--line:#253040;--text:#eef4fb;--muted:#8492a6;--cyan:#26c5dd;--blue:#4b8dff;--green:#46dfad;--violet:#a88bff;--yellow:#f5c451;--red:#ff7885;--mono:'JetBrains Mono',monospace;--sans:'Space Grotesk',sans-serif}
+    *,*::before,*::after{box-sizing:border-box}body{margin:0;min-height:100vh;background:radial-gradient(ellipse at 50% -25%,#152a3a 0,transparent 52%),var(--bg);color:var(--text);font-family:var(--sans);line-height:1.5}button{font:inherit}a{color:inherit}.shell{width:min(1120px,calc(100% - 40px));margin:auto}.topbar{height:78px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #ffffff12}.brand{display:flex;align-items:center;gap:12px;text-decoration:none;font-weight:700;letter-spacing:.08em;font-size:.85rem}.brand-mark{width:36px;height:36px;display:grid;place-items:center;border:1px solid #26c5dd66;border-radius:11px;color:var(--cyan);background:#26c5dd0c;font-size:1rem}.brand small{display:block;color:var(--muted);font:500 .62rem var(--mono);letter-spacing:.13em;margin-top:2px}.back-link{color:var(--muted);font-size:.83rem;text-decoration:none;transition:color .2s}.back-link:hover{color:var(--cyan)}.hero{text-align:center;padding:56px 0 30px}.eyebrow{display:inline-flex;align-items:center;gap:9px;color:var(--cyan);font:500 .7rem var(--mono);letter-spacing:.18em;text-transform:uppercase}.live-dot{height:7px;width:7px;border-radius:50%;background:var(--green);box-shadow:0 0 14px var(--green)}h1{font-size:clamp(2.15rem,5vw,3.5rem);line-height:1.05;letter-spacing:-.055em;margin:13px 0 12px}.hero p{max-width:590px;margin:auto;color:var(--muted);font-size:.98rem}.dashboard{border:1px solid #ffffff12;border-radius:24px;background:linear-gradient(145deg,#111722f5,#0e141df5);box-shadow:0 28px 90px #0006;overflow:hidden}.dash-head{display:flex;justify-content:space-between;align-items:center;gap:16px;padding:18px 24px;border-bottom:1px solid #ffffff10}.dash-label,.server-status{display:flex;align-items:center;gap:9px;font:500 .72rem var(--mono);letter-spacing:.08em;text-transform:uppercase}.dash-label{color:#a9b7c8}.server-status{color:var(--muted);font-size:.64rem;letter-spacing:.03em;text-transform:none}.status-light{width:7px;height:7px;border-radius:50%;background:var(--yellow);box-shadow:0 0 12px currentColor}.status-light.ready{background:var(--green)}.status-light.busy{background:var(--cyan);animation:pulse 1s infinite}.status-light.error{background:var(--red)}@keyframes pulse{50%{opacity:.35;transform:scale(.8)}}.main-measure{display:grid;grid-template-columns:minmax(0,1fr) 300px minmax(0,1fr);align-items:center;gap:12px;padding:22px 28px 24px}.primary-metric{padding:14px 10px}.primary-metric.right{text-align:right}.metric-heading{display:flex;align-items:center;gap:9px;color:#aeb9c8;font-size:.8rem;font-weight:600}.right .metric-heading{justify-content:flex-end}.metric-heading i{color:var(--cyan);font-size:.85rem}.right .metric-heading i{color:var(--blue)}.metric-number{font:500 clamp(2.2rem,5vw,3.5rem)/1.15 var(--mono);letter-spacing:-.08em;margin:6px 0 0;white-space:nowrap}.metric-unit{font:500 .83rem var(--mono);color:var(--muted);letter-spacing:0}.metric-caption{font-size:.73rem;color:var(--muted);margin-top:3px}.gauge-wrap{position:relative;width:min(100%,300px);margin:auto}.gauge{width:100%;height:auto;overflow:visible}.gauge-track,.gauge-value{fill:none;stroke-width:15;stroke-linecap:round}.gauge-track{stroke:#253141}.gauge-value{stroke:url(#gaugeGradient);stroke-dasharray:377;stroke-dashoffset:377;transition:stroke-dashoffset .35s ease}.gauge-tick{stroke:#718094;stroke-width:1.5;opacity:.7}.gauge-readout{position:absolute;inset:47% 0 auto;text-align:center;transform:translateY(-20%)}.gauge-readout strong{display:block;font:500 clamp(2.5rem,7vw,3.8rem)/1 var(--mono);letter-spacing:-.09em}.gauge-readout span{color:#a5b2c3;font-size:.76rem}.gauge-center-label{font:500 .64rem var(--mono);color:var(--muted);letter-spacing:.12em;text-transform:uppercase;margin-top:8px}.go-button{width:82px;height:82px;border:0;border-radius:50%;color:#041218;background:linear-gradient(145deg,#2de5d1,#1fa4e9);box-shadow:0 0 0 7px #25c9dd18,0 0 34px #21c4dc44;cursor:pointer;font:700 1.1rem var(--mono);transition:transform .2s,box-shadow .2s}.go-button:hover:not(:disabled){transform:scale(1.05);box-shadow:0 0 0 10px #25c9dd1c,0 0 44px #21c4dc66}.go-button:focus-visible,.icon-button:focus-visible,.back-link:focus-visible{outline:2px solid white;outline-offset:4px}.go-button:disabled{cursor:wait;opacity:.8}.action-area{display:flex;flex-direction:column;align-items:center;gap:14px;margin-top:-22px}.test-status{min-height:20px;color:var(--muted);font-size:.76rem;text-align:center}.stage{display:inline-flex;align-items:center;gap:7px;color:var(--cyan);font:500 .66rem var(--mono);letter-spacing:.1em;text-transform:uppercase}.stage:empty{display:none}.detail-grid{display:grid;grid-template-columns:repeat(4,1fr);border-top:1px solid #ffffff10}.detail{padding:18px 20px;min-height:99px;border-right:1px solid #ffffff10}.detail:last-child{border:0}.detail-label{display:flex;align-items:center;gap:8px;color:var(--muted);font-size:.72rem}.detail-label i{width:15px;text-align:center;color:var(--yellow)}.detail:nth-child(2) .detail-label i{color:var(--cyan)}.detail:nth-child(3) .detail-label i{color:var(--violet)}.detail-value{font:500 1.13rem var(--mono);margin-top:8px}.detail-value small{font:400 .7rem var(--sans);color:var(--muted)}.quality-row{display:flex;gap:10px;padding:18px 20px 20px;border-top:1px solid #ffffff10}.quality-chip{flex:1;display:flex;align-items:center;gap:10px;padding:11px 12px;border-radius:12px;background:#ffffff06;border:1px solid #ffffff09;min-width:0}.quality-chip i{font-size:1rem;color:var(--green)}.quality-chip:nth-child(2) i{color:var(--yellow)}.quality-chip:nth-child(3) i{color:var(--blue)}.quality-chip strong{display:block;font-size:.72rem}.quality-chip span{display:block;color:var(--muted);font-size:.65rem;white-space:nowrap}.below-grid{display:grid;grid-template-columns:1.2fr .8fr;gap:18px;margin:20px 0 52px}.panel{border:1px solid #ffffff12;border-radius:18px;background:#111722bd;overflow:hidden}.panel-head{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:17px 19px;border-bottom:1px solid #ffffff10}.panel-title{font-size:.9rem;font-weight:600;margin:0;display:flex;align-items:center;gap:9px}.panel-title i{color:var(--cyan)}.mono-note{font:400 .62rem var(--mono);color:var(--muted)}.chart-box{padding:14px 18px 16px}.chart-legend{display:flex;justify-content:space-between;color:var(--muted);font:400 .6rem var(--mono);margin-top:7px}.chart-legend span:first-child{color:var(--cyan)}canvas{display:block;width:100%;height:125px}.history-actions{display:flex;gap:8px;align-items:center}.icon-button{border:1px solid #ffffff16;border-radius:8px;background:#ffffff06;color:var(--muted);padding:7px 9px;cursor:pointer;font-size:.68rem}.icon-button:hover{color:var(--text);border-color:#ffffff35}.history-list{list-style:none;margin:0;padding:0;max-height:214px;overflow:auto}.history-item{display:grid;grid-template-columns:1fr auto auto;align-items:center;gap:12px;padding:12px 18px;border-bottom:1px solid #ffffff09}.history-item:last-child{border:0}.history-time{display:block;color:var(--muted);font:400 .61rem var(--mono)}.history-values{display:flex;gap:9px;margin-top:3px;font:500 .68rem var(--mono)}.history-values .down{color:var(--cyan)}.history-values .up{color:var(--blue)}.history-ping{font:500 .72rem var(--mono);white-space:nowrap}.history-ping small{display:block;text-align:right;color:var(--muted);font:400 .58rem var(--sans)}.empty-history{padding:28px 18px;text-align:center;color:var(--muted);font-size:.77rem}.empty-history i{display:block;font-size:1.2rem;margin-bottom:8px;color:#526175}.info-note{margin:0 0 32px;color:#718095;font-size:.7rem;text-align:center}.info-note i{color:var(--yellow);margin-right:5px}.footer{display:flex;justify-content:space-between;gap:12px;padding:17px 0 24px;border-top:1px solid #ffffff10;color:#66758a;font:400 .62rem var(--mono);letter-spacing:.04em}.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+    @media(max-width:760px){.shell{width:min(100% - 28px,600px)}.hero{padding:40px 0 24px}.main-measure{grid-template-columns:1fr 1fr;padding:18px 16px 16px;gap:4px}.gauge-wrap{grid-column:1/-1;grid-row:1;width:min(280px,84vw);margin:0 auto 2px}.primary-metric{grid-row:2;padding:8px 4px}.metric-number{font-size:clamp(1.8rem,8vw,2.7rem)}.primary-metric.right{text-align:right}.detail-grid{grid-template-columns:repeat(2,1fr)}.detail:nth-child(2){border-right:0}.detail:nth-child(-n+2){border-bottom:1px solid #ffffff10}.detail{padding:14px 16px;min-height:88px}.quality-row{display:grid;grid-template-columns:1fr 1fr;padding:14px}.quality-chip:last-child{grid-column:1/-1}.below-grid{grid-template-columns:1fr;margin-top:14px}.server-status{font-size:0}.server-status span:last-child{font-size:.65rem}.dash-head{padding:15px 16px}}
+    @media(max-width:420px){.topbar{height:66px}.brand{font-size:.75rem}.back-link{font-size:.72rem}.hero p{font-size:.87rem}.dash-head{gap:8px}.main-measure{padding-inline:10px}.metric-heading{font-size:.72rem}.detail-value{font-size:1rem}.footer{font-size:.55rem}.quality-chip{padding:10px 8px;gap:7px}.quality-chip span{font-size:.6rem}}
+    @media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}}
+    /* Connection Lab terminal/dither skin, tuned to the portfolio's experimental visual language. */
+    :root{--bg:#0b0d0b;--panel:#131713;--panel-2:#1b211a;--line:#344034;--text:#f1f2e9;--muted:#a2ad9d;--cyan:#ffad49;--blue:#a8f16a;--green:#a8f16a;--yellow:#f4da70;--red:#ff6660;--violet:#a8f16a}
+    body{background-color:var(--bg);background-image:radial-gradient(ellipse at 50% -25%,#292116 0,transparent 54%),linear-gradient(#ffffff05 1px,transparent 1px),linear-gradient(90deg,#ffffff05 1px,transparent 1px);background-size:auto,4px 4px,4px 4px}
+    .dashboard,.panel{border:1px solid #687052;background:rgba(15,17,13,.96);border-radius:5px;box-shadow:6px 6px 0 #000,0 0 0 3px #10120e}.panel{box-shadow:4px 4px 0 #000}.brand-mark,.quality-chip,.icon-button{border-radius:3px}.go-button{border:2px solid #f7c66e;border-radius:4px;color:#13140f;background:repeating-linear-gradient(135deg,#a7d94e 0 8px,#8bc83d 8px 16px);box-shadow:4px 4px 0 #344323,0 0 24px #8bd45030;font-size:1.25rem;image-rendering:pixelated}.go-button:hover:not(:disabled){transform:translate(-2px,-2px);box-shadow:6px 6px 0 #344323,0 0 30px #8bd45042}.go-button:disabled{opacity:.8}.gauge-track{stroke:#32372b}.gauge-tick{stroke:#9aa08e}.dash-head,.detail,.quality-row,.panel-head{border-color:#343a2b}.detail{border-right-color:#343a2b}.quality-chip{background:#191b15;border-color:#343a2b}.status-light.ready{background:var(--green)}.stage,.eyebrow,.panel-title i,.brand-mark{color:var(--cyan)}
+    .summary-strip{display:grid;grid-template-columns:1fr 1.15fr;gap:12px;padding:0 22px 20px}.overall-score,.connection-card{display:flex;align-items:center;gap:14px;padding:13px 16px;background:#181a14;border:1px solid #343a2b;border-radius:3px}.score-ring{width:52px;height:52px;flex:0 0 52px;display:grid;place-items:center;border:3px solid var(--score-color,var(--muted));color:var(--score-color,var(--muted));font:700 1rem var(--mono);background:repeating-linear-gradient(0deg,#ffffff05 0 2px,transparent 2px 4px)}.score-copy strong,.connection-copy strong{display:block;font-size:.8rem}.score-copy span,.connection-copy span{display:block;margin-top:2px;color:var(--muted);font-size:.66rem}.overall-score .score-copy{min-width:0;flex:1}.overall-unit{color:var(--muted);font:500 .65rem var(--mono);white-space:nowrap}.connection-copy{min-width:0;flex:1}.connection-copy strong{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.score-caption{font:500 .58rem var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}.network-label{width:min(100%,230px);margin-top:7px;padding:6px 8px;border:1px solid #414833;border-radius:2px;background:#10120e;color:var(--text);font:500 .65rem var(--mono)}.network-label::placeholder{color:#68705e}.network-label:focus{border-color:var(--cyan)}
+    .quality-row{grid-template-columns:repeat(4,1fr)}.quality-chip{align-items:flex-start;min-height:75px}.quality-chip>i{margin-top:3px}.quality-chip strong{display:block}.quality-chip .score-detail{font:500 .61rem var(--mono);color:var(--muted);white-space:normal}.grade-excellent{--grade:#8bd450}.grade-good{--grade:#d0d85b}.grade-fair{--grade:#f2b34d}.grade-poor{--grade:#f06450}.quality-chip[data-grade] i,.quality-chip[data-grade] strong{color:var(--grade)}.metric-grade{margin-left:5px!important;font:500 .58rem var(--mono)!important;text-transform:uppercase}
+    .history-item{display:block;padding:0;border-bottom:1px solid #343a2b}.history-item:last-child{border:0}.history-open{width:100%;display:grid;grid-template-columns:1fr auto auto;align-items:center;gap:12px;padding:12px 18px;border:0;background:transparent;color:inherit;text-align:left;cursor:pointer;transition:background .16s}.history-open:hover,.history-open:focus-visible{background:#ffffff0b;outline:1px solid var(--cyan);outline-offset:-1px}.history-open .history-ping{color:var(--green)}.history-open .mono-note{white-space:nowrap}.history-tier{display:inline-grid;place-items:center;min-width:30px;height:30px;margin-right:10px;border:1px solid var(--tier-color,#899889);color:var(--tier-color,#899889);font:700 .72rem var(--mono);box-shadow:0 0 10px color-mix(in srgb,var(--tier-color,#899889) 28%,transparent)}.history-meta-line{display:inline-flex;align-items:center;vertical-align:middle}.history-item.is-legacy .history-tier{--tier-color:#899889!important;box-shadow:none}
+    .metric-help{position:relative;display:inline-flex;align-items:center;gap:7px;cursor:help;outline:none}.metric-help>i{font-size:.67rem;color:#9aa08e;transition:color .15s}.metric-help:hover>i,.metric-help:focus-visible>i{color:var(--cyan)}.metric-help:focus-visible{outline:1px dashed var(--cyan);outline-offset:4px}.metric-help::after{content:attr(data-tooltip);position:absolute;z-index:50;left:0;bottom:calc(100% + 10px);width:min(290px,calc(100vw - 52px));padding:11px 12px;border:1px solid #78815c;border-radius:3px;background:#0d100c;color:var(--text);box-shadow:4px 4px 0 #000;font:400 .68rem/1.55 var(--sans);letter-spacing:normal;text-transform:none;white-space:normal;opacity:0;visibility:hidden;transform:translateY(4px);transition:opacity .14s,transform .14s,visibility .14s;pointer-events:none}.metric-help::before{content:'';position:absolute;z-index:51;left:9px;bottom:calc(100% + 4px);border:6px solid transparent;border-top-color:#78815c;opacity:0;visibility:hidden;transition:opacity .14s,visibility .14s}.metric-help:hover::after,.metric-help:hover::before,.metric-help:focus-visible::after,.metric-help:focus-visible::before{opacity:1;visibility:visible;transform:translateY(0)}.metric-help.metric-help-right::after{left:auto;right:0}.metric-help.metric-help-right::before{left:auto;right:9px}.metric-heading .metric-help::after{font-weight:400}.metric-caption{min-height:1.2em}
+    .tier-card{--tier-color:#899889;position:relative;display:grid;grid-template-columns:auto minmax(0,1fr);align-items:center;gap:16px;margin:0 22px 20px;padding:16px;border:1px solid color-mix(in srgb,var(--tier-color) 62%,#343a2b);background:linear-gradient(110deg,color-mix(in srgb,var(--tier-color) 9%,#171a14),#11130f 62%);overflow:hidden;transition:border-color .3s,background .3s,box-shadow .3s}.tier-card::after{content:'';position:absolute;inset:0;pointer-events:none;background:repeating-linear-gradient(0deg,transparent 0 3px,#ffffff07 3px 4px);opacity:.36}.tier-emblem{position:relative;z-index:1;width:62px;height:62px;display:grid;place-items:center;border:2px solid var(--tier-color);color:var(--tier-color);background:#0a0c09;box-shadow:4px 4px 0 color-mix(in srgb,var(--tier-color) 34%,#000);font:700 1.45rem var(--mono);clip-path:polygon(10px 0,calc(100% - 10px) 0,100% 10px,100% calc(100% - 10px),calc(100% - 10px) 100%,10px 100%,0 calc(100% - 10px),0 10px);transition:color .25s,border-color .25s,box-shadow .25s}.tier-copy{position:relative;z-index:1;min-width:0}.tier-title-row{display:flex;align-items:baseline;flex-wrap:wrap;gap:9px}.tier-title{margin:0;color:var(--tier-color);font:700 .8rem var(--mono);letter-spacing:.08em;text-transform:uppercase}.tier-score{color:var(--muted);font:500 .62rem var(--mono)}.tier-description{margin:5px 0 10px;color:#b8c0ac;font-size:.69rem;line-height:1.45}.tier-scale{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:5px}.tier-step{--step-color:#899889;position:relative;display:grid;place-items:center;min-height:25px;border:1px solid #353b2e;background:#10120e;color:#798171;font:700 .61rem var(--mono);transition:color .2s,border-color .2s,background .2s,transform .2s,box-shadow .2s}.tier-step.is-current{border-color:var(--step-color);background:color-mix(in srgb,var(--step-color) 19%,#10120e);color:var(--step-color);box-shadow:0 0 12px color-mix(in srgb,var(--step-color) 28%,transparent);transform:translateY(-2px)}.tier-step.is-scanning{border-color:var(--step-color);color:var(--step-color);box-shadow:0 0 12px color-mix(in srgb,var(--step-color) 28%,transparent)}.dashboard.is-scanning .tier-emblem{animation:tier-jackpot .72s steps(2,end) infinite}.dashboard.is-revealing .tier-emblem{animation:tier-reveal .95s cubic-bezier(.15,.8,.25,1) both}.dashboard.is-revealing .tier-card{animation:tier-card-flash .85s ease-out both}.dashboard .overall-score{--score-color:var(--tier-color)}.dashboard[data-tier="D"] .tier-card{--tier-color:#ff554f;box-shadow:0 0 8px #ff554f12}.dashboard[data-tier="C"] .tier-card{--tier-color:#ff8748;box-shadow:0 0 12px #ff874824}.dashboard[data-tier="B"] .tier-card{--tier-color:#f6d65d;box-shadow:0 0 16px #f6d65d2b}.dashboard[data-tier="A"] .tier-card{--tier-color:#a8ff60;box-shadow:0 0 20px #a8ff6038}.dashboard[data-tier="S"] .tier-card{--tier-color:#64e6c2;box-shadow:0 0 25px #64e6c244}.dashboard[data-tier="SS"] .tier-card{--tier-color:#d3ff9b;box-shadow:0 0 34px #d3ff9b5c,0 0 68px #d3ff9b22}.dashboard.is-revealing .tier-card{animation:tier-card-flash .85s ease-out both}@keyframes tier-jackpot{0%{transform:translate(0,0);filter:brightness(.9)}25%{transform:translate(2px,-1px);filter:brightness(1.35)}50%{transform:translate(-1px,1px);filter:brightness(1)}75%{transform:translate(1px,0);filter:brightness(1.5)}}@keyframes tier-reveal{0%{transform:scale(.58) rotate(-12deg);filter:brightness(2.2)}55%{transform:scale(1.18) rotate(5deg);filter:brightness(1.55)}78%{transform:scale(.94) rotate(-2deg)}100%{transform:scale(1) rotate(0);filter:brightness(1)}}@keyframes tier-card-flash{0%{box-shadow:0 0 0 transparent}35%{box-shadow:0 0 36px color-mix(in srgb,var(--tier-color) 38%,transparent)}100%{box-shadow:0 0 14px color-mix(in srgb,var(--tier-color) 14%,transparent)}}.tier-step[data-tier="D"]{--step-color:#ff554f}.tier-step[data-tier="C"]{--step-color:#ff8748}.tier-step[data-tier="B"]{--step-color:#f6d65d}.tier-step[data-tier="A"]{--step-color:#a8ff60}.tier-step[data-tier="S"]{--step-color:#64e6c2}.tier-step[data-tier="SS"]{--step-color:#d3ff9b}
+    @media(max-width:760px){.tier-card{margin:0 14px 16px;padding:13px;gap:12px}.tier-emblem{width:52px;height:52px;font-size:1.2rem}.tier-description{font-size:.65rem}}
+    @media(prefers-reduced-motion:reduce){.dashboard.is-scanning .tier-emblem,.dashboard.is-revealing .tier-emblem,.dashboard.is-revealing .tier-card{animation:none!important}.tier-emblem,.tier-step{transition:none!important}}
+    .detail-dialog{width:min(680px,calc(100% - 28px));max-height:min(88vh,820px);padding:0;border:1px solid #78815c;border-radius:5px;background:#10120e;color:var(--text);box-shadow:8px 8px 0 #000,0 20px 80px #000c}.detail-dialog::backdrop{background:#000b;backdrop-filter:blur(4px)}.dialog-head{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;padding:20px 22px;border-bottom:1px solid #343a2b}.dialog-head h2{margin:0;font-size:1.15rem}.dialog-head p{margin:5px 0 0;color:var(--muted);font:400 .68rem var(--mono)}.dialog-close{width:34px;height:34px;border:1px solid #414833;border-radius:3px;background:#191b15;color:var(--text);cursor:pointer}.dialog-content{padding:20px 22px 24px;overflow:auto}.dialog-overview{display:flex;align-items:center;gap:14px;padding:14px;background:#191b15;border:1px solid #343a2b}.dialog-overview .score-ring{width:60px;height:60px;flex-basis:60px;font-size:1.1rem}.dialog-overview strong{display:block}.dialog-overview span{color:var(--muted);font-size:.72rem}.dialog-section-title{margin:22px 0 10px;font:500 .67rem var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}.detail-table{width:100%;border-collapse:collapse;font-size:.76rem}.detail-table th,.detail-table td{padding:10px 8px;border-bottom:1px solid #343a2b;text-align:left}.detail-table th{width:48%;font-weight:500;color:var(--muted)}.detail-table td{font:500 .75rem var(--mono)}.dialog-scores{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}.dialog-score{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:11px;background:#191b15;border:1px solid #343a2b;font-size:.71rem}.dialog-score strong{color:var(--grade,var(--muted));font:600 .7rem var(--mono)}.score-legend{display:flex;flex-wrap:wrap;gap:8px;margin-top:13px}.score-legend span{padding:4px 7px;border:1px solid #343a2b;color:var(--muted);font:500 .58rem var(--mono)}.score-legend .legend-excellent{color:#8bd450}.score-legend .legend-good{color:#d0d85b}.score-legend .legend-fair{color:#f2b34d}.score-legend .legend-poor{color:#f06450}
+    .legacy-warning{margin:0 0 16px;padding:12px;border:1px solid #ff8748;color:#ffcf9d;background:#ff874810;font-size:.73rem;line-height:1.5}.legacy-warning i{margin-right:7px;color:#ff8748}
+    @media(max-width:760px){.summary-strip{grid-template-columns:1fr;padding:0 14px 16px}.quality-row{grid-template-columns:repeat(2,1fr)}.quality-chip:last-child{grid-column:auto}.dialog-content{padding:16px}.dialog-head{padding:16px}}
+    @media(max-width:420px){.overall-score,.connection-card{padding:11px}.history-open{grid-template-columns:1fr auto;gap:8px;padding:11px 12px}.history-open>.mono-note{display:none}.detail-table th,.detail-table td{padding:9px 5px}.dialog-scores{grid-template-columns:1fr}}
+    /* Consistent pixel-terminal scrollbars for the page and nested scroll areas. */
+    *{scrollbar-width:thin;scrollbar-color:#77856a #10120e}
+    *::-webkit-scrollbar{width:12px;height:12px}
+    *::-webkit-scrollbar-track{background:#0c0f0b;border:1px solid #293127}
+    *::-webkit-scrollbar-thumb{background:#66745a;border:3px solid #0c0f0b;border-radius:2px}
+    *::-webkit-scrollbar-thumb:hover{background:#a8ff60}
+    *::-webkit-scrollbar-thumb:active{background:#ffad49}
+    *::-webkit-scrollbar-corner{background:#0c0f0b}
+    /* Prioridad visual al tier y compatibilidad; gauge decorativo detrás de medidas y acción. */
+    .dashboard{--tier-color:#899889}
+    .tier-card{margin:18px 22px 12px;padding:20px;box-shadow:0 0 22px color-mix(in srgb,var(--tier-color) 18%,transparent),4px 4px 0 #000}
+    .tier-emblem{width:78px;height:78px;font-size:1.8rem;box-shadow:0 0 22px color-mix(in srgb,var(--tier-color) 38%,transparent),4px 4px 0 color-mix(in srgb,var(--tier-color) 34%,#000)}
+    .tier-title{font-size:1rem}.tier-score{font-size:.68rem}.tier-description{font-size:.76rem}
+    .quality-row{padding:12px 22px 18px;border-top:0;border-bottom:1px solid #343a2b;gap:8px}
+    .quality-chip{min-height:74px;border-left:3px solid var(--grade,#899889);transition:transform .18s,border-color .18s,box-shadow .18s}
+    .quality-chip[data-grade]:hover{transform:translateY(-2px);box-shadow:0 4px 14px color-mix(in srgb,var(--grade) 16%,transparent)}
+    .measure-stage{position:relative;isolation:isolate;min-height:350px;display:flex;flex-direction:column;justify-content:center;overflow:hidden;padding:30px 22px 18px}
+    .measure-chart{position:absolute;z-index:0;inset:0;overflow:hidden;opacity:.2;pointer-events:none}
+    .measure-chart canvas{display:block;width:100%;height:100%}
+    .measure-chart-meta{position:absolute;right:15px;bottom:10px;display:flex;gap:14px;color:#929b88;font:500 .56rem var(--mono);letter-spacing:.08em;text-transform:uppercase}
+    .gauge-wrap{position:absolute;z-index:0;top:53%;left:50%;width:min(560px,78vw);margin:0;transform:translate(-50%,-56%);pointer-events:none}
+    .gauge{display:block;width:100%;height:auto;overflow:visible;opacity:.25}
+    .gauge-value{stroke:var(--tier-color,#899889);transition:stroke-dashoffset .6s cubic-bezier(.2,.75,.2,1),stroke .3s}
+    .gauge-readout{inset:29% 0 auto;transform:none;color:var(--tier-color,#899889);text-shadow:0 0 18px color-mix(in srgb,var(--tier-color,#899889) 45%,transparent)}
+    .gauge-readout strong{font-size:clamp(2.1rem,5.5vw,3.2rem)}.gauge-readout span{font:600 .68rem var(--mono);color:var(--tier-color,#899889)}.gauge-center-label{margin-top:2px;color:var(--text);font-size:.58rem;letter-spacing:.14em}
+    .main-measure{position:relative;z-index:1;grid-template-columns:1fr 1fr;gap:clamp(25px,9vw,120px);padding:10px 0 24px}
+    .primary-metric{padding:10px 4px}.primary-metric.right{text-align:right}.metric-number{font-size:clamp(2rem,4vw,3.1rem)}
+    .action-area{position:relative;z-index:1;margin:0;gap:10px;padding-top:4px}.detail-grid{position:relative;z-index:1}
+    .test-advisory{max-width:580px;margin:0;color:#939a88;text-align:center;font:400 .58rem/1.5 var(--mono)}
+    .dashboard[data-tier="D"]{--tier-color:#ff554f}.dashboard[data-tier="C"]{--tier-color:#ff8748}.dashboard[data-tier="B"]{--tier-color:#f6d65d}.dashboard[data-tier="A"]{--tier-color:#a8ff60}.dashboard[data-tier="S"]{--tier-color:#64e6c2}.dashboard[data-tier="SS"]{--tier-color:#d3ff9b}
+    .below-grid{grid-template-columns:minmax(0,1fr)}
+    .tier-description{display:none}
+    .measure-chart{position:absolute;z-index:0;inset:0;overflow:hidden;opacity:.2;pointer-events:none}
+    .measure-chart canvas{display:block;width:100%;height:100%}
+    .measure-chart-meta{position:absolute;right:15px;bottom:10px;display:flex;gap:14px;color:#929b88;font:500 .56rem var(--mono);letter-spacing:.08em;text-transform:uppercase}
+    @media(max-width:760px){.measure-chart{opacity:.12}.measure-chart-meta{right:10px;bottom:7px;font-size:.5rem}}
+    @media(max-width:420px){.measure-chart{opacity:.1}.measure-chart-meta{font-size:.46rem}}
+    @media(max-width:760px){.tier-card{margin:14px 14px 10px;padding:15px}.tier-emblem{width:62px;height:62px;font-size:1.5rem}.quality-row{padding:10px 14px 14px}.measure-stage{min-height:315px;padding:26px 16px 16px}.gauge-wrap{width:min(500px,96vw);top:51%;transform:translate(-50%,-53%)}.gauge{opacity:.11}.gauge-readout{display:none}.main-measure{grid-template-columns:1fr 1fr;gap:6px;padding:12px 0 22px}.primary-metric{grid-row:auto;padding:9px 3px}.metric-number{font-size:clamp(1.65rem,7vw,2.5rem)}.action-area{margin:0}.go-button{width:72px;height:72px}}
+    @media(max-width:420px){.tier-card{grid-template-columns:54px minmax(0,1fr);gap:10px;padding:12px}.tier-emblem{width:50px;height:50px;font-size:1.25rem}.tier-title-row{gap:5px}.tier-title{font-size:.78rem}.tier-score{font-size:.58rem}.tier-description{font-size:.65rem}.tier-scale{gap:3px}.tier-step{min-height:22px}.quality-chip{min-height:68px}.measure-stage{min-height:290px;padding-inline:12px}.gauge-wrap{width:105vw;top:50%;transform:translate(-50%,-52%)}.gauge{opacity:.09}.gauge-readout{display:none}.metric-heading{font-size:.65rem}.metric-number{font-size:1.55rem}.metric-caption{font-size:.62rem}.go-button{width:64px;height:64px}}
+    /* Gauge en vivo: también visible en móvil mientras se mide. */
+    .measure-chart{opacity:.1}
+    @media(max-width:760px){.measure-chart{opacity:.08}.gauge{opacity:.22}.gauge-readout{display:block}.gauge-readout strong{font-size:clamp(1.6rem,8vw,2.2rem)}.gauge-center-label{font-size:.52rem}}
+    @media(max-width:420px){.measure-chart{opacity:.07}.gauge{opacity:.18}.gauge-readout{display:block}.gauge-readout strong{font-size:1.45rem}}
+  </style>
+</head>
+<body>
+  <div class="shell">
+    <header class="topbar">
+      <a class="brand" href="../../" aria-label="Volver al portfolio de Rodrigo Sendino">
+        <span class="brand-mark"><i class="fa-solid fa-wave-square" aria-hidden="true"></i></span>
+        <span>CONNECTION LAB<small>NETWORK DIAGNOSTICS</small></span>
+      </a>
+      <a class="back-link" href="../"><i class="fa-solid fa-arrow-left" aria-hidden="true"></i> &nbsp;Proyectos</a>
+    </header>
+    <main>
+      <section class="dashboard" aria-label="Medidor de velocidad de Internet">
+        <div class="dash-head">
+          <span class="dash-label"><i class="fa-solid fa-gauge-high" aria-hidden="true"></i> Test de velocidad</span>
+          <span class="server-status" id="serverStatus"><span class="status-light" id="statusLight"></span><span id="serverLabel">Listo para medir</span></span>
+        </div>
+        <div class="tier-card" id="tierCard" aria-live="polite">
+          <div class="tier-emblem" id="tierEmblem" aria-label="Tier de conexión">?</div>
+          <div class="tier-copy"><div class="tier-title-row"><h2 class="tier-title" id="tierTitle">SIN CLASIFICAR</h2><span class="tier-score" id="tierScore">Ejecuta un análisis para descubrir el rango de tu conexión.</span></div><div class="tier-scale" id="tierScale" aria-label="Escala de tiers de conexión"></div></div>
+        </div>
+        <div class="quality-row" aria-label="Puntuación por actividad">
+          <div class="quality-chip" id="webCard"><i class="fa-solid fa-globe" aria-hidden="true"></i><div><strong>Navegación</strong><span class="score-detail" id="webHint">— / 100 · Sin analizar</span></div></div>
+          <div class="quality-chip" id="gameCard"><i class="fa-solid fa-gamepad" aria-hidden="true"></i><div><strong>Juegos online</strong><span class="score-detail" id="gameHint">— / 100 · Sin analizar</span></div></div>
+          <div class="quality-chip" id="videoCard"><i class="fa-solid fa-film" aria-hidden="true"></i><div><strong>Películas / streaming</strong><span class="score-detail" id="videoHint">— / 100 · Sin analizar</span></div></div>
+          <div class="quality-chip" id="callCard"><i class="fa-solid fa-video" aria-hidden="true"></i><div><strong>Videollamadas</strong><span class="score-detail" id="callHint">— / 100 · Sin analizar</span></div></div>
+        </div>
+        <div class="measure-stage">
+          <div class="measure-chart" aria-hidden="true"><canvas id="speedChart" aria-label="Gráfica de velocidad durante la prueba"></canvas><div class="measure-chart-meta"><span id="chartLabel">↓ Descarga en vivo</span><span id="chartScale">Mbps</span></div></div>
+          <div class="gauge-wrap" aria-hidden="true">
+            <svg class="gauge" viewBox="0 0 300 205" aria-hidden="true">
+              <defs><linearGradient id="gaugeGradient" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#26c5dd"/><stop offset=".55" stop-color="#46dfad"/><stop offset="1" stop-color="#f5c451"/></linearGradient></defs>
+              <path class="gauge-track" d="M30 175 A120 120 0 0 1 270 175" pathLength="377" />
+              <path class="gauge-value" id="gaugeValue" d="M30 175 A120 120 0 0 1 270 175" pathLength="377" />
+              <g aria-hidden="true"><path class="gauge-tick" d="M31 168l10 2"/><path class="gauge-tick" d="M57 94l9 6"/><path class="gauge-tick" d="M108 54l4 10"/><path class="gauge-tick" d="M192 54l-4 10"/><path class="gauge-tick" d="M243 94l-9 6"/><path class="gauge-tick" d="M269 168l-10 2"/></g>
+            </svg>
+            <div class="gauge-readout"><strong id="gaugeNumber">—</strong><span id="gaugeUnit">/100</span><div class="gauge-center-label" id="gaugeMode">PUNTUACIÓN</div></div>
+          </div>
+        <div class="main-measure">
+          <div class="primary-metric">
+            <div class="metric-heading"><span class="metric-help" tabindex="0" aria-label="Ayuda: velocidad de descarga" data-tooltip="Velocidad a la que llegan datos desde Internet. Más alto es mejor. Orientativo: menos de 5 Mbps, baja; 5–25, básica; 25–100, buena para varios usos; más de 100, alta. La Wi-Fi y el servidor de prueba pueden limitar el resultado."><i class="fa-solid fa-arrow-down" aria-hidden="true"></i> Descarga<i class="fa-regular fa-circle-question" aria-hidden="true"></i></span></div>
+            <div class="metric-number" id="downloadValue">—<span class="metric-unit"> Mbps</span></div>
+            <div class="metric-caption" id="downloadGrade">Recepción de datos</div>
+          </div>
+          <div class="primary-metric right">
+            <div class="metric-heading"><span class="metric-help metric-help-right" tabindex="0" aria-label="Ayuda: velocidad de subida" data-tooltip="Velocidad a la que envías datos a Internet. Más alto es mejor para videollamadas, directos y archivos. Orientativo: menos de 2 Mbps, baja; 2–10, básica; 10–30, buena; más de 30, alta. La subida puede variar mucho entre pruebas por el número de conexiones concurrentes y la carga del servidor."><i class="fa-solid fa-arrow-up" aria-hidden="true"></i> Subida<i class="fa-regular fa-circle-question" aria-hidden="true"></i></span></div>
+            <div class="metric-number" id="uploadValue">—<span class="metric-unit"> Mbps</span></div>
+            <div class="metric-caption" id="uploadGrade">Envío de datos</div>
+          </div>
+        </div>
+        <div class="action-area">
+          <button class="go-button" id="startButton" type="button" aria-label="Iniciar test de velocidad">GO</button>
+          <div class="stage" id="testStage" aria-live="polite"></div>
+          <div class="test-status" id="testStatus" aria-live="polite">Pulsa GO para analizar tu conexión</div>
+          <p class="test-advisory">Cada fase mide 10 s (tras un calentamiento descartado) o hasta 256 MiB para limitar el consumo. Tras el test, la gráfica sigue muestreando en segundo plano mientras la pestaña esté visible.</p>
+        </div>
+        </div>
+        <div class="detail-grid" aria-label="Métricas de latencia y red">
+          <div class="detail"><div class="detail-label"><span class="metric-help" tabindex="0" aria-label="Ayuda: latencia HTTP en reposo" data-tooltip="Tiempo de ida y vuelta de una petición pequeña al servidor de prueba, medido desde el navegador. No es ping ICMP ni el ping a tu servidor de juego. Más bajo es mejor: menos de 30 ms, muy bueno; 30–60, correcto; 60–100, alto; más de 100, muy alto. La distancia al servidor influye."><i class="fa-solid fa-bolt" aria-hidden="true"></i> Ping HTTP en reposo<i class="fa-regular fa-circle-question" aria-hidden="true"></i></span></div><div class="detail-value" id="pingValue">— <small>ms</small></div></div>
+          <div class="detail"><div class="detail-label"><span class="metric-help" tabindex="0" aria-label="Ayuda: latencia con descarga" data-tooltip="Tiempo de respuesta HTTP mientras se descarga un bloque. Si sube mucho respecto al reposo, la red se congestiona al descargar. Menos de 50 ms suele ser bueno; más de 150 ms puede sentirse lento. Es una estimación, no una prueba ICMP."><i class="fa-solid fa-arrow-down" aria-hidden="true"></i> Latencia descarga<i class="fa-regular fa-circle-question" aria-hidden="true"></i></span></div><div class="detail-value" id="downloadLatency">— <small>ms</small></div></div>
+          <div class="detail"><div class="detail-label"><span class="metric-help" tabindex="0" aria-label="Ayuda: latencia con subida" data-tooltip="Tiempo de respuesta HTTP durante la subida de datos. Un valor alto puede indicar congestión cuando envías archivos o haces videollamadas. Menos de 50 ms es bueno; más de 150 ms es alto. Se mide contra el servidor del test, no contra todas las aplicaciones."><i class="fa-solid fa-arrow-up" aria-hidden="true"></i> Latencia subida<i class="fa-regular fa-circle-question" aria-hidden="true"></i></span></div><div class="detail-value" id="uploadLatency">— <small>ms</small></div></div>
+          <div class="detail"><div class="detail-label"><span class="metric-help" tabindex="0" aria-label="Ayuda: jitter" data-tooltip="Variación entre tiempos de respuesta sucesivos. Cuanto menor, más estable: menos de 5 ms es excelente; 5–15 ms suele ser correcto; más de 30 ms puede causar cortes o irregularidad en llamadas y juegos. Aquí es jitter HTTP, no pérdida de paquetes."><i class="fa-solid fa-wave-square" aria-hidden="true"></i> Jitter HTTP<i class="fa-regular fa-circle-question" aria-hidden="true"></i></span></div><div class="detail-value" id="jitterValue">— <small>ms</small></div></div>
+        </div>
+        <div class="summary-strip">
+          <div class="overall-score"><div class="score-copy"><span class="score-caption">PUNTUACIÓN</span><strong id="overallGrade">SIN CLASIFICAR</strong><span id="overallHint">Ejecuta un análisis para descubrir el rango de tu conexión.</span></div><span class="score-ring" id="overallScore">—</span><span class="overall-unit">/ 100</span></div>
+          <div class="connection-card"><i class="fa-solid fa-wifi" aria-hidden="true"></i><div class="connection-copy"><span class="score-caption">Conexión / etiqueta personal</span><strong id="connectionName">Red activa · nombre no expuesto</strong><span id="connectionHint">Puedes asignar un alias local (por ejemplo, Wi-Fi casa o Ethernet).</span><input class="network-label" id="networkLabel" type="text" maxlength="80" placeholder="Wi-Fi casa / Ethernet (opcional)" autocomplete="off" aria-label="Etiqueta para identificar esta conexión"></div></div>
+        </div>
+        <p class="score-caption" style="padding:0 22px 18px;margin:0">BAREMO · 85–100 EXCELENTE · 70–84 BUENO · 45–69 REGULAR · 0–44 DEFICIENTE</p>
+      </section>
+      <section class="below-grid" aria-label="Gráfica e histórico de resultados">
+        <article class="panel">
+          <div class="panel-head"><h2 class="panel-title"><i class="fa-solid fa-clock-rotate-left" aria-hidden="true"></i> Historial</h2><div class="history-actions"><span class="mono-note" id="historyCount">0 tests</span><button class="icon-button" id="clearHistory" type="button" aria-label="Borrar historial" title="Borrar historial"><i class="fa-solid fa-trash-can" aria-hidden="true"></i></button></div></div>
+          <ul class="history-list" id="historyList"></ul>
+        </article>
+      </section>
+      <dialog class="detail-dialog" id="historyDialog" aria-labelledby="dialogTitle">
+        <div class="dialog-head"><div><h2 id="dialogTitle">Detalle del análisis</h2><p id="dialogDate"></p></div><button class="dialog-close" id="closeDialog" type="button" aria-label="Cerrar detalle"><i class="fa-solid fa-xmark" aria-hidden="true"></i></button></div>
+        <div class="dialog-content" id="dialogContent"></div>
+      </dialog>
+      <p class="info-note"><i class="fa-solid fa-circle-info" aria-hidden="true"></i> El test mide tráfico HTTP hacia Cloudflare, no la velocidad hasta tu router. Speedtest y Movistar pueden dar otros resultados porque usan servidores, rutas y conexiones paralelas diferentes. Haz varias pruebas en las mismas condiciones para comparar.</p>
+    </main>
+    <footer class="footer"><span>© 2026 RODRIGO SENDINO SANZ</span><span>LOCAL-FIRST · PRIVACY BY DESIGN</span></footer>
+  </div>
+  <script>
+    (() => {
+      'use strict';
+      const ENDPOINT = 'https://speed.cloudflare.com';
+      const HISTORY_KEY = 'connection-lab-history-v1';
+      const NETWORK_LABEL_KEY = 'connection-lab-network-label-v1';
+      const MEASUREMENT_VERSION = 4;
+      const MAX_HISTORY = 20;
+      const PHASE_MIN_DURATION_MS = 10000;
+      const PHASE_MAX_BYTES = 256 * 1024 * 1024;
+      const PHASE_MAX_CHUNK_BYTES = 16 * 1024 * 1024;
+      const PHASE_WARMUP_BYTES = 2 * 1024 * 1024;
+      const PHASE_WARMUP_UPLOAD_BYTES = 128 * 1024;
+      const STEADY_STATE_SKIP_MS = 1200;
+      const UPLOAD_FILLER_BYTES = 4 * 1024 * 1024;
+      const MONITOR_BYTES = 128 * 1024;
+      const MONITOR_INTERVAL_MS = 4000;
+      const CHART_MIN_WINDOW_MS = 20000;
+      const CHART_MAX_WINDOW_MS = 90000;
+      const CHART_POINT_COLORS = { down: '#a8ff60', up: '#ffad49', monitor: '#7f8b76' };
+      const SCORE_RULES = {
+        download: [[5, 0], [15, 35], [50, 65], [100, 85], [300, 100]],
+        upload: [[2, 0], [5, 35], [15, 65], [30, 85], [100, 100]],
+        ping: [[15, 100], [30, 85], [60, 65], [100, 35], [200, 0]],
+        jitter: [[3, 100], [8, 85], [15, 65], [30, 35], [60, 0]]
+      };
+      const PROFILE_WEIGHTS = { download: 30, upload: 25, ping: 30, jitter: 15 };
+      const PROFILES = [
+        { id: 'game', label: 'Juegos online', required: ['ping', 'jitter'], weights: { ping: 0.7, jitter: 0.3 } },
+        { id: 'video', label: 'Películas / streaming', required: ['download'], weights: { download: 1 } },
+        { id: 'call', label: 'Videollamadas', required: ['download', 'upload', 'ping', 'jitter'], weights: { download: 0.2, upload: 0.35, ping: 0.3, jitter: 0.15 } },
+        { id: 'web', label: 'Navegación', required: ['download', 'ping'], weights: { download: 0.5, ping: 0.5 } }
+      ];
+      const TIERS = [
+        { tier: 'D', min: 0, color: '#ff554f', name: 'Señal fragmentada', description: 'Conexión limitada; puede costar mantener usos exigentes o varias actividades a la vez.' },
+        { tier: 'C', min: 35, color: '#ff8748', name: 'Frecuencia baja', description: 'Adecuada para tareas básicas, con posibles límites en streaming, llamadas o juego.' },
+        { tier: 'B', min: 50, color: '#f6d65d', name: 'Enlace estable', description: 'Rendimiento correcto para navegación y varias actividades habituales.' },
+        { tier: 'A', min: 68, color: '#a8ff60', name: 'Banda ancha', description: 'Buen rendimiento para streaming, videollamadas y juego casual.' },
+        { tier: 'S', min: 84, color: '#64e6c2', name: 'Conexión élite', description: 'Velocidades altas y respuesta estable para la mayoría de usos.' },
+        { tier: 'SS', min: 95, color: '#d3ff9b', name: 'Señal perfecta', description: 'Puntuación sobresaliente en las métricas medidas; no garantiza cero cortes ni mide pérdida de paquetes.' }
+      ];
+      const $ = (id) => document.getElementById(id);
+      const els = {
+        button: $('startButton'), status: $('testStatus'), stage: $('testStage'), light: $('statusLight'), server: $('serverLabel'),
+        down: $('downloadValue'), up: $('uploadValue'), gauge: $('gaugeValue'), gaugeNumber: $('gaugeNumber'), gaugeMode: $('gaugeMode'),
+        ping: $('pingValue'), downLatency: $('downloadLatency'), upLatency: $('uploadLatency'), jitter: $('jitterValue'),
+        history: $('historyList'), historyCount: $('historyCount'), canvas: $('speedChart'), chartLabel: $('chartLabel'), chartScale: $('chartScale')
+      };
+      let chartPoints = [];
+      let chartPeak = 10;
+      let chartRaf = 0;
+      let chartScaleLabel = '';
+      let animating = false;
+      let monitorTimer = null;
+      let monitorRunning = false;
+      let monitorFailures = 0;
+      let monitorAbort = null;
+      let tierScanTimer = null;
+      let tierRevealTimer = null;
+      let edgeInfo = null;
+      let uploadFiller = null;
+      const liveSmooth = { download: null, upload: null };
+      const gaugeState = { pct: 0, pctTarget: 0, display: null, displayTarget: null, kind: 'score', scoreColor: '#899889', tierLabel: 'PUNTUACIÓN', raf: 0 };
+      const safeStorage = {
+        read() { try { return JSON.parse(localStorage.getItem(HISTORY_KEY) || '[]'); } catch (_) { return []; } },
+        write(value) { try { localStorage.setItem(HISTORY_KEY, JSON.stringify(value)); return true; } catch (_) { return false; } }
+      };
+      const initialHistory = safeStorage.read();
+      let history = Array.isArray(initialHistory) ? initialHistory.filter((item) => item && (Number.isFinite(item.download) || Number.isFinite(item.upload))).slice(0, MAX_HISTORY) : [];
+
+      function escapeHTML(value) { return String(value ?? '').replace(/[&<>"']/g, (char) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[char]); }
+      function scoreMetric(metric, value) {
+        if (!Number.isFinite(value) || value < 0) return null;
+        const points = SCORE_RULES[metric];
+        const higherIsBetter = metric === 'download' || metric === 'upload';
+        if (higherIsBetter) {
+          if (value <= points[0][0]) return value / points[0][0] * points[0][1];
+          for (let index = 1; index < points.length; index++) {
+            if (value <= points[index][0]) {
+              const [x0, y0] = points[index - 1]; const [x1, y1] = points[index];
+              return y0 + (value - x0) / (x1 - x0) * (y1 - y0);
+            }
+          }
+          return 100;
+        }
+        if (value <= points[0][0]) return 100;
+        for (let index = 1; index < points.length; index++) {
+          if (value <= points[index][0]) {
+            const [x0, y0] = points[index - 1]; const [x1, y1] = points[index];
+            return y0 + (value - x0) / (x1 - x0) * (y1 - y0);
+          }
+        }
+        return 0;
+      }
+      function gradeFor(score) {
+        if (score == null) return { label: 'Sin datos', css: '', color: '#929b91' };
+        if (score >= 85) return { label: 'Excelente', css: 'grade-excellent', color: '#a8f16a' };
+        if (score >= 70) return { label: 'Bueno', css: 'grade-good', color: '#b5dc82' };
+        if (score >= 45) return { label: 'Regular', css: 'grade-fair', color: '#f4da70' };
+        return { label: 'Deficiente', css: 'grade-poor', color: '#ff6660' };
+      }
+      function metricMarkup(value, unit, score) { const grade = gradeFor(score); return `${value} <small>${unit}</small><small class="metric-grade" style="color:${grade.color}">${grade.label}</small>`; }
+      function formatted(value, decimals = 1) { return Number.isFinite(value) ? value.toFixed(decimals) : '—'; }
+      function profileScore(result, profile) {
+        if (!profile.required.every((key) => Number.isFinite(result[key]))) return null;
+        return Math.round(Object.entries(profile.weights).reduce((total, [key, weight]) => total + scoreMetric(key, result[key]) * weight, 0));
+      }
+      function scoreSet(result) {
+        const parts = Object.fromEntries(Object.keys(PROFILE_WEIGHTS).map((key) => [key, scoreMetric(key, result[key])]));
+        let weighted = 0; let coverage = 0;
+        Object.entries(PROFILE_WEIGHTS).forEach(([key, weight]) => { if (parts[key] != null) { weighted += parts[key] * weight; coverage += weight; } });
+        const overall = coverage ? Math.round(weighted / coverage) : null;
+        const profiles = PROFILES.map((profile) => ({ ...profile, score: profileScore(result, profile) }));
+        return { overall, grade: gradeFor(overall), profiles, parts, coverage };
+      }
+      function tierFor(score) {
+        if (!Number.isFinite(score)) return null;
+        return [...TIERS].reverse().find((tier) => score >= tier.min) || TIERS[0];
+      }
+      function renderTierScale(activeTier = null, scanning = false) {
+        $('tierScale').innerHTML = TIERS.map((tier) => `<span class="tier-step${tier.tier === activeTier ? ' is-current' : ''}" data-tier="${tier.tier}" style="--step-color:${tier.color}" aria-label="Tier ${tier.tier}, desde ${tier.min} puntos">${tier.tier}</span>`).join('');
+        if (scanning) startTierScan();
+      }
+      function startTierScan() {
+        stopTierScan();
+        const dashboard = document.querySelector('.dashboard');
+        if (tierRevealTimer) window.clearTimeout(tierRevealTimer);
+        dashboard.classList.remove('is-revealing');
+        dashboard.removeAttribute('data-tier');
+        $('tierCard').style.setProperty('--tier-color', '#899889');
+        $('overallScore').style.setProperty('--score-color', '#899889');
+        $('overallScore').textContent = '—';
+        $('overallGrade').textContent = 'ANALIZANDO';
+        $('overallHint').textContent = 'Calculando el rango con las mediciones reales.';
+        resetGauge('ANALIZANDO', '#899889');
+        $('tierEmblem').setAttribute('aria-label', 'Escaneando tiers');
+        renderTierScale();
+        dashboard.classList.add('is-scanning');
+        $('tierTitle').textContent = 'Escaneando señal…';
+        $('tierScore').textContent = 'Calculando puntuación';
+        $('tierEmblem').textContent = '…';
+        const steps = [...$('tierScale').querySelectorAll('.tier-step')];
+        let index = 0;
+        tierScanTimer = window.setInterval(() => {
+          steps.forEach((step) => step.classList.remove('is-scanning'));
+          if (steps.length) steps[index++ % steps.length].classList.add('is-scanning');
+        }, 150);
+      }
+      function stopTierScan() {
+        if (tierScanTimer) window.clearInterval(tierScanTimer);
+        tierScanTimer = null;
+        document.querySelector('.dashboard')?.classList.remove('is-scanning');
+      }
+      function revealTier(score, coverage = 100) {
+        stopTierScan();
+        const tier = tierFor(score);
+        const dashboard = document.querySelector('.dashboard');
+        dashboard.classList.remove('is-revealing');
+        if (!tier) {
+          dashboard.removeAttribute('data-tier');
+          $('tierEmblem').textContent = '?'; $('tierEmblem').setAttribute('aria-label', 'Sin clasificar');
+          $('tierTitle').textContent = 'SIN CLASIFICAR';
+          $('tierScore').textContent = 'Ejecuta un análisis para descubrir el rango de tu conexión.';
+          $('overallScore').style.setProperty('--score-color', '#899889');
+          resetGauge('SIN CLASIFICAR');
+          renderTierScale();
+          return;
+        }
+        if (tierRevealTimer) window.clearTimeout(tierRevealTimer);
+        dashboard.dataset.tier = tier.tier;
+        $('tierCard').style.setProperty('--tier-color', tier.color);
+        $('overallScore').style.setProperty('--score-color', tier.color);
+        queueGauge('score', score, { tier: tier.tier, color: tier.color });
+        $('tierEmblem').textContent = tier.tier;
+        $('tierEmblem').setAttribute('aria-label', `Tier ${tier.tier}`);
+        $('tierTitle').textContent = tier.name;
+        $('tierScore').textContent = `${score}/100 · ${coverage < 100 ? 'resultado parcial' : 'rango de conexión'}`;
+        renderTierScale(tier.tier);
+        void dashboard.offsetWidth;
+        dashboard.classList.add('is-revealing');
+        tierRevealTimer = window.setTimeout(() => dashboard.classList.remove('is-revealing'), 1100);
+      }
+      function readNetworkLabel() { try { return localStorage.getItem(NETWORK_LABEL_KEY) || ''; } catch (_) { return ''; } }
+      function getNetworkInfo() {
+        const connection = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
+        return {
+          type: connection?.type || 'No expuesto por el navegador',
+          effectiveType: connection?.effectiveType || '—',
+          downlink: Number.isFinite(connection?.downlink) ? connection.downlink : null,
+          browserRtt: Number.isFinite(connection?.rtt) ? connection.rtt : null,
+          saveData: Boolean(connection?.saveData)
+        };
+      }
+      function renderNetworkInfo(info = getNetworkInfo()) {
+        const name = info.type && info.type !== 'No expuesto por el navegador' ? info.type : 'Conexión activa · nombre no expuesto';
+        const label = $('networkLabel').value.trim();
+        $('connectionName').textContent = label || name;
+        const details = [];
+        if (info.effectiveType && info.effectiveType !== '—') details.push(`calidad estimada ${info.effectiveType}`);
+        if (Number.isFinite(info.downlink)) details.push(`~${info.downlink} Mbps estimados`);
+        if (Number.isFinite(info.browserRtt)) details.push(`RTT reportado ${info.browserRtt} ms`);
+        if (info.saveData) details.push('ahorro de datos activado');
+        $('connectionHint').textContent = `${details.length ? details.join(' · ') + '. ' : ''}El SSID/nombre del Wi-Fi está protegido y no es accesible a una página web.`;
+      }
+
+      function setStatus(text, state = 'ready') {
+        els.status.textContent = text;
+        els.server.textContent = state === 'busy' ? 'Prueba en curso' : state === 'error' ? 'Conexión no disponible' : 'Listo para medir';
+        els.light.className = `status-light ${state}`;
+      }
+      function setStage(text) { els.stage.innerHTML = text ? `<i class="fa-solid fa-circle-notch fa-spin" aria-hidden="true"></i> ${text}` : ''; }
+      function gaugePercent(kind, value) {
+        if (!Number.isFinite(value)) return null;
+        const score = kind === 'score' ? value : scoreMetric(kind, value);
+        return score == null ? null : Math.max(0, Math.min(100, score));
+      }
+      function paintGauge() {
+        const percent = Math.max(0, Math.min(100, gaugeState.pct));
+        els.gauge.style.strokeDashoffset = String(377 * (1 - percent / 100));
+        els.gauge.style.stroke = gaugeState.kind === 'score'
+          ? gaugeState.scoreColor
+          : (tierFor(percent)?.color || '#899889');
+        if (gaugeState.display == null) {
+          els.gaugeNumber.textContent = '—';
+          $('gaugeUnit').textContent = '/100';
+          els.gaugeMode.textContent = gaugeState.tierLabel || 'PUNTUACIÓN';
+          return;
+        }
+        if (gaugeState.kind === 'score') {
+          els.gaugeNumber.textContent = String(Math.round(gaugeState.display));
+          $('gaugeUnit').textContent = '/100';
+          els.gaugeMode.textContent = gaugeState.tierLabel || 'PUNTUACIÓN';
+        } else if (gaugeState.kind === 'ping') {
+          els.gaugeNumber.textContent = formatted(gaugeState.display, 0);
+          $('gaugeUnit').textContent = 'ms';
+          els.gaugeMode.textContent = 'LATENCIA';
+        } else {
+          els.gaugeNumber.textContent = formatted(gaugeState.display, gaugeState.display < 10 ? 2 : 1);
+          $('gaugeUnit').textContent = 'Mbps';
+          els.gaugeMode.textContent = gaugeState.kind === 'upload' ? 'SUBIDA' : 'DESCARGA';
+        }
+      }
+      function gaugeTick() {
+        const pctGap = gaugeState.pctTarget - gaugeState.pct;
+        const current = gaugeState.display == null ? 0 : gaugeState.display;
+        const target = gaugeState.displayTarget == null ? gaugeState.pctTarget : gaugeState.displayTarget;
+        const valueGap = target - current;
+        gaugeState.pct += pctGap * 0.18;
+        gaugeState.display = current + valueGap * 0.18;
+        const pctDone = Math.abs(pctGap) < 0.15;
+        const valueDone = Math.abs(valueGap) < Math.max(0.05, Math.abs(target) * 0.002);
+        if (pctDone) gaugeState.pct = gaugeState.pctTarget;
+        if (valueDone) gaugeState.display = target;
+        paintGauge();
+        gaugeState.raf = pctDone && valueDone ? 0 : requestAnimationFrame(gaugeTick);
+      }
+      function queueGauge(kind, value, options = {}) {
+        const percent = gaugePercent(kind, value);
+        if (percent == null) return;
+        if (kind !== gaugeState.kind) { gaugeState.kind = kind; gaugeState.display = null; }
+        if (kind === 'score') {
+          gaugeState.scoreColor = options.color || '#899889';
+          gaugeState.tierLabel = options.tier || 'PUNTUACIÓN';
+        }
+        gaugeState.pctTarget = percent;
+        gaugeState.displayTarget = value;
+        if (gaugeState.display == null) gaugeState.display = 0;
+        if (!gaugeState.raf) gaugeState.raf = requestAnimationFrame(gaugeTick);
+      }
+      function resetGauge(tierLabel = 'PUNTUACIÓN', color = '#899889') {
+        if (gaugeState.raf) cancelAnimationFrame(gaugeState.raf);
+        gaugeState.raf = 0;
+        gaugeState.kind = 'score';
+        gaugeState.pct = 0;
+        gaugeState.pctTarget = 0;
+        gaugeState.display = null;
+        gaugeState.displayTarget = null;
+        gaugeState.scoreColor = color;
+        gaugeState.tierLabel = tierLabel;
+        paintGauge();
+      }
+      function formatDate(value) { const date = new Date(value); return Number.isNaN(date.getTime()) ? 'Fecha desconocida' : new Intl.DateTimeFormat('es-ES', { dateStyle: 'short', timeStyle: 'short' }).format(date); }
+      function renderHistory() {
+        els.historyCount.textContent = `${history.length} ${history.length === 1 ? 'test' : 'tests'}`;
+        if (!history.length) {
+          els.history.innerHTML = '<li class="empty-history"><i class="fa-solid fa-chart-simple" aria-hidden="true"></i>Aún no hay mediciones.<br />Tu próximo test aparecerá aquí.</li>';
+          return;
+        }
+        els.history.innerHTML = history.map((item, index) => {
+          const isLegacy = item.measurementVersion !== MEASUREMENT_VERSION;
+          const score = isLegacy ? null : scoreSet(item);
+          const tier = !isLegacy && score.overall != null ? tierFor(score.overall) : null;
+          const summary = isLegacy ? 'MÉTODO ANTERIOR · repetir test' : score.overall == null ? 'Prueba parcial' : `${score.overall}/100 ${score.grade.label}`;
+          const tierBadge = tier ? `<span class="history-tier" style="--tier-color:${tier.color}" aria-label="Tier ${tier.tier}">${tier.tier}</span>` : '<span class="history-tier" aria-label="Tier no disponible">—</span>';
+          return `<li class="history-item${isLegacy ? ' is-legacy' : ''}"><button class="history-open" type="button" data-history-index="${index}" aria-label="Ver detalle del test del ${escapeHTML(formatDate(item.date))}${tier ? ` · tier ${tier.tier}` : ''}"><span><span class="history-meta-line">${tierBadge}<span class="history-time">${escapeHTML(formatDate(item.date))} · ${summary}</span></span><span class="history-values"><span class="down"><i class="fa-solid fa-arrow-down" aria-hidden="true"></i> ${formatted(item.download)}</span><span class="up"><i class="fa-solid fa-arrow-up" aria-hidden="true"></i> ${formatted(item.upload)}</span></span></span><span class="history-ping">${formatted(item.ping, 0)}<small>ms ping</small></span><span class="mono-note">Ver detalle&nbsp; <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></span></button></li>`;
+        }).join('');
+      }
+      function pushChartPoint(value, kind = 'down') {
+        if (!Number.isFinite(value)) return;
+        const now = performance.now();
+        chartPoints.push({ t: now, mbps: Math.max(0, value), kind });
+        const cutoff = now - CHART_MAX_WINDOW_MS;
+        while (chartPoints.length && chartPoints[0].t < cutoff) chartPoints.shift();
+      }
+      function setChartLabel(kind) {
+        if (!els.chartLabel) return;
+        els.chartLabel.textContent = kind === 'upload' ? '↑ Subida en vivo' : kind === 'download' ? '↓ Descarga en vivo' : 'Monitor en vivo';
+      }
+      function drawChart() {
+        const canvas = els.canvas;
+        const rect = canvas.getBoundingClientRect();
+        if (!rect.width || !rect.height) return;
+        const dpr = Math.min(window.devicePixelRatio || 1, 2);
+        const pixelWidth = Math.round(rect.width * dpr);
+        const pixelHeight = Math.round(rect.height * dpr);
+        if (canvas.width !== pixelWidth || canvas.height !== pixelHeight) { canvas.width = pixelWidth; canvas.height = pixelHeight; }
+        const ctx = canvas.getContext('2d');
+        ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+        const w = rect.width, h = rect.height, pad = { top: 10, right: 4, bottom: 8, left: 4 };
+        ctx.clearRect(0, 0, w, h);
+        ctx.strokeStyle = 'rgba(150,170,195,.10)'; ctx.lineWidth = 1;
+        for (let i = 1; i <= 3; i++) { const y = pad.top + (h - pad.top - pad.bottom) * i / 4; ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(w, y); ctx.stroke(); }
+        const now = performance.now();
+        const last = chartPoints[chartPoints.length - 1];
+        const firstT = chartPoints.length ? chartPoints[0].t : now;
+        const lastT = last ? Math.max(last.t, firstT + 1) : now;
+        const span = Math.max(CHART_MIN_WINDOW_MS, Math.min(CHART_MAX_WINDOW_MS, lastT - firstT));
+        const startT = lastT - span;
+        const visible = [];
+        let peak = 0;
+        for (const point of chartPoints) {
+          if (point.t < startT) continue;
+          visible.push(point);
+          if (point.mbps > peak) peak = point.mbps;
+        }
+        const innerWidth = w - pad.left - pad.right;
+        const innerHeight = h - pad.top - pad.bottom;
+        const scale = Math.max(10, peak * 1.15);
+        if (scale > chartPeak || scale < chartPeak * 0.55) chartPeak = scale;
+        const xFor = (t) => pad.left + innerWidth * Math.max(0, Math.min(1, (t - startT) / span));
+        const yFor = (value) => h - pad.bottom - innerHeight * Math.min(1, value / chartPeak);
+        if (visible.length > 1) {
+          const gradient = ctx.createLinearGradient(0, pad.top, 0, h);
+          gradient.addColorStop(0, 'rgba(168,255,96,.16)');
+          gradient.addColorStop(1, 'rgba(168,255,96,0)');
+          ctx.beginPath();
+          visible.forEach((point, index) => { const x = xFor(point.t); const y = yFor(point.mbps); index ? ctx.lineTo(x, y) : ctx.moveTo(x, y); });
+          ctx.lineTo(xFor(visible[visible.length - 1].t), h - pad.bottom);
+          ctx.lineTo(xFor(visible[0].t), h - pad.bottom);
+          ctx.closePath(); ctx.fillStyle = gradient; ctx.fill();
+          ctx.lineJoin = 'round'; ctx.lineWidth = 1.6;
+          for (let index = 1; index < visible.length; index++) {
+            const previous = visible[index - 1];
+            const current = visible[index];
+            ctx.beginPath();
+            ctx.moveTo(xFor(previous.t), yFor(previous.mbps));
+            ctx.lineTo(xFor(current.t), yFor(current.mbps));
+            ctx.strokeStyle = CHART_POINT_COLORS[current.kind] || CHART_POINT_COLORS.down;
+            ctx.stroke();
+          }
+          const tip = visible[visible.length - 1];
+          ctx.beginPath(); ctx.arc(xFor(tip.t), yFor(tip.mbps), 2.6, 0, Math.PI * 2);
+          ctx.fillStyle = CHART_POINT_COLORS[tip.kind] || CHART_POINT_COLORS.down; ctx.fill();
+        }
+        const label = `0 — ${Math.ceil(chartPeak)} Mbps`;
+        if (label !== chartScaleLabel) { chartScaleLabel = label; els.chartScale.textContent = label; }
+      }
+      function chartLoop() { drawChart(); chartRaf = requestAnimationFrame(chartLoop); }
+      function scheduleMonitor(delay = MONITOR_INTERVAL_MS) {
+        window.clearTimeout(monitorTimer);
+        if (!monitorRunning) { monitorTimer = null; return; }
+        monitorTimer = window.setTimeout(monitorProbe, delay);
+      }
+      async function monitorProbe() {
+        monitorTimer = null;
+        if (!monitorRunning) return;
+        if (animating || document.hidden) { scheduleMonitor(2000); return; }
+        const controller = new AbortController();
+        monitorAbort = controller;
+        const timer = window.setTimeout(() => controller.abort(), 8000);
+        const startedAt = performance.now();
+        try {
+          const response = await fetch(`${ENDPOINT}/__down?bytes=${MONITOR_BYTES}&cacheBust=${Date.now()}-m`, { cache: 'no-store', mode: 'cors', signal: controller.signal });
+          if (!response.ok) throw new Error('monitor');
+          const buffer = await response.arrayBuffer();
+          const duration = performance.now() - startedAt;
+          if (!animating && buffer.byteLength && duration > 0) pushChartPoint(buffer.byteLength * 8 / (duration / 1000) / 1e6, 'monitor');
+          monitorFailures = 0;
+        } catch (_) {
+          monitorFailures += 1;
+          if (monitorFailures >= 5) { stopMonitor(); return; }
+        } finally {
+          window.clearTimeout(timer);
+          monitorAbort = null;
+        }
+        scheduleMonitor();
+      }
+      function startMonitor(delay = MONITOR_INTERVAL_MS) {
+        monitorRunning = true;
+        monitorFailures = 0;
+        setChartLabel('monitor');
+        scheduleMonitor(delay);
+      }
+      function stopMonitor() {
+        monitorRunning = false;
+        window.clearTimeout(monitorTimer);
+        monitorTimer = null;
+        if (monitorAbort) { monitorAbort.abort(); monitorAbort = null; }
+      }
+      function timeoutSignal(ms) {
+        if (typeof AbortSignal !== 'undefined' && typeof AbortSignal.timeout === 'function') return AbortSignal.timeout(ms);
+        const controller = new AbortController();
+        window.setTimeout(() => controller.abort(), ms);
+        return controller.signal;
+      }
+      function wait(ms) { return new Promise((resolve) => setTimeout(resolve, ms)); }
+      function captureEdgeInfo(response) {
+        if (edgeInfo) return;
+        try {
+          const colo = response.headers.get('cf-meta-colo');
+          const city = response.headers.get('cf-meta-city');
+          const asn = response.headers.get('cf-meta-asn');
+          if (!colo && !city && !asn) return;
+          edgeInfo = { colo, city, asn, country: response.headers.get('cf-meta-country') };
+        } catch (_) { /* Cabeceras opcionales. */ }
+      }
+      function jitterFrom(values) {
+        const usable = (values || []).filter((value) => Number.isFinite(value));
+        if (usable.length < 2) return 0;
+        let total = 0;
+        for (let index = 1; index < usable.length; index++) total += Math.abs(usable[index] - usable[index - 1]);
+        return total / (usable.length - 1);
+      }
+      async function warmUp() {
+        setStatus('Calentando la conexión…', 'busy');
+        try {
+          const response = await fetch(`${ENDPOINT}/__down?bytes=${PHASE_WARMUP_BYTES}&cacheBust=${Date.now()}-w`, { cache: 'no-store', mode: 'cors', signal: timeoutSignal(12000) });
+          captureEdgeInfo(response);
+          if (response.ok) await response.arrayBuffer();
+        } catch (_) { /* El calentamiento es opcional. */ }
+        try {
+          await fetch(`${ENDPOINT}/__up?cacheBust=${Date.now()}-wu`, { method: 'POST', body: new Uint8Array(PHASE_WARMUP_UPLOAD_BYTES), headers: { 'Content-Type': 'application/octet-stream' }, cache: 'no-store', mode: 'cors', signal: timeoutSignal(12000) });
+        } catch (_) { /* El calentamiento es opcional. */ }
+      }
+      async function measurePing() {
+        const times = [];
+        for (let i = 0; i < 10; i++) {
+          const startedAt = performance.now();
+          try {
+            const response = await fetch(`${ENDPOINT}/__down?bytes=0&cacheBust=${Date.now()}-${i}`, { cache: 'no-store', mode: 'cors', signal: timeoutSignal(8000) });
+            if (!response.ok) throw new Error('El servidor de prueba no respondió correctamente.');
+            await response.arrayBuffer();
+            const sample = performance.now() - startedAt;
+            times.push(sample);
+            queueGauge('ping', sample);
+          } catch (_) { /* Reintentamos con la siguiente muestra. */ }
+          setStatus(`Midiendo respuesta… ${times.length}/10`, 'busy');
+        }
+        if (times.length < 3) throw new Error('No se pudo medir la latencia.');
+        const usable = times.length > 3 ? times.slice(1) : times;
+        const sorted = [...usable].sort((a, b) => a - b);
+        const ping = median(usable, sorted[0]);
+        return { ping, jitter: jitterFrom(usable), p95: sorted[Math.min(sorted.length - 1, Math.floor(sorted.length * 0.95))], samples: times };
+      }
+      async function measureLoadedLatency(operation) {
+        let stopped = false;
+        const samples = [];
+        const probeController = new AbortController();
+        const sampler = (async () => {
+          while (!stopped) {
+            const startedAt = performance.now();
+            try {
+              const response = await fetch(`${ENDPOINT}/__down?bytes=0&loadProbe=${Date.now()}`, { cache: 'no-store', mode: 'cors', signal: probeController.signal });
+              if (response.ok) { await response.arrayBuffer(); samples.push(performance.now() - startedAt); }
+            } catch (_) { /* Una sonda fallida no cancela la prueba. */ }
+            if (!stopped) await wait(400);
+          }
+        })();
+        let result;
+        try { result = await operation(); }
+        finally { stopped = true; probeController.abort(); await sampler.catch(() => {}); }
+        result.latencySamples = samples;
+        return result;
+      }
+      function steadyStateSpeed(marks, durationMs, totalBytes) {
+        const last = marks[marks.length - 1];
+        if (!last || !last.t) return { speed: totalBytes * 8 / (Math.max(durationMs, 1) / 1000) / 1e6, skippedMs: 0 };
+        const minWindow = 1200;
+        let base = null;
+        for (const mark of marks) {
+          if (mark.t >= STEADY_STATE_SKIP_MS && last.t - mark.t >= minWindow) { base = mark; break; }
+        }
+        if (!base) {
+          const cutoff = last.t * 0.6;
+          base = marks.find((mark) => mark.t >= cutoff) || marks[0];
+          if (last.t - base.t < 400) base = marks[0];
+        }
+        const windowMs = last.t - base.t;
+        if (windowMs < 250) return { speed: totalBytes * 8 / (Math.max(durationMs, 1) / 1000) / 1e6, skippedMs: 0 };
+        return { speed: (last.bytes - base.bytes) * 8 / (windowMs / 1000) / 1e6, skippedMs: base.t };
+      }
+      function handleLiveSample(kind, value) {
+        if (!Number.isFinite(value) || value < 0) return;
+        const key = kind === 'upload' ? 'upload' : 'download';
+        liveSmooth[key] = liveSmooth[key] == null ? value : liveSmooth[key] * 0.65 + value * 0.35;
+        const smooth = liveSmooth[key];
+        pushChartPoint(value, key === 'upload' ? 'up' : 'down');
+        queueGauge(key, smooth);
+        const node = key === 'download' ? els.down : els.up;
+        node.innerHTML = `${formatted(smooth, smooth < 10 ? 2 : 1)}<span class="metric-unit"> Mbps</span>`;
+      }
+      async function measureDownload({ maxChunk = PHASE_MAX_CHUNK_BYTES } = {}) {
+        const marks = [];
+        const chunkRates = [];
+        let totalBytes = 0;
+        let partial = false;
+        let timedOut = false;
+        const phaseStartedAt = performance.now();
+        let requestedBytes = 1024 * 1024;
+        let lastSampleAt = phaseStartedAt;
+        let lastSampleBytes = 0;
+        while (performance.now() - phaseStartedAt < PHASE_MIN_DURATION_MS && totalBytes < PHASE_MAX_BYTES) {
+          const index = marks.length;
+          const remaining = PHASE_MAX_BYTES - totalBytes;
+          requestedBytes = Math.round(Math.max(256 * 1024, Math.min(requestedBytes, remaining, maxChunk)));
+          const requestStartedAt = performance.now();
+          let received = 0;
+          let requestTimedOut = false;
+          try {
+            const response = await fetch(`${ENDPOINT}/__down?bytes=${requestedBytes}&cacheBust=${Date.now()}-${index}`, { cache: 'no-store', mode: 'cors', signal: timeoutSignal(20000) });
+            captureEdgeInfo(response);
+            if (!response.ok || !response.body) throw new Error('No se pudo descargar el bloque de prueba.');
+            const reader = response.body.getReader();
+            while (true) {
+              const { done, value } = await reader.read();
+              if (done) break;
+              received += value.byteLength;
+              totalBytes += value.byteLength;
+              const now = performance.now();
+              marks.push({ t: now - phaseStartedAt, bytes: totalBytes });
+              if (now - phaseStartedAt < 600) { lastSampleAt = now; lastSampleBytes = totalBytes; continue; }
+              if (now - lastSampleAt >= 150) {
+                const instant = ((totalBytes - lastSampleBytes) * 8) / ((now - lastSampleAt) * 1000);
+                lastSampleAt = now; lastSampleBytes = totalBytes;
+                handleLiveSample('download', instant);
+              }
+            }
+          } catch (error) {
+            requestTimedOut = error.name === 'TimeoutError' || error.name === 'AbortError';
+            if (!requestTimedOut || received === 0) {
+              if (!totalBytes) throw error;
+              partial = true;
+              break;
+            }
+          }
+          const duration = performance.now() - requestStartedAt;
+          if (received > 0 && duration > 0) chunkRates.push(received * 8 / (duration / 1000) / 1e6);
+          const elapsed = performance.now() - phaseStartedAt;
+          setStatus(`Descarga · ${(elapsed / 1000).toFixed(1)} / ${(PHASE_MIN_DURATION_MS / 1000).toFixed(0)} s · ${(totalBytes / 1024 / 1024).toFixed(1)} MiB`, 'busy');
+          if (requestTimedOut) { timedOut = true; partial = true; break; }
+          const rate = chunkRates[chunkRates.length - 1] || 1;
+          requestedBytes = Math.round(Math.max(256 * 1024, Math.min(maxChunk, rate * 1e6 * 1.2 / 8)));
+        }
+        const durationMs = performance.now() - phaseStartedAt;
+        if (!totalBytes || !marks.length) throw new Error('No se obtuvieron muestras suficientes de descarga.');
+        const steady = steadyStateSpeed(marks, durationMs, totalBytes);
+        return { speed: steady.speed, bytes: totalBytes, durationMs, speedSamples: chunkRates, latencySamples: [], capped: totalBytes >= PHASE_MAX_BYTES, timedOut, partial, skippedMs: steady.skippedMs };
+      }
+      async function measureDownloadFallback() {
+        const size = 8 * 1024 * 1024;
+        const startedAt = performance.now();
+        const response = await fetch(`${ENDPOINT}/__down?bytes=${size}&cacheBust=${Date.now()}-f`, { cache: 'no-store', mode: 'cors', signal: timeoutSignal(25000) });
+        captureEdgeInfo(response);
+        if (!response.ok) throw new Error('La ruta de respaldo de descarga tampoco respondió.');
+        const buffer = await response.arrayBuffer();
+        const durationMs = performance.now() - startedAt;
+        if (!buffer.byteLength || durationMs <= 0) throw new Error('La ruta de respaldo no devolvió datos.');
+        const speed = buffer.byteLength * 8 / (durationMs / 1000) / 1e6;
+        return { speed, bytes: buffer.byteLength, durationMs, speedSamples: [speed], latencySamples: [], capped: false, timedOut: false, partial: true, skippedMs: 0 };
+      }
+      function uploadFillerBuffer() {
+        if (!uploadFiller) {
+          uploadFiller = new Uint8Array(UPLOAD_FILLER_BYTES);
+          for (let offset = 0; offset < UPLOAD_FILLER_BYTES; offset += 65536) {
+            crypto.getRandomValues(uploadFiller.subarray(offset, Math.min(offset + 65536, UPLOAD_FILLER_BYTES)));
+          }
+        }
+        return uploadFiller;
+      }
+      function serverProcessingMs(response) {
+        try {
+          const timing = response.headers.get('server-timing') || '';
+          const match = /cfSpeedWorker;dur=([\d.]+)/.exec(timing);
+          return match ? Number(match[1]) : 0;
+        } catch (_) { return 0; }
+      }
+      async function measureUpload({ maxChunk = PHASE_MAX_CHUNK_BYTES } = {}) {
+        const buffer = uploadFillerBuffer();
+        const marks = [];
+        const chunkRates = [];
+        let totalBytes = 0;
+        let partial = false;
+        const phaseStartedAt = performance.now();
+        let requestedBytes = 512 * 1024;
+        while (performance.now() - phaseStartedAt < PHASE_MIN_DURATION_MS && totalBytes < PHASE_MAX_BYTES) {
+          const index = marks.length;
+          const remaining = PHASE_MAX_BYTES - totalBytes;
+          const size = Math.round(Math.max(64 * 1024, Math.min(requestedBytes, remaining, maxChunk, buffer.length)));
+          const body = buffer.subarray(0, size);
+          setStatus(`Subida · ${((performance.now() - phaseStartedAt) / 1000).toFixed(1)} / ${(PHASE_MIN_DURATION_MS / 1000).toFixed(0)} s · ${(totalBytes / 1024 / 1024).toFixed(1)} MiB`, 'busy');
+          const startedAt = performance.now();
+          try {
+            const response = await fetch(`${ENDPOINT}/__up?cacheBust=${Date.now()}-${index}`, { method: 'POST', body, headers: { 'Content-Type': 'application/octet-stream' }, cache: 'no-store', mode: 'cors', signal: timeoutSignal(25000) });
+            captureEdgeInfo(response);
+            if (!response.ok) throw new Error('El servidor rechazó una muestra de subida.');
+            await response.arrayBuffer();
+            const elapsed = performance.now() - startedAt;
+            const duration = Math.max(1, elapsed - Math.min(serverProcessingMs(response), elapsed * 0.2));
+            totalBytes += size;
+            marks.push({ t: performance.now() - phaseStartedAt, bytes: totalBytes });
+            const rate = (size * 8) / (duration / 1000) / 1e6;
+            chunkRates.push(rate);
+            handleLiveSample('upload', rate);
+          } catch (error) {
+            if (!totalBytes) throw error;
+            partial = true;
+            break;
+          }
+          const rate = chunkRates[chunkRates.length - 1] || 1;
+          requestedBytes = Math.round(Math.max(256 * 1024, Math.min(maxChunk, rate * 1e6 * 1.2 / 8)));
+        }
+        const durationMs = performance.now() - phaseStartedAt;
+        if (!totalBytes || !marks.length) throw new Error('No se obtuvieron muestras suficientes de subida.');
+        const steady = steadyStateSpeed(marks, durationMs, totalBytes);
+        return { speed: steady.speed, bytes: totalBytes, durationMs, speedSamples: chunkRates, latencySamples: [], capped: totalBytes >= PHASE_MAX_BYTES, timedOut: false, partial, skippedMs: steady.skippedMs };
+      }
+      function median(values, fallback) {
+        const usable = (values || []).filter((value) => Number.isFinite(value));
+        if (!usable.length) return fallback;
+        const sorted = [...usable].sort((a, b) => a - b);
+        const middle = Math.floor(sorted.length / 2);
+        return sorted.length % 2 ? sorted[middle] : (sorted[middle - 1] + sorted[middle]) / 2;
+      }
+      function renderScores(result, { interim = false } = {}) {
+        const scores = scoreSet(result);
+        if (!interim) {
+          $('overallScore').textContent = scores.overall == null ? '—' : scores.overall;
+          $('overallScore').style.setProperty('--score-color', scores.grade.color);
+          $('overallGrade').textContent = scores.grade.label;
+          $('overallHint').textContent = scores.overall == null ? 'No hay datos suficientes para puntuar' : scores.coverage < 100 ? `Puntuación parcial · ${scores.coverage}% de métricas disponibles` : scores.overall >= 70 ? 'Apta para la mayoría de usos' : scores.overall >= 45 ? 'Puede limitar tareas exigentes' : 'Puede causar cortes o esperas';
+        }
+        const ids = { web: 'webCard', game: 'gameCard', video: 'videoCard', call: 'callCard' };
+        scores.profiles.forEach((profile) => {
+          const card = $(ids[profile.id]);
+          const grade = gradeFor(profile.score);
+          card.className = `quality-chip ${grade.css}`;
+          card.dataset.grade = grade.css;
+          const missing = profile.required.filter((key) => !Number.isFinite(result[key]));
+          $(`${profile.id}Hint`).textContent = profile.score == null
+            ? (animating ? 'Midiendo…' : `Sin datos · falta ${missing.join(', ')}`)
+            : `${profile.score} / 100 · ${grade.label}`;
+        });
+        return scores;
+      }
+      function pendingMarkup(text) {
+        return `<i class="fa-solid fa-circle-notch fa-spin" aria-hidden="true"></i><small> ${text}</small>`;
+      }
+      function speedMarkup(value) {
+        if (Number.isFinite(value)) return `${formatted(value, value < 10 ? 2 : 1)}<span class="metric-unit"> Mbps</span>`;
+        return animating ? '<i class="fa-solid fa-circle-notch fa-spin" aria-hidden="true"></i>' : '<small>no medido</small>';
+      }
+      function latencyMarkup(value, metric) {
+        if (Number.isFinite(value)) return metricMarkup(formatted(value), 'ms', scoreMetric(metric, value));
+        return pendingMarkup(animating ? 'midiendo' : 'no medido');
+      }
+      function gradeCaption(value, metric, label) {
+        if (Number.isFinite(value)) {
+          const grade = gradeFor(scoreMetric(metric, value));
+          return { text: `${grade.label} · ${label}`, color: grade.color };
+        }
+        return { text: `${animating ? 'Midiendo' : 'No medido'} · ${label}`, color: '#929b91' };
+      }
+      function renderMeasurement(result, { reveal = true } = {}) {
+        els.down.innerHTML = speedMarkup(result.download);
+        els.up.innerHTML = speedMarkup(result.upload);
+        const ping = Number.isFinite(result.ping) ? result.ping : null;
+        const downloadLatency = Number.isFinite(result.downloadLatency) ? result.downloadLatency : null;
+        const uploadLatency = Number.isFinite(result.uploadLatency) ? result.uploadLatency : null;
+        const jitter = Number.isFinite(result.jitter) ? result.jitter : null;
+        els.ping.innerHTML = latencyMarkup(ping, 'ping');
+        els.downLatency.innerHTML = latencyMarkup(downloadLatency, 'ping');
+        els.upLatency.innerHTML = latencyMarkup(uploadLatency, 'ping');
+        els.jitter.innerHTML = latencyMarkup(jitter, 'jitter');
+        const downloadGrade = gradeCaption(result.download, 'download', 'descarga');
+        const uploadGrade = gradeCaption(result.upload, 'upload', 'subida');
+        $('downloadGrade').textContent = downloadGrade.text;
+        $('downloadGrade').style.color = downloadGrade.color;
+        $('uploadGrade').textContent = uploadGrade.text;
+        $('uploadGrade').style.color = uploadGrade.color;
+        const scores = renderScores({ ...result, ping, jitter }, { interim: !reveal });
+        if (reveal) revealTier(scores.overall, scores.coverage);
+        renderNetworkInfo(result.connection);
+      }
+      function metricRow(label, value) { return `<tr><th scope="row">${escapeHTML(label)}</th><td>${escapeHTML(value)}</td></tr>`; }
+      function openHistoryDetail(index) {
+        const item = history[index];
+        if (!item) return;
+        const isLegacy = item.measurementVersion !== MEASUREMENT_VERSION;
+        const scores = isLegacy
+          ? { overall: null, grade: gradeFor(null), profiles: PROFILES.map((profile) => ({ ...profile, score: null })) }
+          : scoreSet(item);
+        const savedTier = !isLegacy && Number.isFinite(item.overallScore)
+          ? tierFor(item.overallScore)
+          : !isLegacy && scores.overall != null ? tierFor(scores.overall) : null;
+        $('dialogDate').textContent = formatDate(item.date);
+        const details = [
+          ['Tier obtenido', savedTier ? `${savedTier.tier} · ${savedTier.name}` : 'No disponible'], ['Puntuación guardada', Number.isFinite(item.overallScore) ? `${item.overallScore}/100` : scores.overall != null ? `${scores.overall}/100` : 'No disponible'],
+          ['Descarga', `${formatted(item.download, 2)} Mbps`], ['Subida', `${formatted(item.upload, 2)} Mbps`],
+          ['Ping en reposo', `${formatted(item.ping)} ms`], ['Latencia bajo carga · descarga', `${formatted(item.downloadLatency ?? item.ping)} ms`],
+          ['Latencia bajo carga · subida', `${formatted(item.uploadLatency ?? item.ping)} ms`], ['Jitter', `${formatted(item.jitter)} ms`],
+          ['Etiqueta de conexión', item.networkLabel || 'Sin etiqueta'], ['Red / tipo detectado', item.connection?.type || 'No disponible'], ['Tipo efectivo reportado', item.connection?.effectiveType || item.network || '—'],
+          ['Estimación del navegador', item.connection?.downlink != null ? `~${item.connection.downlink} Mbps` : 'No disponible'],
+          ['RTT estimado por navegador', item.connection?.browserRtt != null ? `${item.connection.browserRtt} ms` : 'No disponible'],
+          ['Tamaño descargado', item.bytesDownloaded ? `${(item.bytesDownloaded / 1024 / 1024).toFixed(2)} MiB` : 'No registrado'],
+          ['Tamaño subido', item.bytesUploaded ? `${(item.bytesUploaded / 1024 / 1024).toFixed(2)} MiB` : 'No registrado'],
+          ['Duración descarga', item.downloadDurationMs ? `${(item.downloadDurationMs / 1000).toFixed(2)} s` : 'No registrada'],
+          ['Duración subida', item.uploadDurationMs ? `${(item.uploadDurationMs / 1000).toFixed(2)} s` : 'No registrada'],
+          ['Criterio de velocidad', 'Ventana estacionaria: descarta el arranque y mide bytes ÷ tiempo reales de la fase'],
+          ['Calentamiento descartado', item.warmUpBytes ? `${(item.warmUpBytes / 1024 / 1024).toFixed(2)} MiB` : 'No registrado'],
+          ['Arranque descartado por fase', Number.isFinite(item.downloadSkippedMs) ? `${Math.round(item.downloadSkippedMs)} ms descarga · ${Math.round(item.uploadSkippedMs || 0)} ms subida` : 'No registrado'],
+          ['Duración mínima por fase', item.minPhaseMs ? `${(item.minPhaseMs / 1000).toFixed(0)} s` : 'No registrada'],
+          ['Latencia derivada', item.derivedLatency ? 'Sí · estimada con latencias bajo carga' : 'No'],
+          ['P95 de latencia en reposo', Number.isFinite(item.pingP95) ? `${item.pingP95.toFixed(1)} ms` : 'No registrado'],
+          ['Muestras descarga', Array.isArray(item.downloadSpeedSamples) ? `${item.downloadSpeedSamples.length} bloques` : 'No registradas'],
+          ['Muestras subida', Array.isArray(item.uploadSpeedSamples) ? `${item.uploadSpeedSamples.length} bloques` : 'No registradas'],
+          ['Límite de datos alcanzado', item.downloadCapped || item.uploadCapped ? 'Sí · ver límites por dirección' : 'No'],
+          ['Fases incompletas por timeout', item.downloadTimedOut || item.uploadTimedOut ? 'Sí · valor parcial' : 'No'],
+          ['Muestras de velocidad de descarga', Array.isArray(item.downloadSpeedSamples) ? item.downloadSpeedSamples.map((value) => `${value.toFixed(1)} Mbps`).join(', ') || 'Sin muestras' : 'No registradas'],
+          ['Muestras de velocidad de subida', Array.isArray(item.uploadSpeedSamples) ? item.uploadSpeedSamples.map((value) => `${value.toFixed(1)} Mbps`).join(', ') || 'Sin muestras' : 'No registradas'],
+          ['Muestras de latencia en descarga', Array.isArray(item.downloadLatencySamples) ? item.downloadLatencySamples.map((value) => `${value.toFixed(1)} ms`).join(', ') || 'Sin muestras' : 'No registradas'],
+          ['Muestras de latencia en subida', Array.isArray(item.uploadLatencySamples) ? item.uploadLatencySamples.map((value) => `${value.toFixed(1)} ms`).join(', ') || 'Sin muestras' : 'No registradas'],
+          ['Servidor de medición', item.edge?.colo ? `Cloudflare · ${item.edge.city && item.edge.city !== item.edge.colo ? `${item.edge.city} (${item.edge.colo})` : item.edge.colo || item.edge.city}` : 'Cloudflare Speed Test'],
+          ...(item.edge?.asn ? [['ASN de tu operador', item.edge.asn]] : []),
+          ['Almacenamiento', 'Solo en este navegador']
+        ];
+        const scoresMarkup = scores.profiles.map((profile) => {
+          const grade = gradeFor(profile.score);
+          const missing = profile.required.filter((key) => !Number.isFinite(item[key]));
+          return `<div class="dialog-score" style="--grade:${grade.color}"><span>${escapeHTML(profile.label)}</span><strong>${profile.score == null ? `Sin datos · falta ${escapeHTML(missing.join(', '))}` : `${profile.score}/100 · ${grade.label}`}</strong></div>`;
+        }).join('');
+        const scoreSummary = savedTier ? `Tier ${savedTier.tier} · ${savedTier.name}` : scores.overall == null ? 'Sin puntuación · prueba parcial' : `${scores.grade.label} · ${scores.overall}/100`;
+        const versionNotice = isLegacy ? '<p class="legacy-warning"><i class="fa-solid fa-triangle-exclamation" aria-hidden="true"></i> Esta prueba se hizo con una versión anterior del método (sin calentamiento descartado ni ventana estacionaria). Puede variar respecto a una prueba nueva; repítela para comparar con el método actual.</p>' : '';
+        $('dialogContent').innerHTML = `${versionNotice}<div class="dialog-overview"><span class="score-ring" style="--score-color:${scores.grade.color}">${scores.overall ?? '—'}</span><div><strong>${scoreSummary}</strong><span>Valoración orientativa según las métricas disponibles.</span></div></div><h3 class="dialog-section-title">Puntuación por actividad</h3><div class="dialog-scores">${scoresMarkup}</div><div class="score-legend"><span class="legend-excellent">85–100 Excelente</span><span class="legend-good">70–84 Bueno</span><span class="legend-fair">45–69 Regular</span><span class="legend-poor">0–44 Deficiente</span></div><h3 class="dialog-section-title">Datos completos</h3><table class="detail-table"><tbody>${details.map(([label, value]) => metricRow(label, value)).join('')}</tbody></table>${Object.keys(item.errors || {}).length ? `<h3 class="dialog-section-title">Incidencias de la prueba</h3><table class="detail-table"><tbody>${Object.entries(item.errors).map(([key, value]) => metricRow(key, value)).join('')}</tbody></table>` : ''}<p class="info-note" style="text-align:left;margin:16px 0 0">Los resultados son orientativos. El nombre/SSID real del Wi-Fi está protegido y no es accesible desde una página web.</p>`;
+        $('historyDialog').showModal();
+      }
+      function finalizeLatency(result) {
+        const pool = [...result.downloadLatencySamples, ...result.uploadLatencySamples].filter((value) => Number.isFinite(value));
+        if (!Number.isFinite(result.ping) && pool.length) {
+          result.ping = median(pool, null);
+          result.jitter = jitterFrom(pool);
+          result.derivedLatency = true;
+        }
+        if (!Number.isFinite(result.downloadLatency) && result.downloadLatencySamples.length) result.downloadLatency = median(result.downloadLatencySamples, result.ping);
+        if (!Number.isFinite(result.uploadLatency) && result.uploadLatencySamples.length) result.uploadLatency = median(result.uploadLatencySamples, result.ping);
+      }
+      async function runTest() {
+        if (animating) return;
+        animating = true; els.button.disabled = true; els.button.setAttribute('aria-label', 'Test de velocidad en curso');
+        els.button.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin" aria-hidden="true"></i>';
+        els.light.className = 'status-light busy';
+        stopMonitor();
+        edgeInfo = null;
+        chartPoints = []; chartPeak = 10; chartScaleLabel = '';
+        liveSmooth.download = null; liveSmooth.upload = null;
+        setChartLabel('download');
+        startTierScan();
+        resetGauge('ANALIZANDO', '#899889');
+        const result = { measurementVersion: MEASUREMENT_VERSION, date: new Date().toISOString(), download: null, upload: null, ping: null, jitter: null, downloadLatency: null, uploadLatency: null, downloadLatencySamples: [], uploadLatencySamples: [], downloadSpeedSamples: [], uploadSpeedSamples: [], downloadDurationMs: null, uploadDurationMs: null, bytesDownloaded: null, bytesUploaded: null, downloadCapped: false, uploadCapped: false, downloadTimedOut: false, uploadTimedOut: false, downloadSkippedMs: null, uploadSkippedMs: null, warmUpBytes: PHASE_WARMUP_BYTES, minPhaseMs: PHASE_MIN_DURATION_MS, connection: getNetworkInfo(), networkLabel: $('networkLabel').value.trim(), network: navigator.connection?.effectiveType || '—', edge: null, derivedLatency: false, errors: {} };
+        renderMeasurement(result, { reveal: false });
+        try {
+          setStage('Preparando prueba'); setStatus('Preparando prueba…', 'busy');
+          await warmUp();
+          result.edge = edgeInfo;
+          setStage('Latencia');
+          try {
+            const ping = await measurePing();
+            Object.assign(result, { ping: ping.ping, jitter: ping.jitter, pingP95: ping.p95, latencySamples: ping.samples });
+            renderMeasurement(result, { reveal: false });
+          } catch (error) { result.errors.latency = error.message || String(error); }
+          setStage('Descarga');
+          setChartLabel('download');
+          try {
+            let download;
+            try {
+              download = await measureLoadedLatency(() => measureDownload());
+            } catch (primaryError) {
+              result.errors.downloadPrimary = primaryError.message || String(primaryError);
+              setStatus('Reintentando la descarga con una ruta más simple…', 'busy');
+              download = await measureDownloadFallback();
+            }
+            Object.assign(result, { download: download.speed, downloadLatency: median(download.latencySamples, result.ping), downloadLatencySamples: download.latencySamples, downloadSpeedSamples: download.speedSamples, downloadDurationMs: download.durationMs, bytesDownloaded: download.bytes, downloadCapped: download.capped, downloadTimedOut: download.timedOut, downloadSkippedMs: download.skippedMs ?? null });
+            renderMeasurement(result, { reveal: false });
+          } catch (error) { result.errors.download = error.message || String(error); }
+          setStage('Subida');
+          setChartLabel('upload');
+          try {
+            let upload;
+            try {
+              upload = await measureLoadedLatency(() => measureUpload());
+            } catch (primaryError) {
+              result.errors.uploadPrimary = primaryError.message || String(primaryError);
+              setStatus('Reintentando la subida con bloques más pequeños…', 'busy');
+              upload = await measureLoadedLatency(() => measureUpload({ maxChunk: 1024 * 1024 }));
+            }
+            Object.assign(result, { upload: upload.speed, uploadLatency: median(upload.latencySamples, result.ping), uploadLatencySamples: upload.latencySamples, uploadSpeedSamples: upload.speedSamples, uploadDurationMs: upload.durationMs, bytesUploaded: upload.bytes, uploadCapped: upload.capped, uploadTimedOut: upload.timedOut, uploadSkippedMs: upload.skippedMs ?? null });
+            renderMeasurement(result, { reveal: false });
+          } catch (error) { result.errors.upload = error.message || String(error); }
+          finalizeLatency(result);
+          result.edge = edgeInfo;
+          if (!['download', 'upload', 'ping', 'jitter'].some((key) => Number.isFinite(result[key]))) throw new Error('No se pudo obtener ninguna medición. Comprueba la conexión e inténtalo de nuevo.');
+          const finalScores = scoreSet(result);
+          const finalTier = tierFor(finalScores.overall);
+          result.overallScore = finalScores.overall;
+          result.tier = finalTier?.tier ?? null;
+          result.tierName = finalTier?.name ?? null;
+          result.tierColor = finalTier?.color ?? null;
+          renderMeasurement(result, { reveal: true });
+          history = [result, ...history].slice(0, MAX_HISTORY);
+          const saved = safeStorage.write(history);
+          renderHistory();
+          setStage('');
+          const partial = Object.keys(result.errors).length > 0;
+          const capped = result.downloadCapped || result.uploadCapped;
+          setStatus(saved ? partial ? 'Prueba parcial · abre el registro para ver los datos e incidencias' : capped ? 'Análisis completo · alcanzó el límite de datos configurado' : 'Análisis completo · fases sostenidas y guardado' : 'Análisis completado · el navegador no permitió guardar el historial', saved ? partial ? 'error' : 'ready' : 'error');
+        } catch (error) {
+          console.error('Error en test de conexión:', error);
+          resetGauge('SIN CLASIFICAR');
+          $('overallScore').textContent = '—';
+          $('overallGrade').textContent = 'SIN CLASIFICAR';
+          $('overallHint').textContent = 'No se pudo completar el análisis.';
+          setStage('');
+          animating = false;
+          renderMeasurement(result, { reveal: false });
+          setStatus(error.name === 'TimeoutError' ? 'La prueba tardó demasiado. Comprueba tu conexión e inténtalo de nuevo.' : 'No se pudo acceder al servidor de medición. Comprueba tu conexión o inténtalo más tarde.', 'error');
+        } finally {
+          stopTierScan();
+          animating = false;
+          els.button.disabled = false;
+          els.button.innerHTML = 'GO';
+          els.button.setAttribute('aria-label', 'Iniciar test de velocidad');
+          startMonitor(1500);
+        }
+      }
+      els.button.addEventListener('click', runTest);
+      $('clearHistory').addEventListener('click', () => { history = []; safeStorage.write(history); renderHistory(); });
+      const savedNetworkLabel = readNetworkLabel();
+      $('networkLabel').value = savedNetworkLabel;
+      $('networkLabel').addEventListener('input', () => {
+        try { localStorage.setItem(NETWORK_LABEL_KEY, $('networkLabel').value.trim()); } catch (_) { /* La etiqueta es opcional si el almacenamiento no está disponible. */ }
+        renderNetworkInfo();
+      });
+      els.history.addEventListener('click', (event) => {
+        const button = event.target.closest('[data-history-index]');
+        if (button) openHistoryDetail(Number(button.dataset.historyIndex));
+      });
+      $('closeDialog').addEventListener('click', () => $('historyDialog').close());
+      $('historyDialog').addEventListener('click', (event) => { if (event.target === $('historyDialog')) $('historyDialog').close(); });
+      document.addEventListener('visibilitychange', () => { if (!document.hidden && monitorRunning) scheduleMonitor(400); });
+      renderHistory(); renderNetworkInfo();
+      chartRaf = requestAnimationFrame(chartLoop);
+      if (history[0]?.measurementVersion === MEASUREMENT_VERSION) {
+        renderMeasurement(history[0]);
+        if (Number.isFinite(history[0].download)) pushChartPoint(history[0].download, 'monitor');
+        if (Number.isFinite(history[0].upload)) pushChartPoint(history[0].upload, 'monitor');
+        setStatus(`Última medición recuperada · ${formatDate(history[0].date)}`, 'ready');
+      } else {
+        renderTierScale();
+        if (history.length) setStatus('Hay resultados guardados con el método anterior. Repite el análisis para obtener una cifra corregida.', 'ready');
+      }
+    })();
+  </script>
+</body>
+</html>
