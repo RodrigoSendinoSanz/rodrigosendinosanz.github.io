@@ -83,10 +83,10 @@
     .calc-item{margin:0 0 8px;padding-left:14px;border-left:2px solid #26c5dd33}
     .calc-item strong{color:#26c5dd}
     .calc-note{margin-top:10px;font-size:.68rem;color:#8492a6;border-top:1px solid #ffffff0f;padding-top:8px}
-    .fast-info{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:8px;margin:0 22px 16px;font:500 .68rem var(--mono);letter-spacing:.06em;text-transform:uppercase}
-    .fast-row{display:flex;justify-content:space-between;gap:8px;padding:7px 12px;border:1px solid #ffffff0f;border-radius:8px;background:#0e141d}
-    .fast-label{color:#8492a6}
-    .fast-row span:last-child{color:#eef4fb}
+    .fast-info{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:8px;margin:0 22px 16px}
+    .fast-row{display:flex;align-items:center;gap:14px;padding:13px 16px;background:#181a14;border:1px solid #343a2b;border-radius:3px}
+    .fast-label{color:#8492a6;font:500 .68rem var(--mono);letter-spacing:.06em;text-transform:uppercase}
+    .fast-row span:last-child{color:#eef4fb;font:500 .75rem var(--mono)}
     #shareBtn{display:inline-flex;align-items:center;gap:8px;padding:10px 16px;border:1px solid #26c5dd;border-radius:8px;background:#26c5dd0c;color:#26c5dd;font:700 .75rem var(--mono);letter-spacing:.08em;cursor:pointer;margin-top:10px}
     #shareBtn:hover{background:#26c5dd;color:#090c12}
     #shareBtn i{font-size:.9rem}
@@ -113,21 +113,11 @@
           <div class="tier-copy"><div class="tier-title-row"><h2 class="tier-title" id="tierTitle">SIN CLASIFICAR</h2><span class="tier-score" id="tierScore">Ejecuta un análisis para descubrir el rango de tu conexión.</span></div><div class="tier-scale" id="tierScale" aria-label="Escala de tiers de conexión"></div></div>
         </div>
         <div class="quality-row" aria-label="Puntuación por actividad">
-          <div class="quality-chip" id="webCard"><i class="fa-solid fa-globe" aria-hidden="true"></i><div><strong>Navegación</strong><span class="score-detail" id="webHint">— / 100 · Sin analizar</span></div></div>
-          <div class="quality-chip" id="gameCard"><i class="fa-solid fa-gamepad" aria-hidden="true"></i><div><strong>Juegos online</strong><span class="score-detail" id="gameHint">— / 100 · Sin analizar</span></div></div>
-          <div class="quality-chip" id="videoCard"><i class="fa-solid fa-film" aria-hidden="true"></i><div><strong>Películas / streaming</strong><span class="score-detail" id="videoHint">— / 100 · Sin analizar</span></div></div>
-          <div class="quality-chip" id="callCard"><i class="fa-solid fa-video" aria-hidden="true"></i><div><strong>Videollamadas</strong><span class="score-detail" id="callHint">— / 100 · Sin analizar</span></div></div>
+          <div class="quality-chip" id="webCard"><i class="fa-solid fa-globe" aria-hidden="true"></i><div><strong>Navegación</strong><span class="metric-help" tabindex="0" aria-label="Ayuda: puntuación navegación" data-tooltip="Descarga 50 % + Ping 50 %. Se premia una recepción rápida y respuesta baja al cargar páginas."><i class="fa-regular fa-circle-question" aria-hidden="true"></i></span><span class="score-detail" id="webHint">— / 100 · Sin analizar</span></div></div>
+          <div class="quality-chip" id="gameCard"><i class="fa-solid fa-gamepad" aria-hidden="true"></i><div><strong>Juegos online</strong><span class="metric-help" tabindex="0" aria-label="Ayuda: puntuación juegos online" data-tooltip="Ping 70 % + Jitter 30 %. Lo que importa es la respuesta estable y baja, no el ancho de banda."><i class="fa-regular fa-circle-question" aria-hidden="true"></i></span><span class="score-detail" id="gameHint">— / 100 · Sin analizar</span></div></div>
+          <div class="quality-chip" id="videoCard"><i class="fa-solid fa-film" aria-hidden="true"></i><div><strong>Películas / streaming</strong><span class="metric-help" tabindex="0" aria-label="Ayuda: puntuación streaming" data-tooltip="Descarga 100 %. Se valora la velocidad sostenida para reproducir sin interrupciones."><i class="fa-regular fa-circle-question" aria-hidden="true"></i></span><span class="score-detail" id="videoHint">— / 100 · Sin analizar</span></div></div>
+          <div class="quality-chip" id="callCard"><i class="fa-solid fa-video" aria-hidden="true"></i><div><strong>Videollamadas</strong><span class="metric-help" tabindex="0" aria-label="Ayuda: puntuación videollamadas" data-tooltip="Descarga 20 % + Subida 35 % + Ping 30 % + Jitter 15 %. Equilibra enviar y recibir vídeo con respuesta baja."><i class="fa-regular fa-circle-question" aria-hidden="true"></i></span><span class="score-detail" id="callHint">— / 100 · Sin analizar</span></div></div>
         </div>
-        <details class="calc-panel" id="calcPanel">
-          <summary class="calc-summary"><i class="fa-solid fa-calculator" aria-hidden="true"></i> Cómo se calcula cada actividad</summary>
-          <div class="calc-body">
-            <div class="calc-item"><strong>Navegación</strong> · Descarga 50 % + Ping 50 %. Se premia una recepción rápida y respuesta baja al cargar páginas.</div>
-            <div class="calc-item"><strong>Juegos online</strong> · Ping 70 % + Jitter 30 %. Lo que importa es la respuesta estable y baja, no el ancho de banda.</div>
-            <div class="calc-item"><strong>Películas / streaming</strong> · Descarga 100 %. Se valora la velocidad sostenida para reproducir sin interrupciones.</div>
-            <div class="calc-item"><strong>Videollamadas</strong> · Descarga 20 % + Subida 35 % + Ping 30 % + Jitter 15 %. Equilibra enviar y recibir vídeo con respuesta baja.</div>
-            <p class="calc-note">Las puntuaciones van de 0 a 100 (85–100 Excelente · 70–84 Bueno · 45–69 Regular · 0–44 Deficiente). Si falta alguna métrica, el chip muestra "Sin datos". Este test mide HTTP hacia Cloudflare, no pérdida de paquetes real.</p>
-          </div>
-        </details>
         <div class="measure-stage">
           <div class="measure-chart" aria-hidden="true"><canvas id="speedChart" aria-label="Gráfica de velocidad durante la prueba"></canvas><div class="measure-chart-meta"><span id="chartLabel">↓ Descarga en vivo</span><span id="chartScale">Mbps</span></div></div>
           <div class="gauge-wrap" aria-hidden="true">
@@ -155,7 +145,6 @@
           <button class="go-button" id="startButton" type="button" aria-label="Iniciar test de velocidad">GO</button>
           <div class="stage" id="testStage" aria-live="polite"></div>
           <div class="test-status" id="testStatus" aria-live="polite">Pulsa GO para analizar tu conexión</div>
-          <p class="test-advisory">Cada fase mide 10 s (tras un calentamiento descartado) o hasta 256 MiB para limitar el consumo. Tras el test, la gráfica sigue muestreando en segundo plano mientras la pestaña esté visible.</p>
         </div>
         </div>
         <div class="detail-grid" aria-label="Métricas de latencia y red">
@@ -253,7 +242,7 @@
       let tierRevealTimer = null;
       let edgeInfo = null;
       let clientIp = null;
-      let resultLastDownload = null, resultLastUpload = null, resultLastPing = null, resultLastTier = null;
+      let resultLastDownload = null, resultLastUpload = null, resultLastPing = null, resultLastTier = null, resultLastScore = null;
       let uploadFiller = null;
       const liveSmooth = { download: null, upload: null };
       const gaugeState = { pct: 0, pctTarget: 0, display: null, displayTarget: null, kind: 'score', scoreColor: '#899889', tierLabel: 'PUNTUACIÓN', raf: 0 };
@@ -937,9 +926,10 @@
         const upload = Number.isFinite(resultLastUpload) ? formatted(resultLastUpload) : '—';
         const ping = Number.isFinite(resultLastPing) ? formatted(resultLastPing, 0) : '—';
         const tier = resultLastTier || '—';
+        const score = Number.isFinite(resultLastScore) ? resultLastScore : '—';
         const text = encodeURIComponent(
           'Resultado de Connection Lab:\n'
-          + `Descarga: ${download} Mbps · Subida: ${upload} Mbps · Ping: ${ping} ms · Tier: ${tier}\n`
+          + `Descarga: ${download} Mbps · Subida: ${upload} Mbps · Ping: ${ping} ms · Tier: ${tier} · Puntuación: ${score}/100\n`
           + `Web: https://rodrigosendinosanz.github.io/projects/connection-lab/`
         );
         window.open(`https://wa.me/?text=${text}`, '_blank');
@@ -1029,6 +1019,8 @@
             const ping = await measurePing();
             Object.assign(result, { ping: ping.ping, jitter: ping.jitter, pingP95: ping.p95, latencySamples: ping.samples });
             renderMeasurement(result, { reveal: false });
+            // Pausa breve para que se pueda leer la métrica de juegos online (ping + jitter)
+            await wait(1500);
           } catch (error) { result.errors.latency = error.message || String(error); }
           setStage('Descarga');
           setChartLabel('download');
@@ -1072,6 +1064,7 @@
           resultLastUpload = result.upload;
           resultLastPing = result.ping;
           resultLastTier = result.tier;
+          resultLastScore = result.overallScore;
           history = [result, ...history].slice(0, MAX_HISTORY);
           const saved = safeStorage.write(history);
           renderHistory();
