@@ -43,8 +43,9 @@
     /* Prioridad visual al tier y compatibilidad; gauge decorativo detrás de medidas y acción. */
     .dashboard{--tier-color:#899889}
     .tier-card{margin:18px 22px 12px;padding:20px;box-shadow:0 0 22px color-mix(in srgb,var(--tier-color) 18%,transparent),4px 4px 0 #000}
-    .tier-emblem{width:78px;height:78px;font-size:1.8rem;box-shadow:0 0 22px color-mix(in srgb,var(--tier-color) 38%,transparent),4px 4px 0 color-mix(in srgb,var(--tier-color) 34%,#000)}
+    .tier-emblem{width:78px;height:78px;font-size:1.8rem;box-shadow:0 0 22px color-mix(in srgb,var(--tier-color) 38%,transparent),4px 4px 0 color-mix(in srgb,var(--tier-color) 34%,#000);font-family:'VT323',monospace;letter-spacing:.05em;text-shadow:1px 1px 0 #000,-1px -1px 0 #000,1px -1px 0 #000,-1px 1px 0 #000}
     .tier-title{font-size:1rem}.tier-score{font-size:.68rem}.tier-description{font-size:.76rem}
+    .gauge-center-label{font-family:'VT323',monospace;letter-spacing:.08em;text-shadow:1px 1px 0 #000,-1px -1px 0 #000,1px -1px 0 #000,-1px 1px 0 #000}
     .quality-row{padding:12px 22px 18px;border-top:0;border-bottom:1px solid #343a2b;gap:8px}
     .quality-chip{min-height:74px;border-left:3px solid var(--grade,#899889);transition:transform .18s,border-color .18s,box-shadow .18s}
     .quality-chip[data-grade]:hover{transform:translateY(-2px);box-shadow:0 4px 14px color-mix(in srgb,var(--grade) 16%,transparent)}
@@ -75,7 +76,22 @@
     .measure-chart{opacity:.1}
     @media(max-width:760px){.measure-chart{opacity:.08}.gauge{opacity:.22}.gauge-readout{display:block}.gauge-readout strong{font-size:clamp(1.6rem,8vw,2.2rem)}.gauge-center-label{font-size:.52rem}}
     @media(max-width:420px){.measure-chart{opacity:.07}.gauge{opacity:.18}.gauge-readout{display:block}.gauge-readout strong{font-size:1.45rem}}
+    .calc-panel{border:1px solid #ffffff12;border-radius:12px;margin:0 22px 18px;background:rgba(17,23,34,.6)}
+    .calc-summary{display:flex;align-items:center;gap:8px;padding:12px 18px;cursor:pointer;font:500 .72rem var(--mono);letter-spacing:.08em;text-transform:uppercase;color:#8492a6;border-bottom:1px solid #ffffff10}
+    .calc-summary i{color:#26c5dd}
+    .calc-body{padding:12px 18px 16px;font:400 .78rem/1.6 var(--sans);color:#a9b7c8}
+    .calc-item{margin:0 0 8px;padding-left:14px;border-left:2px solid #26c5dd33}
+    .calc-item strong{color:#26c5dd}
+    .calc-note{margin-top:10px;font-size:.68rem;color:#8492a6;border-top:1px solid #ffffff0f;padding-top:8px}
+    .fast-info{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:8px;margin:0 22px 16px;font:500 .68rem var(--mono);letter-spacing:.06em;text-transform:uppercase}
+    .fast-row{display:flex;justify-content:space-between;gap:8px;padding:7px 12px;border:1px solid #ffffff0f;border-radius:8px;background:#0e141d}
+    .fast-label{color:#8492a6}
+    .fast-row span:last-child{color:#eef4fb}
+    #shareBtn{display:inline-flex;align-items:center;gap:8px;padding:10px 16px;border:1px solid #26c5dd;border-radius:8px;background:#26c5dd0c;color:#26c5dd;font:700 .75rem var(--mono);letter-spacing:.08em;cursor:pointer;margin-top:10px}
+    #shareBtn:hover{background:#26c5dd;color:#090c12}
+    #shareBtn i{font-size:.9rem}
   </style>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 </head>
 <body>
   <div class="shell">
@@ -102,6 +118,16 @@
           <div class="quality-chip" id="videoCard"><i class="fa-solid fa-film" aria-hidden="true"></i><div><strong>Películas / streaming</strong><span class="score-detail" id="videoHint">— / 100 · Sin analizar</span></div></div>
           <div class="quality-chip" id="callCard"><i class="fa-solid fa-video" aria-hidden="true"></i><div><strong>Videollamadas</strong><span class="score-detail" id="callHint">— / 100 · Sin analizar</span></div></div>
         </div>
+        <details class="calc-panel" id="calcPanel">
+          <summary class="calc-summary"><i class="fa-solid fa-calculator" aria-hidden="true"></i> Cómo se calcula cada actividad</summary>
+          <div class="calc-body">
+            <div class="calc-item"><strong>Navegación</strong> · Descarga 50 % + Ping 50 %. Se premia una recepción rápida y respuesta baja al cargar páginas.</div>
+            <div class="calc-item"><strong>Juegos online</strong> · Ping 70 % + Jitter 30 %. Lo que importa es la respuesta estable y baja, no el ancho de banda.</div>
+            <div class="calc-item"><strong>Películas / streaming</strong> · Descarga 100 %. Se valora la velocidad sostenida para reproducir sin interrupciones.</div>
+            <div class="calc-item"><strong>Videollamadas</strong> · Descarga 20 % + Subida 35 % + Ping 30 % + Jitter 15 %. Equilibra enviar y recibir vídeo con respuesta baja.</div>
+            <p class="calc-note">Las puntuaciones van de 0 a 100 (85–100 Excelente · 70–84 Bueno · 45–69 Regular · 0–44 Deficiente). Si falta alguna métrica, el chip muestra "Sin datos". Este test mide HTTP hacia Cloudflare, no pérdida de paquetes real.</p>
+          </div>
+        </details>
         <div class="measure-stage">
           <div class="measure-chart" aria-hidden="true"><canvas id="speedChart" aria-label="Gráfica de velocidad durante la prueba"></canvas><div class="measure-chart-meta"><span id="chartLabel">↓ Descarga en vivo</span><span id="chartScale">Mbps</span></div></div>
           <div class="gauge-wrap" aria-hidden="true">
@@ -143,6 +169,13 @@
           <div class="connection-card"><i class="fa-solid fa-wifi" aria-hidden="true"></i><div class="connection-copy"><span class="score-caption">Conexión / etiqueta personal</span><strong id="connectionName">Red activa · nombre no expuesto</strong><span id="connectionHint">Puedes asignar un alias local (por ejemplo, Wi-Fi casa o Ethernet).</span><input class="network-label" id="networkLabel" type="text" maxlength="80" placeholder="Wi-Fi casa / Ethernet (opcional)" autocomplete="off" aria-label="Etiqueta para identificar esta conexión"></div></div>
         </div>
         <p class="score-caption" style="padding:0 22px 18px;margin:0">BAREMO · 85–100 EXCELENTE · 70–84 BUENO · 45–69 REGULAR · 0–44 DEFICIENTE</p>
+        <div class="fast-info" id="fastInfo" aria-hidden="true">
+          <div class="fast-row"><span class="fast-label">Cliente</span><span id="fastClient">—</span></div>
+          <div class="fast-row"><span class="fast-label">Ubicación</span><span id="fastLocation">—</span></div>
+          <div class="fast-row"><span class="fast-label">Operador</span><span id="fastAsn">—</span></div>
+          <div class="fast-row"><span class="fast-label">Servidor</span><span id="fastServer">Cloudflare · Madrid (MAD)</span></div>
+          <div class="fast-row"><span class="fast-label">Configuración</span><span id="fastConfig">Fase 10 s · calentamiento descartado · ventana estacionaria</span></div>
+        </div>
       </section>
       <section class="below-grid" aria-label="Gráfica e histórico de resultados">
         <article class="panel">
@@ -204,7 +237,8 @@
         button: $('startButton'), status: $('testStatus'), stage: $('testStage'), light: $('statusLight'), server: $('serverLabel'),
         down: $('downloadValue'), up: $('uploadValue'), gauge: $('gaugeValue'), gaugeNumber: $('gaugeNumber'), gaugeMode: $('gaugeMode'),
         ping: $('pingValue'), downLatency: $('downloadLatency'), upLatency: $('uploadLatency'), jitter: $('jitterValue'),
-        history: $('historyList'), historyCount: $('historyCount'), canvas: $('speedChart'), chartLabel: $('chartLabel'), chartScale: $('chartScale')
+        history: $('historyList'), historyCount: $('historyCount'), canvas: $('speedChart'), chartLabel: $('chartLabel'), chartScale: $('chartScale'),
+        fastClient: $('fastClient'), fastLocation: $('fastLocation'), fastAsn: $('fastAsn'), fastServer: $('fastServer')
       };
       let chartPoints = [];
       let chartPeak = 10;
@@ -218,6 +252,8 @@
       let tierScanTimer = null;
       let tierRevealTimer = null;
       let edgeInfo = null;
+      let clientIp = null;
+      let resultLastDownload = null, resultLastUpload = null, resultLastPing = null, resultLastTier = null;
       let uploadFiller = null;
       const liveSmooth = { download: null, upload: null };
       const gaugeState = { pct: 0, pctTarget: 0, display: null, displayTarget: null, kind: 'score', scoreColor: '#899889', tierLabel: 'PUNTUACIÓN', raf: 0 };
@@ -580,8 +616,10 @@
           const colo = response.headers.get('cf-meta-colo');
           const city = response.headers.get('cf-meta-city');
           const asn = response.headers.get('cf-meta-asn');
-          if (!colo && !city && !asn) return;
+          const ip = response.headers.get('cf-meta-ip');
+          if (!colo && !city && !asn && !ip) return;
           edgeInfo = { colo, city, asn, country: response.headers.get('cf-meta-country') };
+          clientIp = ip || null;
         } catch (_) { /* Cabeceras opcionales. */ }
       }
       function jitterFrom(values) {
@@ -860,6 +898,51 @@
         const scores = renderScores({ ...result, ping, jitter }, { interim: !reveal });
         if (reveal) revealTier(scores.overall, scores.coverage);
         renderNetworkInfo(result.connection);
+        if (reveal) renderFastInfo(result);
+      }
+      function renderFastInfo(result) {
+        const panel = $('fastInfo');
+        if (!panel) return;
+        panel.setAttribute('aria-hidden', 'false');
+        const edge = result.edge || edgeInfo || {};
+        if (els.fastClient) els.fastClient.textContent = clientIp || '—';
+        if (els.fastLocation) els.fastLocation.textContent = edge.city ? `${edge.city}, ${edge.country || 'ES'}` : '—';
+        if (els.fastAsn) els.fastAsn.textContent = edge.asn ? `AS${edge.asn}` : '—';
+        if (els.fastServer) els.fastServer.textContent = edge.colo ? `Cloudflare · ${edge.city || edge.colo} (${edge.colo})` : 'Cloudflare · Madrid (MAD)';
+        if (els.fastConfig && (Number.isFinite(result.download) || Number.isFinite(result.upload))) {
+          const total = (Number(result.bytesDownloaded || 0) + Number(result.bytesUploaded || 0));
+          els.fastConfig.textContent = `Fase 10 s · calentamiento descartado · ventana estacionaria · ${(total / 1024 / 1024).toFixed(2)} MiB`;
+        }
+      }
+      async function shareWhatsApp() {
+        const container = document.querySelector('.dashboard');
+        if (!container) return;
+        const btn = document.getElementById('shareBtn');
+        if (btn) { btn.disabled = true; btn.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin" aria-hidden="true"></i> Generando…'; }
+        try {
+          const canvas = await html2canvas(container, { backgroundColor: '#090c12', scale: 1.5, logging: false, allowTaint: true });
+          const blob = await new Promise((resolve) => canvas.toBlob(resolve, 'image/png'));
+          const url = URL.createObjectURL(blob);
+          const a = document.createElement('a');
+          a.href = url; a.download = `connection-lab-resultado-${new Date().toISOString().slice(0,10)}.png`;
+          a.click();
+          URL.revokeObjectURL(url);
+        } catch (error) {
+          console.error('html2canvas error:', error);
+          // Screenshot opcional: aún se puede compartir por texto
+        } finally {
+          if (btn) { btn.disabled = false; btn.innerHTML = '<i class="fa-brands fa-whatsapp" aria-hidden="true"></i> Compartir en WhatsApp'; }
+        }
+        const download = Number.isFinite(resultLastDownload) ? formatted(resultLastDownload) : '—';
+        const upload = Number.isFinite(resultLastUpload) ? formatted(resultLastUpload) : '—';
+        const ping = Number.isFinite(resultLastPing) ? formatted(resultLastPing, 0) : '—';
+        const tier = resultLastTier || '—';
+        const text = encodeURIComponent(
+          'Resultado de Connection Lab:\n'
+          + `Descarga: ${download} Mbps · Subida: ${upload} Mbps · Ping: ${ping} ms · Tier: ${tier}\n`
+          + `Web: https://rodrigosendinosanz.github.io/projects/connection-lab/`
+        );
+        window.open(`https://wa.me/?text=${text}`, '_blank');
       }
       function metricRow(label, value) { return `<tr><th scope="row">${escapeHTML(label)}</th><td>${escapeHTML(value)}</td></tr>`; }
       function openHistoryDetail(index) {
@@ -985,13 +1068,18 @@
           result.tierName = finalTier?.name ?? null;
           result.tierColor = finalTier?.color ?? null;
           renderMeasurement(result, { reveal: true });
+          resultLastDownload = result.download;
+          resultLastUpload = result.upload;
+          resultLastPing = result.ping;
+          resultLastTier = result.tier;
           history = [result, ...history].slice(0, MAX_HISTORY);
           const saved = safeStorage.write(history);
           renderHistory();
           setStage('');
           const partial = Object.keys(result.errors).length > 0;
           const capped = result.downloadCapped || result.uploadCapped;
-          setStatus(saved ? partial ? 'Prueba parcial · abre el registro para ver los datos e incidencias' : capped ? 'Análisis completo · alcanzó el límite de datos configurado' : 'Análisis completo · fases sostenidas y guardado' : 'Análisis completado · el navegador no permitió guardar el historial', saved ? partial ? 'error' : 'ready' : 'error');
+          els.status.innerHTML = '<button id="shareBtn" type="button" aria-label="Compartir resultado en WhatsApp"><i class="fa-brands fa-whatsapp" aria-hidden="true"></i> Compartir en WhatsApp</button>';
+          document.getElementById('shareBtn')?.addEventListener('click', shareWhatsApp, { once: true });
         } catch (error) {
           console.error('Error en test de conexión:', error);
           resetGauge('SIN CLASIFICAR');
