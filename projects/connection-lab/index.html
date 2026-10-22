@@ -48,6 +48,8 @@
     .gauge-center-label{font-family:'VT323',monospace;letter-spacing:.08em;text-shadow:1px 1px 0 #000,-1px -1px 0 #000,1px -1px 0 #000,-1px 1px 0 #000}
     .quality-row{padding:12px 22px 18px;border-top:0;border-bottom:1px solid #343a2b;gap:8px}
     .quality-chip{min-height:74px;border-left:3px solid var(--grade,#899889);transition:transform .18s,border-color .18s,box-shadow .18s}
+    .quality-chip > div{display:flex;flex-direction:column;align-items:flex-start;gap:2px;font-size:.72rem;color:var(--muted)}
+    .chip-top{display:flex;align-items:center;gap:6px}
     .quality-chip[data-grade]:hover{transform:translateY(-2px);box-shadow:0 4px 14px color-mix(in srgb,var(--grade) 16%,transparent)}
     .measure-stage{position:relative;isolation:isolate;min-height:350px;display:flex;flex-direction:column;justify-content:center;overflow:hidden;padding:30px 22px 18px}
     .measure-chart{position:absolute;z-index:0;inset:0;overflow:hidden;opacity:.2;pointer-events:none}
@@ -113,10 +115,10 @@
           <div class="tier-copy"><div class="tier-title-row"><h2 class="tier-title" id="tierTitle">SIN CLASIFICAR</h2><span class="tier-score" id="tierScore">Ejecuta un análisis para descubrir el rango de tu conexión.</span></div><div class="tier-scale" id="tierScale" aria-label="Escala de tiers de conexión"></div></div>
         </div>
         <div class="quality-row" aria-label="Puntuación por actividad">
-          <div class="quality-chip" id="webCard"><i class="fa-solid fa-globe" aria-hidden="true"></i><div><strong>Navegación</strong><span class="metric-help" tabindex="0" aria-label="Ayuda: puntuación navegación" data-tooltip="Descarga 50 % + Ping 50 %. Se premia una recepción rápida y respuesta baja al cargar páginas."><i class="fa-regular fa-circle-question" aria-hidden="true"></i></span><span class="score-detail" id="webHint">— / 100 · Sin analizar</span></div></div>
-          <div class="quality-chip" id="gameCard"><i class="fa-solid fa-gamepad" aria-hidden="true"></i><div><strong>Juegos online</strong><span class="metric-help" tabindex="0" aria-label="Ayuda: puntuación juegos online" data-tooltip="Ping 70 % + Jitter 30 %. Lo que importa es la respuesta estable y baja, no el ancho de banda."><i class="fa-regular fa-circle-question" aria-hidden="true"></i></span><span class="score-detail" id="gameHint">— / 100 · Sin analizar</span></div></div>
-          <div class="quality-chip" id="videoCard"><i class="fa-solid fa-film" aria-hidden="true"></i><div><strong>Películas / streaming</strong><span class="metric-help" tabindex="0" aria-label="Ayuda: puntuación streaming" data-tooltip="Descarga 100 %. Se valora la velocidad sostenida para reproducir sin interrupciones."><i class="fa-regular fa-circle-question" aria-hidden="true"></i></span><span class="score-detail" id="videoHint">— / 100 · Sin analizar</span></div></div>
-          <div class="quality-chip" id="callCard"><i class="fa-solid fa-video" aria-hidden="true"></i><div><strong>Videollamadas</strong><span class="metric-help" tabindex="0" aria-label="Ayuda: puntuación videollamadas" data-tooltip="Descarga 20 % + Subida 35 % + Ping 30 % + Jitter 15 %. Equilibra enviar y recibir vídeo con respuesta baja."><i class="fa-regular fa-circle-question" aria-hidden="true"></i></span><span class="score-detail" id="callHint">— / 100 · Sin analizar</span></div></div>
+          <div class="quality-chip" id="webCard"><i class="fa-solid fa-globe" aria-hidden="true"></i><div><div class="chip-top"><strong>Navegación</strong><span class="metric-help" tabindex="0" aria-label="Ayuda: puntuación navegación" data-tooltip="Descarga 50 % + Ping 50 %. Se premia una recepción rápida y respuesta baja al cargar páginas."><i class="fa-regular fa-circle-question" aria-hidden="true"></i></span></div><span class="score-detail" id="webHint">— / 100 · Sin analizar</span></div></div>
+          <div class="quality-chip" id="gameCard"><i class="fa-solid fa-gamepad" aria-hidden="true"></i><div><div class="chip-top"><strong>Juegos online</strong><span class="metric-help" tabindex="0" aria-label="Ayuda: puntuación juegos online" data-tooltip="Ping 70 % + Jitter 30 %. Lo que importa es la respuesta estable y baja, no el ancho de banda."><i class="fa-regular fa-circle-question" aria-hidden="true"></i></span></div><span class="score-detail" id="gameHint">— / 100 · Sin analizar</span></div></div>
+          <div class="quality-chip" id="videoCard"><i class="fa-solid fa-film" aria-hidden="true"></i><div><div class="chip-top"><strong>Películas / streaming</strong><span class="metric-help" tabindex="0" aria-label="Ayuda: puntuación streaming" data-tooltip="Descarga 100 %. Se valora la velocidad sostenida para reproducir sin interrupciones."><i class="fa-regular fa-circle-question" aria-hidden="true"></i></span></div><span class="score-detail" id="videoHint">— / 100 · Sin analizar</span></div></div>
+          <div class="quality-chip" id="callCard"><i class="fa-solid fa-video" aria-hidden="true"></i><div><div class="chip-top"><strong>Videollamadas</strong><span class="metric-help" tabindex="0" aria-label="Ayuda: puntuación videollamadas" data-tooltip="Descarga 20 % + Subida 35 % + Ping 30 % + Jitter 15 %. Equilibra enviar y recibir vídeo con respuesta baja."><i class="fa-regular fa-circle-question" aria-hidden="true"></i></span></div><span class="score-detail" id="callHint">— / 100 · Sin analizar</span></div></div>
         </div>
         <div class="measure-stage">
           <div class="measure-chart" aria-hidden="true"><canvas id="speedChart" aria-label="Gráfica de velocidad durante la prueba"></canvas><div class="measure-chart-meta"><span id="chartLabel">↓ Descarga en vivo</span><span id="chartScale">Mbps</span></div></div>
@@ -640,6 +642,7 @@
             const sample = performance.now() - startedAt;
             times.push(sample);
             queueGauge('ping', sample);
+            if (i < 9) await wait(250);
           } catch (_) { /* Reintentamos con la siguiente muestra. */ }
           setStatus(`Midiendo respuesta… ${times.length}/10`, 'busy');
         }
