@@ -165,7 +165,6 @@
           <div class="fast-row"><span class="fast-label">Ubicación</span><span id="fastLocation">—</span></div>
           <div class="fast-row"><span class="fast-label">Operador</span><span id="fastAsn">—</span></div>
           <div class="fast-row"><span class="fast-label">Servidor</span><span id="fastServer">Cloudflare · Madrid (MAD)</span></div>
-          <div class="fast-row"><span class="fast-label">Configuración</span><span id="fastConfig">Fase 10 s · calentamiento descartado · ventana estacionaria</span></div>
         </div>
       </section>
       <section class="below-grid" aria-label="Gráfica e histórico de resultados">
@@ -901,10 +900,6 @@
         if (els.fastLocation) els.fastLocation.textContent = edge.city ? `${edge.city}, ${edge.country || 'ES'}` : '—';
         if (els.fastAsn) els.fastAsn.textContent = edge.asn ? `AS${edge.asn}` : '—';
         if (els.fastServer) els.fastServer.textContent = edge.colo ? `Cloudflare · ${edge.city || edge.colo} (${edge.colo})` : 'Cloudflare · Madrid (MAD)';
-        if (els.fastConfig && (Number.isFinite(result.download) || Number.isFinite(result.upload))) {
-          const total = (Number(result.bytesDownloaded || 0) + Number(result.bytesUploaded || 0));
-          els.fastConfig.textContent = `Fase 10 s · calentamiento descartado · ventana estacionaria · ${(total / 1024 / 1024).toFixed(2)} MiB`;
-        }
       }
       async function shareWhatsApp() {
         const container = document.querySelector('.dashboard');
