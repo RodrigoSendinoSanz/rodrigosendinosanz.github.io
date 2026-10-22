@@ -129,7 +129,7 @@
               <path class="gauge-value" id="gaugeValue" d="M30 175 A120 120 0 0 1 270 175" pathLength="377" />
               <g aria-hidden="true"><path class="gauge-tick" d="M31 168l10 2"/><path class="gauge-tick" d="M57 94l9 6"/><path class="gauge-tick" d="M108 54l4 10"/><path class="gauge-tick" d="M192 54l-4 10"/><path class="gauge-tick" d="M243 94l-9 6"/><path class="gauge-tick" d="M269 168l-10 2"/></g>
             </svg>
-            <div class="gauge-readout"><strong id="gaugeNumber">—</strong><span id="gaugeUnit">/100</span><div class="gauge-center-label" id="gaugeMode">PUNTUACIÓN</div></div>
+            <div class="gauge-readout"><strong id="gaugeNumber">—</strong><span id="gaugeUnit">/100</span></div>
           </div>
         <div class="main-measure">
           <div class="primary-metric">
@@ -225,7 +225,7 @@
       const $ = (id) => document.getElementById(id);
       const els = {
         button: $('startButton'), status: $('testStatus'), stage: $('testStage'), light: $('statusLight'), server: $('serverLabel'),
-        down: $('downloadValue'), up: $('uploadValue'), gauge: $('gaugeValue'), gaugeNumber: $('gaugeNumber'), gaugeMode: $('gaugeMode'),
+        down: $('downloadValue'), up: $('uploadValue'), gauge: $('gaugeValue'), gaugeNumber: $('gaugeNumber'),
         ping: $('pingValue'), downLatency: $('downloadLatency'), upLatency: $('uploadLatency'), jitter: $('jitterValue'),
         history: $('historyList'), historyCount: $('historyCount'), canvas: $('speedChart'), chartLabel: $('chartLabel'), chartScale: $('chartScale'),
         fastClient: $('fastClient'), fastLocation: $('fastLocation'), fastAsn: $('fastAsn'), fastServer: $('fastServer')
@@ -409,21 +409,17 @@
         if (gaugeState.display == null) {
           els.gaugeNumber.textContent = '—';
           $('gaugeUnit').textContent = '/100';
-          els.gaugeMode.textContent = gaugeState.tierLabel || 'PUNTUACIÓN';
           return;
         }
         if (gaugeState.kind === 'score') {
           els.gaugeNumber.textContent = String(Math.round(gaugeState.display));
           $('gaugeUnit').textContent = '/100';
-          els.gaugeMode.textContent = gaugeState.tierLabel || 'PUNTUACIÓN';
         } else if (gaugeState.kind === 'ping') {
           els.gaugeNumber.textContent = formatted(gaugeState.display, 0);
           $('gaugeUnit').textContent = 'ms';
-          els.gaugeMode.textContent = 'LATENCIA';
         } else {
           els.gaugeNumber.textContent = formatted(gaugeState.display, gaugeState.display < 10 ? 2 : 1);
           $('gaugeUnit').textContent = 'Mbps';
-          els.gaugeMode.textContent = gaugeState.kind === 'upload' ? 'SUBIDA' : 'DESCARGA';
         }
       }
       function gaugeTick() {
