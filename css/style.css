@@ -142,6 +142,9 @@ a { color: inherit; text-decoration: none; }
   will-change: transform;
   display: none;
 }
+@media (max-width: 1024px), (pointer: coarse) {
+  .cursor { display: none !important; }
+}
 @media (min-width: 1025px) and (pointer: fine) {
   .cursor { display: block; }
 }

@@ -13,8 +13,9 @@
   <title>Connection Lab — Rodrigo Sendino</title>
   <style>
     :root{color-scheme:dark;--bg:#090c12;--panel:#111722;--panel-2:#151d29;--line:#253040;--text:#eef4fb;--muted:#8492a6;--cyan:#26c5dd;--blue:#4b8dff;--green:#46dfad;--violet:#a88bff;--yellow:#f5c451;--red:#ff7885;--mono:'JetBrains Mono',monospace;--sans:'Space Grotesk',sans-serif}
-    *,*::before,*::after{box-sizing:border-box}body{margin:0;min-height:100vh;background:radial-gradient(ellipse at 50% -25%,#152a3a 0,transparent 52%),var(--bg);color:var(--text);font-family:var(--sans);line-height:1.5}button{font:inherit}a{color:inherit}.shell{width:min(1120px,calc(100% - 40px));margin:auto}.topbar{height:78px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #ffffff12}.brand{display:flex;align-items:center;gap:12px;text-decoration:none;font-weight:700;letter-spacing:.08em;font-size:.85rem}.brand-mark{width:36px;height:36px;display:grid;place-items:center;border:1px solid #26c5dd66;border-radius:11px;color:var(--cyan);background:#26c5dd0c;font-size:1rem}.brand small{display:block;color:var(--muted);font:500 .62rem var(--mono);letter-spacing:.13em;margin-top:2px}.back-link{color:var(--muted);font-size:.83rem;text-decoration:none;transition:color .2s}.back-link:hover{color:var(--cyan)}.hero{text-align:center;padding:56px 0 30px}.eyebrow{display:inline-flex;align-items:center;gap:9px;color:var(--cyan);font:500 .7rem var(--mono);letter-spacing:.18em;text-transform:uppercase}.live-dot{height:7px;width:7px;border-radius:50%;background:var(--green);box-shadow:0 0 14px var(--green)}h1{font-size:clamp(2.15rem,5vw,3.5rem);line-height:1.05;letter-spacing:-.055em;margin:13px 0 12px}.hero p{max-width:590px;margin:auto;color:var(--muted);font-size:.98rem}.dashboard{border:1px solid #ffffff12;border-radius:24px;background:linear-gradient(145deg,#111722f5,#0e141df5);box-shadow:0 28px 90px #0006;overflow:hidden}.dash-head{display:flex;justify-content:space-between;align-items:center;gap:16px;padding:18px 24px;border-bottom:1px solid #ffffff10}.dash-label,.server-status{display:flex;align-items:center;gap:9px;font:500 .72rem var(--mono);letter-spacing:.08em;text-transform:uppercase}.dash-label{color:#a9b7c8}.server-status{color:var(--muted);font-size:.64rem;letter-spacing:.03em;text-transform:none}.status-light{width:7px;height:7px;border-radius:50%;background:var(--yellow);box-shadow:0 0 12px currentColor}.status-light.ready{background:var(--green)}.status-light.busy{background:var(--cyan);animation:pulse 1s infinite}.status-light.error{background:var(--red)}@keyframes pulse{50%{opacity:.35;transform:scale(.8)}}.main-measure{display:grid;grid-template-columns:minmax(0,1fr) 300px minmax(0,1fr);align-items:center;gap:12px;padding:22px 28px 24px}.primary-metric{padding:14px 10px}.primary-metric.right{text-align:right}.metric-heading{display:flex;align-items:center;gap:9px;color:#aeb9c8;font-size:.8rem;font-weight:600}.right .metric-heading{justify-content:flex-end}.metric-heading i{color:var(--cyan);font-size:.85rem}.right .metric-heading i{color:var(--blue)}.metric-number{font:500 clamp(2.2rem,5vw,3.5rem)/1.15 var(--mono);letter-spacing:-.08em;margin:6px 0 0;white-space:nowrap}.metric-unit{font:500 .83rem var(--mono);color:var(--muted);letter-spacing:0}.metric-caption{font-size:.73rem;color:var(--muted);margin-top:3px}.gauge-wrap{position:relative;width:min(100%,300px);margin:auto}.gauge{width:100%;height:auto;overflow:visible}.gauge-track,.gauge-value{fill:none;stroke-width:15;stroke-linecap:round}.gauge-track{stroke:#253141}.gauge-value{stroke:url(#gaugeGradient);stroke-dasharray:377;stroke-dashoffset:377;transition:stroke-dashoffset .35s ease}.gauge-tick{stroke:#718094;stroke-width:1.5;opacity:.7}.gauge-readout{position:absolute;inset:47% 0 auto;text-align:center;transform:translateY(-20%)}.gauge-readout strong{display:block;font:500 clamp(2.5rem,7vw,3.8rem)/1 var(--mono);letter-spacing:-.09em}.gauge-readout span{color:#a5b2c3;font-size:.76rem}.gauge-center-label{font:500 .64rem var(--mono);color:var(--muted);letter-spacing:.12em;text-transform:uppercase;margin-top:8px}.go-button{width:82px;height:82px;border:0;border-radius:50%;color:#041218;background:linear-gradient(145deg,#2de5d1,#1fa4e9);box-shadow:0 0 0 7px #25c9dd18,0 0 34px #21c4dc44;cursor:pointer;font:700 1.1rem var(--mono);transition:transform .2s,box-shadow .2s}.go-button:hover:not(:disabled){transform:scale(1.05);box-shadow:0 0 0 10px #25c9dd1c,0 0 44px #21c4dc66}.go-button:focus-visible,.icon-button:focus-visible,.back-link:focus-visible{outline:2px solid white;outline-offset:4px}.go-button:disabled{cursor:wait;opacity:.8}.action-area{display:flex;flex-direction:column;align-items:center;gap:14px;margin-top:-22px}.test-status{min-height:20px;color:var(--muted);font-size:.76rem;text-align:center}.stage{display:inline-flex;align-items:center;gap:7px;color:var(--cyan);font:500 .66rem var(--mono);letter-spacing:.1em;text-transform:uppercase}.stage:empty{display:none}.detail-grid{display:grid;grid-template-columns:repeat(4,1fr);border-top:1px solid #ffffff10}.detail{padding:18px 20px;min-height:99px;border-right:1px solid #ffffff10}.detail:last-child{border:0}.detail-label{display:flex;align-items:center;gap:8px;color:var(--muted);font-size:.72rem}.detail-label i{width:15px;text-align:center;color:var(--yellow)}.detail:nth-child(2) .detail-label i{color:var(--cyan)}.detail:nth-child(3) .detail-label i{color:var(--violet)}.detail-value{font:500 1.13rem var(--mono);margin-top:8px}.detail-value small{font:400 .7rem var(--sans);color:var(--muted)}.quality-row{display:flex;gap:10px;padding:18px 20px 20px;border-top:1px solid #ffffff10}.quality-chip{flex:1;display:flex;align-items:center;gap:10px;padding:11px 12px;border-radius:12px;background:#ffffff06;border:1px solid #ffffff09;min-width:0}.quality-chip i{font-size:1rem;color:var(--green)}.quality-chip:nth-child(2) i{color:var(--yellow)}.quality-chip:nth-child(3) i{color:var(--blue)}.quality-chip strong{display:block;font-size:.72rem}.quality-chip span{display:block;color:var(--muted);font-size:.65rem;white-space:nowrap}.below-grid{display:grid;grid-template-columns:1.2fr .8fr;gap:18px;margin:20px 0 52px}.panel{border:1px solid #ffffff12;border-radius:18px;background:#111722bd;overflow:hidden}.panel-head{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:17px 19px;border-bottom:1px solid #ffffff10}.panel-title{font-size:.9rem;font-weight:600;margin:0;display:flex;align-items:center;gap:9px}.panel-title i{color:var(--cyan)}.mono-note{font:400 .62rem var(--mono);color:var(--muted)}.chart-box{padding:14px 18px 16px}.chart-legend{display:flex;justify-content:space-between;color:var(--muted);font:400 .6rem var(--mono);margin-top:7px}.chart-legend span:first-child{color:var(--cyan)}canvas{display:block;width:100%;height:125px}.history-actions{display:flex;gap:8px;align-items:center}.icon-button{border:1px solid #ffffff16;border-radius:8px;background:#ffffff06;color:var(--muted);padding:7px 9px;cursor:pointer;font-size:.68rem}.icon-button:hover{color:var(--text);border-color:#ffffff35}.history-list{list-style:none;margin:0;padding:0;max-height:214px;overflow:auto}.history-item{display:grid;grid-template-columns:1fr auto auto;align-items:center;gap:12px;padding:12px 18px;border-bottom:1px solid #ffffff09}.history-item:last-child{border:0}.history-time{display:block;color:var(--muted);font:400 .61rem var(--mono)}.history-values{display:flex;gap:9px;margin-top:3px;font:500 .68rem var(--mono)}.history-values .down{color:var(--cyan)}.history-values .up{color:var(--blue)}.history-ping{font:500 .72rem var(--mono);white-space:nowrap}.history-ping small{display:block;text-align:right;color:var(--muted);font:400 .58rem var(--sans)}.empty-history{padding:28px 18px;text-align:center;color:var(--muted);font-size:.77rem}.empty-history i{display:block;font-size:1.2rem;margin-bottom:8px;color:#526175}.info-note{margin:0 0 32px;color:#718095;font-size:.7rem;text-align:center}.info-note i{color:var(--yellow);margin-right:5px}.footer{display:flex;justify-content:space-between;gap:12px;padding:17px 0 24px;border-top:1px solid #ffffff10;color:#66758a;font:400 .62rem var(--mono);letter-spacing:.04em}.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
-    @media(max-width:760px){.shell{width:min(100% - 28px,600px)}.hero{padding:40px 0 24px}.main-measure{grid-template-columns:1fr 1fr;padding:18px 16px 16px;gap:4px}.gauge-wrap{grid-column:1/-1;grid-row:1;width:min(280px,84vw);margin:0 auto 2px}.primary-metric{grid-row:2;padding:8px 4px}.metric-number{font-size:clamp(1.8rem,8vw,2.7rem)}.primary-metric.right{text-align:right}.detail-grid{grid-template-columns:repeat(2,1fr)}.detail:nth-child(2){border-right:0}.detail:nth-child(-n+2){border-bottom:1px solid #ffffff10}.detail{padding:14px 16px;min-height:88px}.quality-row{display:grid;grid-template-columns:1fr 1fr;padding:14px}.quality-chip:last-child{grid-column:1/-1}.below-grid{grid-template-columns:1fr;margin-top:14px}.server-status{font-size:0}.server-status span:last-child{font-size:.65rem}.dash-head{padding:15px 16px}}
+    *,*::before,*::after{box-sizing:border-box}body{margin:0;min-height:100vh;background:radial-gradient(ellipse at 50% -25%,#152a3a 0,transparent 52%),var(--bg);color:var(--text);font-family:var(--sans);line-height:1.5}button{font:inherit}a{color:inherit}.shell{width:min(1120px,calc(100% - 40px));margin:auto}.topbar{height:78px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #ffffff12}.brand{display:flex;align-items:center;gap:12px;text-decoration:none;font-weight:700;letter-spacing:.08em;font-size:.85rem}.brand-mark{width:36px;height:36px;display:grid;place-items:center;border:1px solid #26c5dd66;border-radius:11px;color:var(--cyan);background:#26c5dd0c;font-size:1rem}.brand small{display:block;color:var(--muted);font:500 .62rem var(--mono);letter-spacing:.13em;margin-top:2px}.back-link{color:var(--muted);font-size:.83rem;text-decoration:none;transition:color .2s}.back-link:hover{color:var(--cyan)}.hero{text-align:center;padding:56px 0 30px}.eyebrow{display:inline-flex;align-items:center;gap:9px;color:var(--cyan);font:500 .7rem var(--mono);letter-spacing:.18em;text-transform:uppercase}.live-dot{height:7px;width:7px;border-radius:50%;background:var(--green);box-shadow:0 0 14px var(--green)}h1{font-size:clamp(2.15rem,5vw,3.5rem);line-height:1.05;letter-spacing:-.055em;margin:13px 0 12px}.hero p{max-width:590px;margin:auto;color:var(--muted);font-size:.98rem}.dashboard{border:1px solid #ffffff12;border-radius:24px;background:linear-gradient(145deg,#111722f5,#0e141df5);box-shadow:0 28px 90px #0006;overflow:hidden}.dash-head{display:flex;justify-content:space-between;align-items:center;gap:16px;padding:18px 24px;border-bottom:1px solid #ffffff10}.dash-label,.server-status{display:flex;align-items:center;gap:9px;font:500 .72rem var(--mono);letter-spacing:.08em;text-transform:uppercase}.dash-label{color:#a9b7c8}.server-status{color:var(--muted);font-size:.64rem;letter-spacing:.03em;text-transform:none}.status-light{width:7px;height:7px;border-radius:50%;background:var(--yellow);box-shadow:0 0 12px currentColor}.status-light.ready{background:var(--green)}.status-light.busy{background:var(--cyan);animation:pulse 1s infinite}.status-light.error{background:var(--red)}@keyframes pulse{50%{opacity:.35;transform:scale(.8)}}.main-measure{display:grid;grid-template-columns:minmax(0,1fr) 300px minmax(0,1fr);align-items:center;gap:12px;padding:22px 28px 24px}.primary-metric{padding:14px 10px}.primary-metric.right{text-align:right}.metric-heading{display:flex;align-items:center;gap:9px;color:#aeb9c8;font-size:.8rem;font-weight:600}.right .metric-heading{justify-content:flex-end}.metric-heading i{color:var(--cyan);font-size:.85rem}.right .metric-heading i{color:var(--blue)}.metric-number{font:500 clamp(2.6rem,6vw,4.2rem)/1.1 var(--mono);letter-spacing:-.08em;margin:6px 0 0;white-space:nowrap}.metric-unit{font:500 2rem var(--mono);color:var(--muted);letter-spacing:0}.metric-caption{font-size:.73rem;color:var(--muted);margin-top:3px}.gauge-wrap{position:relative;width:min(100%,300px);margin:auto}.gauge{width:100%;height:auto;overflow:visible}.gauge-track,.gauge-value{fill:none;stroke-width:15;stroke-linecap:round}.gauge-track{stroke:#253141}.gauge-value{stroke:url(#gaugeGradient);stroke-dasharray:377;stroke-dashoffset:377;transition:stroke-dashoffset .35s ease}.gauge-tick{stroke:#718094;stroke-width:1.5;opacity:.7}.gauge-readout{position:absolute;inset:47% 0 auto;text-align:center;transform:translateY(-20%)}.gauge-readout strong{display:block;font:500 clamp(2.5rem,7vw,3.8rem)/1 var(--mono);letter-spacing:-.09em}.gauge-readout span{color:#a5b2c3;font-size:.76rem}.gauge-center-label{font:500 .64rem var(--mono);color:var(--muted);letter-spacing:.12em;text-transform:uppercase;margin-top:8px}.go-button{width:82px;height:82px;border:0;border-radius:50%;color:#041218;background:linear-gradient(145deg,#2de5d1,#1fa4e9);box-shadow:0 0 0 7px #25c9dd18,0 0 34px #21c4dc44;cursor:pointer;font:700 1.1rem var(--mono);transition:transform .2s,box-shadow .2s}.go-button:hover:not(:disabled){transform:scale(1.05);box-shadow:0 0 0 10px #25c9dd1c,0 0 44px #21c4dc66}.go-button:focus-visible,.icon-button:focus-visible,.back-link:focus-visible{outline:2px solid white;outline-offset:4px}.go-button:disabled{cursor:wait;opacity:.8}.action-area{display:flex;flex-direction:column;align-items:center;gap:14px;margin-top:-22px}.test-status{min-height:20px;color:var(--muted);font-size:.76rem;text-align:center}.stage{display:inline-flex;align-items:center;gap:7px;color:var(--cyan);font:500 .66rem var(--mono);letter-spacing:.1em;text-transform:uppercase}.stage:empty{display:none}.detail-grid{display:grid;grid-template-columns:repeat(4,1fr);border-top:1px solid #ffffff10}.detail{padding:18px 20px;min-height:99px;border-right:1px solid #ffffff10}.detail:last-child{border:0}.detail-label{display:flex;align-items:center;gap:8px;color:var(--muted);font-size:.72rem}.detail-label i{width:15px;text-align:center;color:var(--yellow)}.detail:nth-child(2) .detail-label i{color:var(--cyan)}.detail:nth-child(3) .detail-label i{color:var(--violet)}.detail-value{font:500 1.13rem var(--mono);margin-top:8px}.detail-value small{font:400 .7rem var(--sans);color:var(--muted)}.quality-row{display:flex;gap:10px;padding:18px 20px 20px;border-top:1px solid #ffffff10}.quality-chip{flex:1;display:flex;align-items:center;gap:10px;padding:11px 12px;border-radius:12px;background:#ffffff06;border:1px solid #ffffff09;min-width:0}.quality-chip i{font-size:1rem;color:var(--green)}.quality-chip:nth-child(2) i{color:var(--yellow)}.quality-chip:nth-child(3) i{color:var(--blue)}.quality-chip strong{display:block;font-size:.72rem}.quality-chip span{display:block;color:var(--muted);font-size:.65rem;white-space:nowrap}.below-grid{display:grid;grid-template-columns:1.2fr .8fr;gap:18px;margin:20px 0 52px}.panel{border:1px solid #ffffff12;border-radius:18px;background:#111722bd;overflow:hidden}.panel-head{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:17px 19px;border-bottom:1px solid #ffffff10}.panel-title{font-size:.9rem;font-weight:600;margin:0;display:flex;align-items:center;gap:9px}.panel-title i{color:var(--cyan)}.mono-note{font:400 .62rem var(--mono);color:var(--muted)}.chart-box{padding:14px 18px 16px}.chart-legend{display:flex;justify-content:space-between;color:var(--muted);font:400 .6rem var(--mono);margin-top:7px}.chart-legend span:first-child{color:var(--cyan)}canvas{display:block;width:100%;height:125px}.history-actions{display:flex;gap:8px;align-items:center}.icon-button{border:1px solid #ffffff16;border-radius:8px;background:#ffffff06;color:var(--muted);padding:7px 9px;cursor:pointer;font-size:.68rem}.icon-button:hover{color:var(--text);border-color:#ffffff35}.history-wrap{display:grid;grid-template-columns:1fr 1.15fr;gap:18px;padding:0 19px 18px}
+.history-list{max-height:340px;overflow-y:auto}.history-average{display:flex;flex-direction:column;gap:10px}.history-average-title{font-size:.8rem;font-weight:600;margin:0 0 6px;color:var(--cyan);text-transform:uppercase;letter-spacing:.08em}.history-average-values{display:flex;gap:12px;align-items:baseline}.history-average-item{display:flex;align-items:baseline;gap:6px}.history-average-item .down{color:var(--cyan)}.history-average-item .up{color:var(--blue)}.history-average-item i{font-size:.75rem}.history-average-item span{font:500 .95rem var(--mono)}.history-average-meta{display:flex;align-items:center;gap:6px;font:500 .85rem var(--mono);color:var(--text)}.history-average-meta small{color:var(--muted);font-size:.6rem;margin-left:2px}.history-average-score{display:flex;align-items:center;gap:8px}.history-average-score span{font:700 1.3rem var(--mono);color:var(--text)}.history-average-score small{color:var(--muted);font-size:.6rem}.history-average-grade{font:500 .65rem var(--mono);text-transform:uppercase;letter-spacing:.05em}.history-average-tier{font:500 .62rem var(--mono);color:var(--muted);text-transform:uppercase;letter-spacing:.05em}.history-average .mono-note{font-size:.62rem;margin-top:6px}.history-average-types{margin-top:14px;padding-top:12px;border-top:1px solid #ffffff12}.history-average-types-title{font-size:.75rem;font-weight:600;margin:0 0 8px;color:var(--cyan);text-transform:uppercase;letter-spacing:.08em}.history-average-types-list{display:flex;flex-direction:column;gap:8px}.history-average-type-item{display:flex;align-items:center;gap:10px;padding:10px 12px;border:1px solid #ffffff12;border-radius:10px;background:#ffffff06}.history-average-type-item .type-name{font:500 .65rem var(--mono);color:var(--text);min-width:130px}.history-average-type-item .type-stats{display:flex;gap:14px;flex:1}.history-average-type-item .type-stat{display:flex;flex-direction:column;gap:2px}.history-average-type-item .type-stat .label{font:400 .58rem var(--mono);color:var(--muted);text-transform:uppercase;letter-spacing:.04em}.history-average-type-item .type-stat .value{font:500 .8rem var(--mono);color:var(--text)}.history-average-type-item .type-tier{font:700 .75rem var(--mono);padding:4px 8px;border-radius:6px;border:1px solid currentColor;color:currentColor;background:color-mix(in srgb,currentColor 12%,transparent)}history-list{list-style:none;margin:0;padding:0;max-height:214px;overflow:auto}.history-item{display:grid;grid-template-columns:1fr auto auto;align-items:center;gap:12px;padding:12px 18px;border-bottom:1px solid #ffffff09}.history-item:last-child{border:0}.history-time{display:block;color:var(--muted);font:400 .61rem var(--mono)}.history-values{display:flex;gap:9px;margin-top:3px;font:500 .68rem var(--mono)}.history-values .down{color:var(--cyan)}.history-values .up{color:var(--blue)}.history-ping{font:500 .72rem var(--mono);white-space:nowrap}.history-ping small{display:block;text-align:right;color:var(--muted);font:400 .58rem var(--sans)}.empty-history{padding:28px 18px;text-align:center;color:var(--muted);font-size:.77rem}.empty-history i{display:block;font-size:1.2rem;margin-bottom:8px;color:#526175}.info-note{margin:0 0 32px;color:#718095;font-size:.7rem;text-align:center}.info-note i{color:var(--yellow);margin-right:5px}.footer{display:flex;justify-content:space-between;gap:12px;padding:17px 0 24px;border-top:1px solid #ffffff10;color:#66758a;font:400 .62rem var(--mono);letter-spacing:.04em}.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+    @media(max-width:760px){.shell{width:min(100% - 28px,600px)}.hero{padding:40px 0 24px}.main-measure{grid-template-columns:1fr 1fr;padding:18px 16px 16px;gap:4px}.gauge-wrap{grid-column:1/-1;grid-row:1;width:min(280px,84vw);margin:0 auto 2px}.primary-metric{grid-row:2;padding:8px 4px}.metric-number{font-size:clamp(2.2rem,9vw,3.4rem)}.primary-metric.right{text-align:right}.detail-grid{grid-template-columns:repeat(2,1fr)}.detail:nth-child(2){border-right:0}.detail:nth-child(-n+2){border-bottom:1px solid #ffffff10}.detail{padding:14px 16px;min-height:88px}.quality-row{display:grid;grid-template-columns:1fr 1fr;padding:14px}.quality-chip:last-child{grid-column:1/-1}.below-grid{grid-template-columns:1fr;margin-top:14px}.server-status{font-size:0}.server-status span:last-child{font-size:.65rem}.dash-head{padding:15px 16px}.history-wrap{grid-template-columns:1fr}.history-list{padding:0}}
     @media(max-width:420px){.topbar{height:66px}.brand{font-size:.75rem}.back-link{font-size:.72rem}.hero p{font-size:.87rem}.dash-head{gap:8px}.main-measure{padding-inline:10px}.metric-heading{font-size:.72rem}.detail-value{font-size:1rem}.footer{font-size:.55rem}.quality-chip{padding:10px 8px;gap:7px}.quality-chip span{font-size:.6rem}}
     @media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}}
     /* Connection Lab terminal/dither skin, tuned to the portfolio's experimental visual language. */
@@ -24,7 +25,7 @@
     .summary-strip{display:grid;grid-template-columns:1fr 1.15fr;gap:12px;padding:0 22px 20px}.overall-score,.connection-card{display:flex;align-items:center;gap:14px;padding:13px 16px;background:#181a14;border:1px solid #343a2b;border-radius:3px}.score-ring{width:52px;height:52px;flex:0 0 52px;display:grid;place-items:center;border:3px solid var(--score-color,var(--muted));color:var(--score-color,var(--muted));font:700 1rem var(--mono);background:repeating-linear-gradient(0deg,#ffffff05 0 2px,transparent 2px 4px)}.score-copy strong,.connection-copy strong{display:block;font-size:.8rem}.score-copy span,.connection-copy span{display:block;margin-top:2px;color:var(--muted);font-size:.66rem}.overall-score .score-copy{min-width:0;flex:1}.overall-unit{color:var(--muted);font:500 .65rem var(--mono);white-space:nowrap}.connection-copy{min-width:0;flex:1}.connection-copy strong{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.score-caption{font:500 .58rem var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}.network-label{width:min(100%,230px);margin-top:7px;padding:6px 8px;border:1px solid #414833;border-radius:2px;background:#10120e;color:var(--text);font:500 .65rem var(--mono)}.network-label::placeholder{color:#68705e}.network-label:focus{border-color:var(--cyan)}
     .quality-row{grid-template-columns:repeat(4,1fr)}.quality-chip{align-items:flex-start;min-height:75px}.quality-chip>i{margin-top:3px}.quality-chip strong{display:block}.quality-chip .score-detail{font:500 .61rem var(--mono);color:var(--muted);white-space:normal}.grade-excellent{--grade:#8bd450}.grade-good{--grade:#d0d85b}.grade-fair{--grade:#f2b34d}.grade-poor{--grade:#f06450}.quality-chip[data-grade] i,.quality-chip[data-grade] strong{color:var(--grade)}.metric-grade{margin-left:5px!important;font:500 .58rem var(--mono)!important;text-transform:uppercase}
     .history-item{display:block;padding:0;border-bottom:1px solid #343a2b}.history-item:last-child{border:0}.history-open{width:100%;display:grid;grid-template-columns:1fr auto auto;align-items:center;gap:12px;padding:12px 18px;border:0;background:transparent;color:inherit;text-align:left;cursor:pointer;transition:background .16s}.history-open:hover,.history-open:focus-visible{background:#ffffff0b;outline:1px solid var(--cyan);outline-offset:-1px}.history-open .history-ping{color:var(--green)}.history-open .mono-note{white-space:nowrap}.history-tier{display:inline-grid;place-items:center;min-width:30px;height:30px;margin-right:10px;border:1px solid var(--tier-color,#899889);color:var(--tier-color,#899889);font:700 .72rem var(--mono);box-shadow:0 0 10px color-mix(in srgb,var(--tier-color,#899889) 28%,transparent)}.history-meta-line{display:inline-flex;align-items:center;vertical-align:middle}.history-item.is-legacy .history-tier{--tier-color:#899889!important;box-shadow:none}
-    .metric-help{position:relative;display:inline-flex;align-items:center;gap:7px;cursor:help;outline:none}.metric-help>i{font-size:.67rem;color:#9aa08e;transition:color .15s}.metric-help:hover>i,.metric-help:focus-visible>i{color:var(--cyan)}.metric-help:focus-visible{outline:1px dashed var(--cyan);outline-offset:4px}.metric-help::after{content:attr(data-tooltip);position:absolute;z-index:50;left:0;bottom:calc(100% + 10px);width:min(290px,calc(100vw - 52px));padding:11px 12px;border:1px solid #78815c;border-radius:3px;background:#0d100c;color:var(--text);box-shadow:4px 4px 0 #000;font:400 .68rem/1.55 var(--sans);letter-spacing:normal;text-transform:none;white-space:normal;opacity:0;visibility:hidden;transform:translateY(4px);transition:opacity .14s,transform .14s,visibility .14s;pointer-events:none}.metric-help::before{content:'';position:absolute;z-index:51;left:9px;bottom:calc(100% + 4px);border:6px solid transparent;border-top-color:#78815c;opacity:0;visibility:hidden;transition:opacity .14s,visibility .14s}.metric-help:hover::after,.metric-help:hover::before,.metric-help:focus-visible::after,.metric-help:focus-visible::before{opacity:1;visibility:visible;transform:translateY(0)}.metric-help.metric-help-right::after{left:auto;right:0}.metric-help.metric-help-right::before{left:auto;right:9px}.metric-heading .metric-help::after{font-weight:400}.metric-caption{min-height:1.2em}
+    .metric-help{position:relative;display:inline-flex;align-items:center;gap:7px;cursor:help;outline:none;overflow-wrap:anywhere;max-width:100%}.metric-help>i{font-size:.67rem;color:#9aa08e;transition:color .15s}.metric-help:hover>i,.metric-help:focus-visible>i{color:var(--cyan)}.metric-help:focus-visible{outline:1px dashed var(--cyan);outline-offset:4px}.metric-caption{min-height:1.2em}
     .tier-card{--tier-color:#899889;position:relative;display:grid;grid-template-columns:auto minmax(0,1fr);align-items:center;gap:16px;margin:0 22px 20px;padding:16px;border:1px solid color-mix(in srgb,var(--tier-color) 62%,#343a2b);background:linear-gradient(110deg,color-mix(in srgb,var(--tier-color) 9%,#171a14),#11130f 62%);overflow:hidden;transition:border-color .3s,background .3s,box-shadow .3s}.tier-card::after{content:'';position:absolute;inset:0;pointer-events:none;background:repeating-linear-gradient(0deg,transparent 0 3px,#ffffff07 3px 4px);opacity:.36}.tier-emblem{position:relative;z-index:1;width:62px;height:62px;display:grid;place-items:center;border:2px solid var(--tier-color);color:var(--tier-color);background:#0a0c09;box-shadow:4px 4px 0 color-mix(in srgb,var(--tier-color) 34%,#000);font:700 1.45rem var(--mono);clip-path:polygon(10px 0,calc(100% - 10px) 0,100% 10px,100% calc(100% - 10px),calc(100% - 10px) 100%,10px 100%,0 calc(100% - 10px),0 10px);transition:color .25s,border-color .25s,box-shadow .25s}.tier-copy{position:relative;z-index:1;min-width:0}.tier-title-row{display:flex;align-items:baseline;flex-wrap:wrap;gap:9px}.tier-title{margin:0;color:var(--tier-color);font:700 .8rem var(--mono);letter-spacing:.08em;text-transform:uppercase}.tier-score{color:var(--muted);font:500 .62rem var(--mono)}.tier-description{margin:5px 0 10px;color:#b8c0ac;font-size:.69rem;line-height:1.45}.tier-scale{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:5px}.tier-step{--step-color:#899889;position:relative;display:grid;place-items:center;min-height:25px;border:1px solid #353b2e;background:#10120e;color:#798171;font:700 .61rem var(--mono);transition:color .2s,border-color .2s,background .2s,transform .2s,box-shadow .2s}.tier-step.is-current{border-color:var(--step-color);background:color-mix(in srgb,var(--step-color) 19%,#10120e);color:var(--step-color);box-shadow:0 0 12px color-mix(in srgb,var(--step-color) 28%,transparent);transform:translateY(-2px)}.tier-step.is-scanning{border-color:var(--step-color);color:var(--step-color);box-shadow:0 0 12px color-mix(in srgb,var(--step-color) 28%,transparent)}.dashboard.is-scanning .tier-emblem{animation:tier-jackpot .72s steps(2,end) infinite}.dashboard.is-revealing .tier-emblem{animation:tier-reveal .95s cubic-bezier(.15,.8,.25,1) both}.dashboard.is-revealing .tier-card{animation:tier-card-flash .85s ease-out both}.dashboard .overall-score{--score-color:var(--tier-color)}.dashboard[data-tier="D"] .tier-card{--tier-color:#ff554f;box-shadow:0 0 8px #ff554f12}.dashboard[data-tier="C"] .tier-card{--tier-color:#ff8748;box-shadow:0 0 12px #ff874824}.dashboard[data-tier="B"] .tier-card{--tier-color:#f6d65d;box-shadow:0 0 16px #f6d65d2b}.dashboard[data-tier="A"] .tier-card{--tier-color:#a8ff60;box-shadow:0 0 20px #a8ff6038}.dashboard[data-tier="S"] .tier-card{--tier-color:#64e6c2;box-shadow:0 0 25px #64e6c244}.dashboard[data-tier="SS"] .tier-card{--tier-color:#d3ff9b;box-shadow:0 0 34px #d3ff9b5c,0 0 68px #d3ff9b22}.dashboard.is-revealing .tier-card{animation:tier-card-flash .85s ease-out both}@keyframes tier-jackpot{0%{transform:translate(0,0);filter:brightness(.9)}25%{transform:translate(2px,-1px);filter:brightness(1.35)}50%{transform:translate(-1px,1px);filter:brightness(1)}75%{transform:translate(1px,0);filter:brightness(1.5)}}@keyframes tier-reveal{0%{transform:scale(.58) rotate(-12deg);filter:brightness(2.2)}55%{transform:scale(1.18) rotate(5deg);filter:brightness(1.55)}78%{transform:scale(.94) rotate(-2deg)}100%{transform:scale(1) rotate(0);filter:brightness(1)}}@keyframes tier-card-flash{0%{box-shadow:0 0 0 transparent}35%{box-shadow:0 0 36px color-mix(in srgb,var(--tier-color) 38%,transparent)}100%{box-shadow:0 0 14px color-mix(in srgb,var(--tier-color) 14%,transparent)}}.tier-step[data-tier="D"]{--step-color:#ff554f}.tier-step[data-tier="C"]{--step-color:#ff8748}.tier-step[data-tier="B"]{--step-color:#f6d65d}.tier-step[data-tier="A"]{--step-color:#a8ff60}.tier-step[data-tier="S"]{--step-color:#64e6c2}.tier-step[data-tier="SS"]{--step-color:#d3ff9b}
     @media(max-width:760px){.tier-card{margin:0 14px 16px;padding:13px;gap:12px}.tier-emblem{width:52px;height:52px;font-size:2.2rem}.tier-description{font-size:.65rem}}
     @media(prefers-reduced-motion:reduce){.dashboard.is-scanning .tier-emblem,.dashboard.is-revealing .tier-emblem,.dashboard.is-revealing .tier-card{animation:none!important}.tier-emblem,.tier-step{transition:none!important}}
@@ -43,7 +44,7 @@
     /* Prioridad visual al tier y compatibilidad; gauge decorativo detrás de medidas y acción. */
     .dashboard{--tier-color:#899889}
     .tier-card{margin:18px 22px 12px;padding:20px;box-shadow:0 0 22px color-mix(in srgb,var(--tier-color) 18%,transparent),4px 4px 0 #000}
-    .tier-emblem{width:78px;height:78px;font-size:4.8rem;box-shadow:0 0 22px color-mix(in srgb,var(--tier-color) 38%,transparent),4px 4px 0 color-mix(in srgb,var(--tier-color) 34%,#000);font-family:'VT323',monospace;font-weight:400;letter-spacing:.05em;text-shadow:1px 1px 0 #000,-1px -1px 0 #000,1px -1px 0 #000,-1px 1px 0 #000}
+    .tier-emblem{width:78px;height:78px;font-size:4.8rem;box-shadow:0 0 22px color-mix(in srgb,var(--tier-color) 38%,transparent),4px 4px 0 color-mix(in srgb,var(--tier-color) 34%,#000);font-family:'VT323',monospace;font-weight:400;letter-spacing:.05em;text-shadow:1px 1px 0 #000,-1px -1px 0 #000,1px -1px 0 #000,-1px 1px 0 #000}#avgTierEmblem{width:52px;height:52px;font-size:1.8rem;box-shadow:0 0 28px color-mix(in srgb,var(--tier-color) 45%,transparent),4px 4px 0 color-mix(in srgb,var(--tier-color) 34%,#000);font-family:'VT323',monospace;font-weight:400;letter-spacing:.05em;text-shadow:1px 1px 0 #000,-1px -1px 0 #000,1px -1px 0 #000,-1px 1px 0 #000}
     .tier-title{font-size:1rem}.tier-score{font-size:.68rem}.tier-description{font-size:.76rem}
     .gauge-center-label{font-family:'VT323',monospace;letter-spacing:.08em;text-shadow:1px 1px 0 #000,-1px -1px 0 #000,1px -1px 0 #000,-1px 1px 0 #000}
     .quality-row{padding:12px 22px 18px;border-top:0;border-bottom:1px solid #343a2b;gap:8px}
@@ -61,7 +62,7 @@
     .gauge-readout{inset:29% 0 auto;transform:none;color:var(--tier-color,#899889);text-shadow:0 0 18px color-mix(in srgb,var(--tier-color,#899889) 45%,transparent)}
     .gauge-readout strong{font-size:clamp(2.1rem,5.5vw,3.2rem)}.gauge-readout span{font:600 .68rem var(--mono);color:var(--tier-color,#899889)}.gauge-center-label{margin-top:2px;color:var(--text);font-size:.58rem;letter-spacing:.14em}
     .main-measure{position:relative;z-index:1;grid-template-columns:1fr 1fr;gap:clamp(25px,9vw,120px);padding:10px 0 24px}
-    .primary-metric{padding:10px 4px}.primary-metric.right{text-align:right}.metric-number{font-size:clamp(2rem,4vw,3.1rem)}
+    .primary-metric{padding:10px 4px}.primary-metric.right{text-align:right}.metric-number{font-size:clamp(2.6rem,6vw,4.2rem)}
     .action-area{position:relative;z-index:1;margin:0;gap:10px;padding-top:4px}.detail-grid{position:relative;z-index:1}
     .test-advisory{max-width:580px;margin:0;color:#939a88;text-align:center;font:400 .58rem/1.5 var(--mono)}
     .dashboard[data-tier="D"]{--tier-color:#ff554f}.dashboard[data-tier="C"]{--tier-color:#ff8748}.dashboard[data-tier="B"]{--tier-color:#f6d65d}.dashboard[data-tier="A"]{--tier-color:#a8ff60}.dashboard[data-tier="S"]{--tier-color:#64e6c2}.dashboard[data-tier="SS"]{--tier-color:#d3ff9b}
@@ -72,8 +73,8 @@
     .measure-chart-meta{position:absolute;right:15px;bottom:10px;display:flex;gap:14px;color:#929b88;font:500 .56rem var(--mono);letter-spacing:.08em;text-transform:uppercase}
     @media(max-width:760px){.measure-chart{opacity:.12}.measure-chart-meta{right:10px;bottom:7px;font-size:.5rem}}
     @media(max-width:420px){.measure-chart{opacity:.1}.measure-chart-meta{font-size:.46rem}}
-    @media(max-width:760px){.tier-card{margin:14px 14px 10px;padding:15px}.tier-emblem{width:62px;height:62px;font-size:2.5rem}.quality-row{padding:10px 14px 14px}.measure-stage{min-height:315px;padding:26px 16px 16px}.gauge-wrap{width:min(500px,96vw);top:51%;transform:translate(-50%,-53%)}.gauge{opacity:.11}.gauge-readout{display:none}.main-measure{grid-template-columns:1fr 1fr;gap:6px;padding:12px 0 22px}.primary-metric{grid-row:auto;padding:9px 3px}.metric-number{font-size:clamp(1.65rem,7vw,2.5rem)}.action-area{margin:0}.go-button{width:72px;height:72px}.fast-info{gap:6px;margin:0 14px 12px}.fast-row{padding:10px 14px;gap:10px}.fast-label{font-size:.62rem}.fast-row span:last-child{font-size:.7rem}}
-    @media(max-width:420px){.tier-card{grid-template-columns:54px minmax(0,1fr);gap:10px;padding:12px}.tier-emblem{width:50px;height:50px;font-size:2rem}.tier-title-row{gap:5px}.tier-title{font-size:.78rem}.tier-score{font-size:.58rem}.tier-description{font-size:.65rem}.tier-scale{gap:3px}.tier-step{min-height:22px}.quality-chip{min-height:68px}.measure-stage{min-height:290px;padding-inline:12px}.gauge-wrap{width:105vw;top:50%;transform:translate(-50%,-52%)}.gauge{opacity:.09}.gauge-readout{display:none}.metric-heading{font-size:.65rem}.metric-number{font-size:1.55rem}.metric-caption{font-size:.62rem}.go-button{width:64px;height:64px}.fast-info{gap:5px;margin:0 10px 10px}.fast-row{padding:9px 12px;gap:8px}.fast-label{font-size:.58rem}.fast-row span:last-child{font-size:.65rem}}
+    @media(max-width:760px){.tier-card{margin:14px 14px 10px;padding:15px}.tier-emblem{width:62px;height:62px;font-size:2.5rem}.quality-row{padding:10px 14px 14px}.measure-stage{min-height:315px;padding:26px 16px 16px}.gauge-wrap{width:min(500px,96vw);top:51%;transform:translate(-50%,-53%)}.gauge{opacity:.11}.gauge-readout{display:none}.main-measure{grid-template-columns:1fr 1fr;gap:6px;padding:12px 0 22px}.primary-metric{grid-row:auto;padding:9px 3px}.metric-number{font-size:clamp(2rem,8vw,3rem)}.action-area{margin:0}.go-button{width:72px;height:72px}.fast-info{gap:6px;margin:0 14px 12px}.fast-row{padding:10px 14px;gap:10px}.fast-label{font-size:.62rem}.fast-row span:last-child{font-size:.7rem}}
+    @media(max-width:420px){.tier-card{grid-template-columns:54px minmax(0,1fr);gap:10px;padding:12px}.tier-emblem{width:50px;height:50px;font-size:2rem}.tier-title-row{gap:5px}.tier-title{font-size:.78rem}.tier-score{font-size:.58rem}.tier-description{font-size:.65rem}.tier-scale{gap:3px}.tier-step{min-height:22px}.quality-chip{min-height:68px}.measure-stage{min-height:290px;padding-inline:12px}.gauge-wrap{width:105vw;top:50%;transform:translate(-50%,-52%)}.gauge{opacity:.09}.gauge-readout{display:none}.metric-heading{font-size:.65rem}.metric-number{font-size:2rem}.metric-caption{font-size:.62rem}.go-button{width:64px;height:64px}.fast-info{gap:5px;margin:0 10px 10px}.fast-row{padding:9px 12px;gap:8px}.fast-label{font-size:.58rem}.fast-row span:last-child{font-size:.65rem}}
     /* Gauge en vivo: también visible en móvil mientras se mide. */
     .measure-chart{opacity:.1}
     @media(max-width:760px){.measure-chart{opacity:.08}.gauge{opacity:.22}.gauge-readout{display:block}.gauge-readout strong{font-size:clamp(1.6rem,8vw,2.2rem)}.gauge-center-label{font-size:.52rem}}
@@ -86,12 +87,41 @@
     .calc-item strong{color:#26c5dd}
     .calc-note{margin-top:10px;font-size:.68rem;color:#8492a6;border-top:1px solid #ffffff0f;padding-top:8px}
     .fast-info{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:8px;margin:0 22px 16px}
-    .fast-row{display:flex;align-items:center;gap:14px;padding:13px 16px;background:#181a14;border:1px solid #343a2b;border-radius:3px}
+    .fast-row{display:flex;align-items:center;gap:14px;padding:13px 16px;background:#181a14;border:1px solid #343a2b;border-radius:3px;min-width:0;overflow-wrap:anywhere}
     .fast-label{color:#8492a6;font:500 .68rem var(--mono);letter-spacing:.06em;text-transform:uppercase}
-    .fast-row span:last-child{color:#eef4fb;font:500 .75rem var(--mono)}
-    #shareBtn{display:inline-flex;align-items:center;gap:8px;padding:10px 16px;border:1px solid #26c5dd;border-radius:8px;background:#26c5dd0c;color:#26c5dd;font:700 .75rem var(--mono);letter-spacing:.08em;cursor:pointer;margin-top:10px}
-    #shareBtn:hover{background:#26c5dd;color:#090c12}
+    .fast-row span:last-child{color:#eef4fb;font:500 .75rem var(--mono);overflow-wrap:anywhere;word-break:break-all;min-width:0}
+    #shareBtn{display:inline-flex;align-items:center;gap:8px;padding:10px 16px;border:1px solid #26c5dd;border-radius:8px;background:#26c5dd0c;color:#26c5dd;font:700 .75rem var(--mono);letter-spacing:.08em;cursor:pointer;margin-top:10px;transition:all 0.35s cubic-bezier(0.4,0,0.2,1)}
+    #shareBtn:hover{background:#26c5dd;color:#090c12;transform:translateY(-1px);box-shadow:0 0 20px color-mix(in srgb,#26c5dd 40%,transparent)}
     #shareBtn i{font-size:.9rem}
+    .history-wrap[hidden]{display:none}
+    /* Indicador visual de resultado compartido */
+    .dashboard.is-shared{opacity:.92;filter:saturate(1.15)}
+    .dashboard.is-shared .tier-card::after{position:absolute;right:12px;font:500 .62rem var(--mono);color:var(--muted);background:#ffffff12;padding:2px 8px;border-radius:4px;border:1px solid #ffffff22;z-index:2}
+    .dashboard.is-shared .test-status::before{content:'Resultado compartido · ';font:500 .62rem var(--mono);color:#d3ff9b;margin-right:6px}
+    @media (max-width: 760px) {
+      .quality-row,
+      .quality-chip {
+        overflow: visible !important;
+      }
+      .detail-label,
+      .metric-heading {
+        overflow-wrap: anywhere !important;
+        max-width: 100% !important;
+      }
+    }
+    /* Último elemento ocupa ancho entero en grids de 2 columnas en móvil */
+    @media (max-width: 760px) {
+      .fast-info,
+      .detail-grid,
+      .quality-row {
+        grid-template-columns: 1fr 1fr !important;
+      }
+      .fast-info .fast-row:nth-last-child(1):nth-child(odd),
+      .detail-grid .detail:nth-last-child(1):nth-child(odd),
+      .quality-row .quality-chip:nth-last-child(1):nth-child(odd) {
+        grid-column: 1 / -1 !important;
+      }
+    }
   </style>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 </head>
@@ -144,9 +174,16 @@
           </div>
         </div>
         <div class="action-area">
-          <button class="go-button" id="startButton" type="button" aria-label="Iniciar test de velocidad">GO</button>
+          <button class="go-button" id="startButton" type="button" aria-label="Iniciar test de velocidad">
+            <span class="btn-icons" style="display:flex;align-items:center;justify-content:center;gap:2px">
+              <i class="fa-solid fa-play btn-icon-play" aria-hidden="true" style="color:#041218;font-size:1.15rem"></i>
+              <i class="fa-solid fa-pause btn-icon-pause btn-icon-hidden" aria-hidden="true" style="color:#041218;font-size:1.15rem;display:none"></i>
+              <i class="fa-solid fa-rotate-right btn-icon-restart btn-icon-hidden" aria-hidden="true" style="color:#041218;font-size:1.15rem;display:none"></i>
+            </span>
+          </button>
           <div class="stage" id="testStage" aria-live="polite"></div>
           <div class="test-status" id="testStatus" aria-live="polite">Pulsa GO para analizar tu conexión</div>
+          <button id="retryOwnTest" type="button" style="display:none;margin-top:10px;padding:10px 18px;border:1px solid #ffffff35;border-radius:8px;background:#ffffff0a;color:var(--text);font:500 .75rem var(--mono);letter-spacing:.08em;cursor:pointer"><i class="fa-solid fa-play" aria-hidden="true"></i> Probar tu la tuya</button>
         </div>
         </div>
         <div class="detail-grid" aria-label="Métricas de latencia y red">
@@ -171,12 +208,37 @@
       <section class="below-grid" aria-label="Gráfica e histórico de resultados">
         <article class="panel">
           <div class="panel-head"><h2 class="panel-title"><i class="fa-solid fa-clock-rotate-left" aria-hidden="true"></i> Historial</h2><div class="history-actions"><span class="mono-note" id="historyCount">0 tests</span><button class="icon-button" id="clearHistory" type="button" aria-label="Borrar historial" title="Borrar historial"><i class="fa-solid fa-trash-can" aria-hidden="true"></i></button></div></div>
-          <ul class="history-list" id="historyList"></ul>
+          <div class="history-wrap" aria-label="Resumen y lista de historial" hidden>
+            <div class="history-average" style="margin-block-start: 1em; margin-block-end: 1em;">
+              <h3 class="history-average-title">Media de conexión</h3>
+              <select class="history-connection-filter" id="historyConnectionFilter" style="width:100%;padding:8px 10px;border:1px solid #ffffff12;border-radius:10px;background:#ffffff06;color:var(--text);font:500 .65rem var(--mono);margin-bottom:8px"><option value="all">Todos los tipos de conexión</option></select>
+              <div class="history-average-tier" style="display: block;flex-direction:column;align-items:center;gap:6px;">
+                <div class="tier-emblem" id="avgTierEmblem" style="--tier-color:#899889;width:52px;height:52px;font-size:1.8rem;" aria-label="Tier medio —">—</div>
+                <div id="avgTierLabel" style="font:500 .65rem var(--mono);color:var(--muted);text-transform:uppercase;letter-spacing:.05em;text-align:initial;margin-top:.5rem;">Tier medio: —</div>
+              </div>
+              <div class="history-average-values">
+                <span class="history-average-item"><span class="down"><i class="fa-solid fa-arrow-down" aria-hidden="true"></i> <span id="avgDownload">—</span></span></span>
+                <span class="history-average-item"><span class="up"><i class="fa-solid fa-arrow-up" aria-hidden="true"></i> <span id="avgUpload">—</span></span></span>
+              </div>
+              <div class="history-average-score"><span id="avgScore">—</span><small>/100</small><span id="avgGrade" class="history-average-grade">Sin datos</span></div>
+              <div class="history-average-meta"><span id="avgPing">—</span><small>ms ping medio</small></div>
+              <p class="mono-note" id="avgTests">Media sobre <strong id="avgTestsCount">0</strong> test<span id="avgTestsPlural">es</span>.</p>
+            </div>
+            <div class="history-average-types" id="historyAverageTypes" style="display:none;margin-top:14px;padding-top:12px;border-top:1px solid #ffffff12">
+              <h4 class="history-average-types-title">Media por tipo de conexión</h4>
+              <div class="history-average-types-list" id="historyAverageTypesList"></div>
+            </div>
+            <ul class="history-list" id="historyList"></ul>
+          </div>
         </article>
       </section>
       <dialog class="detail-dialog" id="historyDialog" aria-labelledby="dialogTitle">
         <div class="dialog-head"><div><h2 id="dialogTitle">Detalle del análisis</h2><p id="dialogDate"></p></div><button class="dialog-close" id="closeDialog" type="button" aria-label="Cerrar detalle"><i class="fa-solid fa-xmark" aria-hidden="true"></i></button></div>
         <div class="dialog-content" id="dialogContent"></div>
+      </dialog>
+      <dialog class="detail-dialog" id="helpDialog" aria-labelledby="helpDialogTitle">
+        <div class="dialog-head"><div><h2 id="helpDialogTitle">Información</h2><p id="helpDialogSubtitle"></p></div><button class="dialog-close" id="closeHelpDialog" type="button" aria-label="Cerrar información"><i class="fa-solid fa-xmark" aria-hidden="true"></i></button></div>
+        <div class="dialog-content" id="helpDialogContent"></div>
       </dialog>
       <p class="info-note"><i class="fa-solid fa-circle-info" aria-hidden="true"></i> El test mide tráfico HTTP hacia Cloudflare, no la velocidad hasta tu router. Speedtest y Movistar pueden dar otros resultados porque usan servidores, rutas y conexiones paralelas diferentes. Haz varias pruebas en las mismas condiciones para comparar.</p>
     </main>
@@ -190,6 +252,7 @@
       const NETWORK_LABEL_KEY = 'connection-lab-network-label-v1';
       const MEASUREMENT_VERSION = 4;
       const MAX_HISTORY = 20;
+      const PARALLEL_STREAMS = 4;
       const PHASE_MIN_DURATION_MS = 10000;
       const PHASE_MAX_BYTES = 256 * 1024 * 1024;
       const PHASE_MAX_CHUNK_BYTES = 16 * 1024 * 1024;
@@ -229,6 +292,7 @@
         down: $('downloadValue'), up: $('uploadValue'), gauge: $('gaugeValue'), gaugeNumber: $('gaugeNumber'),
         ping: $('pingValue'), downLatency: $('downloadLatency'), upLatency: $('uploadLatency'), jitter: $('jitterValue'),
         history: $('historyList'), historyCount: $('historyCount'), canvas: $('speedChart'), chartLabel: $('chartLabel'), chartScale: $('chartScale'),
+        avgDownload: $('avgDownload'), avgUpload: $('avgUpload'), avgPing: $('avgPing'), avgScore: $('avgScore'), avgGrade: $('avgGrade'), avgTierEmblem: $('avgTierEmblem'), avgTierLabel: $('avgTierLabel'), avgTestsCount: $('avgTestsCount'), avgTestsPlural: $('avgTestsPlural'),
         fastClient: $('fastClient'), fastLocation: $('fastLocation'), fastAsn: $('fastAsn'), fastServer: $('fastServer'), fastTransferred: $('fastTransferred')
       };
       let chartPoints = [];
@@ -244,7 +308,7 @@
       let tierRevealTimer = null;
       let edgeInfo = null;
       let clientIp = null;
-      let resultLastDownload = null, resultLastUpload = null, resultLastPing = null, resultLastTier = null, resultLastScore = null;
+      let resultLastDownload = null, resultLastUpload = null, resultLastPing = null, resultLastJitter = null, resultLastTier = null, resultLastScore = null, resultLastDownLatency = null, resultLastUpLatency = null;
       let uploadFiller = null;
       const liveSmooth = { download: null, upload: null };
       const gaugeState = { pct: 0, pctTarget: 0, display: null, displayTarget: null, kind: 'score', scoreColor: '#899889', tierLabel: 'PUNTUACIÓN', raf: 0 };
@@ -254,6 +318,7 @@
       };
       const initialHistory = safeStorage.read();
       let history = Array.isArray(initialHistory) ? initialHistory.filter((item) => item && (Number.isFinite(item.download) || Number.isFinite(item.upload))).slice(0, MAX_HISTORY) : [];
+      let currentHistoryFilter = 'all';
 
       function escapeHTML(value) { return String(value ?? '').replace(/[&<>"']/g, (char) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[char]); }
       function ispNameFor(asn) {
@@ -310,6 +375,7 @@
       }
       function metricMarkup(value, unit, score) { const grade = gradeFor(score); return `${value} <small>${unit}</small><small class="metric-grade" style="color:${grade.color}">${grade.label}</small>`; }
       function formatted(value, decimals = 1) { return Number.isFinite(value) ? value.toFixed(decimals) : '—'; }
+      function formatSpeed(mbps) { if (!Number.isFinite(mbps)) return '—'; if (mbps >= 1000) return `${(mbps / 1000).toFixed(2)} Gbps`; return mbps.toFixed(mbps < 10 ? 2 : 1) + ' Mbps'; }
       function profileScore(result, profile) {
         if (!profile.required.every((key) => Number.isFinite(result[key]))) return null;
         return Math.round(Object.entries(profile.weights).reduce((total, [key, weight]) => total + scoreMetric(key, result[key]) * weight, 0));
@@ -400,6 +466,19 @@
           saveData: Boolean(connection?.saveData)
         };
       }
+      function getConnectionType() {
+        const conn = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
+        const effective = conn?.effectiveType || '—';
+        const isp = edgeInfo?.asn ? ispNameFor(edgeInfo.asn) : '';
+        const isMobile = /4g|5g|lte|3g|2g/i.test(effective);
+        const isWifi = effective === 'wifi' || /wifi/i.test(conn?.type || '');
+        const isEthernet = /ethernet/i.test(conn?.type || '');
+        if (isMobile) return `Móvil (${effective.toUpperCase()})${isp ? ' · ' + isp : ''}`;
+        if (isWifi) return `Wi-Fi${isp ? ' · ' + isp : ''}`;
+        if (isEthernet) return `Ethernet${isp ? ' · ' + isp : ''}`;
+        if (isp) return isp;
+        return effective === '—' ? 'Desconocida' : effective;
+      }
       function renderNetworkInfo(info = getNetworkInfo()) {
         const name = info.type && info.type !== 'No expuesto por el navegador' ? info.type : 'Conexión activa · nombre no expuesto';
         const label = $('networkLabel').value.trim();
@@ -487,9 +566,98 @@
       function formatDate(value) { const date = new Date(value); return Number.isNaN(date.getTime()) ? 'Fecha desconocida' : new Intl.DateTimeFormat('es-ES', { dateStyle: 'short', timeStyle: 'short' }).format(date); }
       function renderHistory() {
         els.historyCount.textContent = `${history.length} ${history.length === 1 ? 'test' : 'tests'}`;
+        document.querySelector('.history-wrap').hidden = history.length === 0;
+        const filterSelect = $('historyConnectionFilter');
+        const types = [...new Set(history.filter((item) => item && item.connectionType).map((item) => item.connectionType))].sort();
+        if (filterSelect) {
+          const currentValue = filterSelect.value;
+          filterSelect.innerHTML = '<option value="all">Todos los tipos de conexión</option>' + types.map((t) => `<option value="${escapeHTML(t)}">${escapeHTML(t)}</option>`).join('');
+          filterSelect.value = types.includes(currentValue) ? currentValue : 'all';
+          currentHistoryFilter = filterSelect.value;
+        }
+        const valid = history.filter((item) => item && Number.isFinite(item.download) && Number.isFinite(item.upload) && (currentHistoryFilter === 'all' || item.connectionType === currentHistoryFilter));
+        const count = valid.length;
+        if (count) {
+          const avgDownload = valid.reduce((sum, item) => sum + item.download, 0) / count;
+          const avgUpload = valid.reduce((sum, item) => sum + item.upload, 0) / count;
+          const avgPing = valid.reduce((sum, item) => sum + (Number.isFinite(item.ping) ? item.ping : 0), 0) / count;
+          const scores = valid.map((item) => scoreSet(item)).filter((s) => s.overall != null);
+          const avgOverall = scores.length ? scores.reduce((sum, s) => sum + s.overall, 0) / scores.length : null;
+          const avgGrade = gradeFor(avgOverall);
+          const avgTier = tierFor(avgOverall);
+          els.avgDownload.innerHTML = `<i class="fa-solid fa-arrow-down" aria-hidden="true"></i> ${formatSpeed(avgDownload)}`;
+          els.avgUpload.innerHTML = `<i class="fa-solid fa-arrow-up" aria-hidden="true"></i> ${formatSpeed(avgUpload)}`;
+          els.avgPing.textContent = formatted(avgPing, 0);
+          els.avgScore.textContent = avgOverall != null ? Math.round(avgOverall) : '—';
+          els.avgGrade.textContent = avgOverall != null ? avgGrade.label : 'Sin datos';
+          els.avgGrade.style.color = avgOverall != null ? avgGrade.color : '#929b91';
+          if (avgTier) {
+            els.avgTierEmblem.textContent = avgTier.tier;
+            els.avgTierEmblem.style.setProperty('--tier-color', avgTier.color);
+            els.avgTierEmblem.setAttribute('aria-label', `Tier medio ${avgTier.tier}`);
+            els.avgTierLabel.textContent = `${avgTier.tier} · ${avgTier.name}`;
+          } else {
+            els.avgTierEmblem.textContent = '—';
+            els.avgTierEmblem.style.setProperty('--tier-color', '#899889');
+            els.avgTierEmblem.removeAttribute('aria-label');
+            els.avgTierLabel.textContent = 'Tier medio: —';
+          }
+          els.avgTestsCount.textContent = count;
+          els.avgTestsPlural.textContent = count === 1 ? '' : 'es';
+        } else {
+          els.avgDownload.innerHTML = '<i class="fa-solid fa-arrow-down" aria-hidden="true"></i> —';
+          els.avgUpload.innerHTML = '<i class="fa-solid fa-arrow-up" aria-hidden="true"></i> —';
+          els.avgPing.textContent = '—';
+          els.avgScore.textContent = '—';
+          els.avgGrade.textContent = 'Sin datos';
+          els.avgGrade.style.color = '#929b91';
+          els.avgTierEmblem.textContent = '—';
+          els.avgTierEmblem.style.setProperty('--tier-color', '#899889');
+          els.avgTierEmblem.removeAttribute('aria-label');
+          els.avgTierLabel.textContent = 'Tier medio: —';
+          els.avgTestsCount.textContent = '0';
+          els.avgTestsPlural.textContent = 'es';
+        }
         if (!history.length) {
           els.history.innerHTML = '<li class="empty-history"><i class="fa-solid fa-chart-simple" aria-hidden="true"></i>Aún no hay mediciones.<br />Tu próximo test aparecerá aquí.</li>';
+          if (filterSelect) filterSelect.style.display = 'none';
+          const typesContainer = $('historyAverageTypes');
+          const typesList = $('historyAverageTypesList');
+          if (typesContainer) typesContainer.style.display = 'none';
+          if (typesList) typesList.innerHTML = '';
           return;
+        }
+        if (filterSelect) filterSelect.style.display = types.length >= 2 ? 'block' : 'none';
+        if (types.length < 2) { currentHistoryFilter = 'all'; if (filterSelect) filterSelect.value = 'all'; }
+        // Medias por tipo de conexión
+        const typesContainer = $('historyAverageTypes');
+        const typesList = $('historyAverageTypesList');
+        if (typesContainer && typesList) {
+          if (types.length >= 2) {
+            typesContainer.style.display = 'block';
+            const groups = {};
+            history.forEach((item) => {
+              if (!item || !item.connectionType || !Number.isFinite(item.download) || !Number.isFinite(item.upload)) return;
+              if (!groups[item.connectionType]) groups[item.connectionType] = [];
+              groups[item.connectionType].push(item);
+            });
+            const typeEntries = Object.entries(groups).map(([typeName, items]) => {
+              const n = items.length;
+              const avgD = items.reduce((s, it) => s + it.download, 0) / n;
+              const avgU = items.reduce((s, it) => s + it.upload, 0) / n;
+              const avgP = items.reduce((s, it) => s + (Number.isFinite(it.ping) ? it.ping : 0), 0) / n;
+              const scores = items.map((it) => scoreSet(it)).filter((s) => s.overall != null);
+              const avgO = scores.length ? scores.reduce((s, sc) => s + sc.overall, 0) / scores.length : null;
+              const avgG = gradeFor(avgO);
+              const avgT = tierFor(avgO);
+              const tierHtml = avgT ? `<span class="type-tier" style="--tier-color:${avgT.color}">${avgT.tier}</span>` : '<span class="type-tier">—</span>';
+              return `<div class="history-average-type-item"><div class="type-name">${escapeHTML(typeName)}</div><div class="type-stats"><div class="type-stat"><span class="label">↓</span><span class="value">${formatSpeed(avgD)}</span></div><div class="type-stat"><span class="label">↑</span><span class="value">${formatSpeed(avgU)}</span></div><div class="type-stat"><span class="label">ping</span><span class="value">${formatted(avgP, 0)} ms</span></div><div class="type-stat"><span class="label">score</span><span class="value" style="color:${avgG ? avgG.color : '#929b91'}">${avgO != null ? Math.round(avgO) : '—'}</span></div>${tierHtml}<div class="type-stat"><span class="label">tests</span><span class="value">${n}</span></div></div></div>`;
+            }).join('');
+            typesList.innerHTML = typeEntries;
+          } else {
+            typesContainer.style.display = 'none';
+            typesList.innerHTML = '';
+          }
         }
         els.history.innerHTML = history.map((item, index) => {
           const isLegacy = item.measurementVersion !== MEASUREMENT_VERSION;
@@ -497,7 +665,7 @@
           const tier = !isLegacy && score.overall != null ? tierFor(score.overall) : null;
           const summary = isLegacy ? 'MÉTODO ANTERIOR · repetir test' : score.overall == null ? 'Prueba parcial' : `${score.overall}/100 ${score.grade.label}`;
           const tierBadge = tier ? `<span class="history-tier" style="--tier-color:${tier.color}" aria-label="Tier ${tier.tier}">${tier.tier}</span>` : '<span class="history-tier" aria-label="Tier no disponible">—</span>';
-          return `<li class="history-item${isLegacy ? ' is-legacy' : ''}"><button class="history-open" type="button" data-history-index="${index}" aria-label="Ver detalle del test del ${escapeHTML(formatDate(item.date))}${tier ? ` · tier ${tier.tier}` : ''}"><span><span class="history-meta-line">${tierBadge}<span class="history-time">${escapeHTML(formatDate(item.date))} · ${summary}</span></span><span class="history-values"><span class="down"><i class="fa-solid fa-arrow-down" aria-hidden="true"></i> ${formatted(item.download)}</span><span class="up"><i class="fa-solid fa-arrow-up" aria-hidden="true"></i> ${formatted(item.upload)}</span></span></span><span class="history-ping">${formatted(item.ping, 0)}<small>ms ping</small></span><span class="mono-note">Ver detalle&nbsp; <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></span></button></li>`;
+          return `<li class="history-item${isLegacy ? ' is-legacy' : ''}"><button class="history-open" type="button" data-history-index="${index}" aria-label="Ver detalle del test del ${escapeHTML(formatDate(item.date))}${tier ? ` · tier ${tier.tier}` : ''}"><span><span class="history-meta-line">${tierBadge}<span class="history-time">${escapeHTML(formatDate(item.date))} · ${summary}</span></span><span class="history-values"><span class="down"><i class="fa-solid fa-arrow-down" aria-hidden="true"></i> ${formatSpeed(item.download)}</span><span class="up"><i class="fa-solid fa-arrow-up" aria-hidden="true"></i> ${formatSpeed(item.upload)}</span></span></span><span class="history-ping">${formatted(item.ping, 0)}<small>ms ping</small></span><span class="mono-note">Ver detalle&nbsp; <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></span></button></li>`;
         }).join('');
       }
       function pushChartPoint(value, kind = 'down') {
@@ -724,56 +892,66 @@
         let partial = false;
         let timedOut = false;
         const phaseStartedAt = performance.now();
-        let requestedBytes = 1024 * 1024;
         let lastSampleAt = phaseStartedAt;
         let lastSampleBytes = 0;
-        while (performance.now() - phaseStartedAt < PHASE_MIN_DURATION_MS && totalBytes < PHASE_MAX_BYTES) {
-          const index = marks.length;
-          const remaining = PHASE_MAX_BYTES - totalBytes;
-          requestedBytes = Math.round(Math.max(256 * 1024, Math.min(requestedBytes, remaining, maxChunk)));
-          const requestStartedAt = performance.now();
+        const streamRequested = Array(PARALLEL_STREAMS).fill(1024 * 1024);
+
+        async function streamWorker(streamIndex) {
           let received = 0;
           let requestTimedOut = false;
-          try {
-            const response = await fetch(`${ENDPOINT}/__down?bytes=${requestedBytes}&cacheBust=${Date.now()}-${index}`, { cache: 'no-store', mode: 'cors', signal: timeoutSignal(20000) });
-            captureEdgeInfo(response);
-            if (!response.ok || !response.body) throw new Error('No se pudo descargar el bloque de prueba.');
-            const reader = response.body.getReader();
-            while (true) {
-              const { done, value } = await reader.read();
-              if (done) break;
-              received += value.byteLength;
-              totalBytes += value.byteLength;
-              const now = performance.now();
-              marks.push({ t: now - phaseStartedAt, bytes: totalBytes });
-              if (now - phaseStartedAt < 600) { lastSampleAt = now; lastSampleBytes = totalBytes; continue; }
-              if (now - lastSampleAt >= 150) {
-                const instant = ((totalBytes - lastSampleBytes) * 8) / ((now - lastSampleAt) * 1000);
-                lastSampleAt = now; lastSampleBytes = totalBytes;
-                handleLiveSample('download', instant);
+          while (performance.now() - phaseStartedAt < PHASE_MIN_DURATION_MS && totalBytes < PHASE_MAX_BYTES) {
+            const remaining = PHASE_MAX_BYTES - totalBytes;
+            const size = Math.round(Math.max(256 * 1024, Math.min(streamRequested[streamIndex], remaining, maxChunk)));
+            if (size <= 0) break;
+            const requestStartedAt = performance.now();
+            try {
+              const response = await fetch(`${ENDPOINT}/__down?bytes=${size}&cacheBust=${Date.now()}-${streamIndex}-${received}`, { cache: 'no-store', mode: 'cors', signal: timeoutSignal(20000) });
+              captureEdgeInfo(response);
+              if (!response.ok || !response.body) throw new Error('No se pudo descargar el bloque de prueba.');
+              const reader = response.body.getReader();
+              while (true) {
+                const { done, value } = await reader.read();
+                if (done) break;
+                received += value.byteLength;
+                totalBytes += value.byteLength;
+                const now = performance.now();
+                marks.push({ t: now - phaseStartedAt, bytes: totalBytes });
+                if (now - phaseStartedAt < 600) { lastSampleAt = now; lastSampleBytes = totalBytes; continue; }
+                if (now - lastSampleAt >= 150) {
+                  const instant = ((totalBytes - lastSampleBytes) * 8) / ((now - lastSampleAt) * 1000);
+                  lastSampleAt = now; lastSampleBytes = totalBytes;
+                  handleLiveSample('download', instant);
+                }
+              }
+            } catch (error) {
+              requestTimedOut = error.name === 'TimeoutError' || error.name === 'AbortError';
+              if (!requestTimedOut || received === 0) {
+                if (!totalBytes) throw error;
+                partial = true;
+                break;
               }
             }
-          } catch (error) {
-            requestTimedOut = error.name === 'TimeoutError' || error.name === 'AbortError';
-            if (!requestTimedOut || received === 0) {
-              if (!totalBytes) throw error;
-              partial = true;
-              break;
+            const duration = performance.now() - requestStartedAt;
+            if (received > 0 && duration > 0) {
+              const rate = received * 8 / (duration / 1000) / 1e6;
+              chunkRates.push(rate);
+              streamRequested[streamIndex] = Math.round(Math.max(256 * 1024, Math.min(maxChunk, rate * 1e6 * 1.2 / 8)));
             }
+            const elapsed = performance.now() - phaseStartedAt;
+            setStatus(`Descarga · ${(elapsed / 1000).toFixed(1)} / ${(PHASE_MIN_DURATION_MS / 1000).toFixed(0)} s · ${(totalBytes / 1024 / 1024).toFixed(1)} MiB`, 'busy');
+            if (requestTimedOut) { timedOut = true; partial = true; break; }
           }
-          const duration = performance.now() - requestStartedAt;
-          if (received > 0 && duration > 0) chunkRates.push(received * 8 / (duration / 1000) / 1e6);
-          const elapsed = performance.now() - phaseStartedAt;
-          setStatus(`Descarga · ${(elapsed / 1000).toFixed(1)} / ${(PHASE_MIN_DURATION_MS / 1000).toFixed(0)} s · ${(totalBytes / 1024 / 1024).toFixed(1)} MiB`, 'busy');
-          if (requestTimedOut) { timedOut = true; partial = true; break; }
-          const rate = chunkRates[chunkRates.length - 1] || 1;
-          requestedBytes = Math.round(Math.max(256 * 1024, Math.min(maxChunk, rate * 1e6 * 1.2 / 8)));
+          return received;
         }
+
+        await Promise.all(Array.from({ length: PARALLEL_STREAMS }, (_, i) => streamWorker(i)));
+
         const durationMs = performance.now() - phaseStartedAt;
         if (!totalBytes || !marks.length) throw new Error('No se obtuvieron muestras suficientes de descarga.');
         const steady = steadyStateSpeed(marks, durationMs, totalBytes);
         return { speed: steady.speed, bytes: totalBytes, durationMs, speedSamples: chunkRates, latencySamples: [], capped: totalBytes >= PHASE_MAX_BYTES, timedOut, partial, skippedMs: steady.skippedMs };
       }
+
       async function measureDownloadFallback() {
         const size = 8 * 1024 * 1024;
         const startedAt = performance.now();
@@ -809,34 +987,53 @@
         let totalBytes = 0;
         let partial = false;
         const phaseStartedAt = performance.now();
-        let requestedBytes = 512 * 1024;
-        while (performance.now() - phaseStartedAt < PHASE_MIN_DURATION_MS && totalBytes < PHASE_MAX_BYTES) {
-          const index = marks.length;
-          const remaining = PHASE_MAX_BYTES - totalBytes;
-          const size = Math.round(Math.max(64 * 1024, Math.min(requestedBytes, remaining, maxChunk, buffer.length)));
-          const body = buffer.subarray(0, size);
-          setStatus(`Subida · ${((performance.now() - phaseStartedAt) / 1000).toFixed(1)} / ${(PHASE_MIN_DURATION_MS / 1000).toFixed(0)} s · ${(totalBytes / 1024 / 1024).toFixed(1)} MiB`, 'busy');
-          const startedAt = performance.now();
-          try {
-            const response = await fetch(`${ENDPOINT}/__up?cacheBust=${Date.now()}-${index}`, { method: 'POST', body, headers: { 'Content-Type': 'application/octet-stream' }, cache: 'no-store', mode: 'cors', signal: timeoutSignal(25000) });
-            captureEdgeInfo(response);
-            if (!response.ok) throw new Error('El servidor rechazó una muestra de subida.');
-            await response.arrayBuffer();
-            const elapsed = performance.now() - startedAt;
-            const duration = Math.max(1, elapsed - Math.min(serverProcessingMs(response), elapsed * 0.2));
-            totalBytes += size;
-            marks.push({ t: performance.now() - phaseStartedAt, bytes: totalBytes });
-            const rate = (size * 8) / (duration / 1000) / 1e6;
-            chunkRates.push(rate);
-            handleLiveSample('upload', rate);
-          } catch (error) {
-            if (!totalBytes) throw error;
-            partial = true;
-            break;
+        let lastSampleAt = phaseStartedAt;
+        let lastSampleBytes = 0;
+        const streamRequested = Array(PARALLEL_STREAMS).fill(512 * 1024);
+
+        async function streamWorker(streamIndex) {
+          let sent = 0;
+          while (performance.now() - phaseStartedAt < PHASE_MIN_DURATION_MS && totalBytes < PHASE_MAX_BYTES) {
+            const remaining = PHASE_MAX_BYTES - totalBytes;
+            const size = Math.round(Math.max(64 * 1024, Math.min(streamRequested[streamIndex], remaining, maxChunk, buffer.length)));
+            if (size <= 0) break;
+            const body = buffer.subarray(0, size);
+            setStatus(`Subida · ${((performance.now() - phaseStartedAt) / 1000).toFixed(1)} / ${(PHASE_MIN_DURATION_MS / 1000).toFixed(0)} s · ${(totalBytes / 1024 / 1024).toFixed(1)} MiB`, 'busy');
+            const startedAt = performance.now();
+            try {
+              const response = await fetch(`${ENDPOINT}/__up?cacheBust=${Date.now()}-${streamIndex}-${sent}`, { method: 'POST', body, headers: { 'Content-Type': 'application/octet-stream' }, cache: 'no-store', mode: 'cors', signal: timeoutSignal(25000) });
+              captureEdgeInfo(response);
+              if (!response.ok) throw new Error('El servidor rechazó una muestra de subida.');
+              await response.arrayBuffer();
+              const elapsed = performance.now() - startedAt;
+              const duration = Math.max(1, elapsed - Math.min(serverProcessingMs(response), elapsed * 0.2));
+              sent += size;
+              totalBytes += size;
+              const now = performance.now();
+              marks.push({ t: now - phaseStartedAt, bytes: totalBytes });
+              if (now - phaseStartedAt < 600) { lastSampleAt = now; lastSampleBytes = totalBytes; continue; }
+              if (now - lastSampleAt >= 150) {
+                const instant = ((totalBytes - lastSampleBytes) * 8) / ((now - lastSampleAt) * 1000);
+                lastSampleAt = now; lastSampleBytes = totalBytes;
+                handleLiveSample('upload', instant);
+              }
+            } catch (error) {
+              if (!totalBytes) throw error;
+              partial = true;
+              break;
+            }
+            const duration = performance.now() - startedAt;
+            if (size > 0 && duration > 0) {
+              const rate = (size * 8) / (duration / 1000) / 1e6;
+              chunkRates.push(rate);
+              streamRequested[streamIndex] = Math.round(Math.max(256 * 1024, Math.min(maxChunk, rate * 1e6 * 1.2 / 8)));
+            }
           }
-          const rate = chunkRates[chunkRates.length - 1] || 1;
-          requestedBytes = Math.round(Math.max(256 * 1024, Math.min(maxChunk, rate * 1e6 * 1.2 / 8)));
+          return sent;
         }
+
+        await Promise.all(Array.from({ length: PARALLEL_STREAMS }, (_, i) => streamWorker(i)));
+
         const durationMs = performance.now() - phaseStartedAt;
         if (!totalBytes || !marks.length) throw new Error('No se obtuvieron muestras suficientes de subida.');
         const steady = steadyStateSpeed(marks, durationMs, totalBytes);
@@ -874,7 +1071,7 @@
         return `<i class="fa-solid fa-circle-notch fa-spin" aria-hidden="true"></i><small> ${text}</small>`;
       }
       function speedMarkup(value) {
-        if (Number.isFinite(value)) return `${formatted(value, value < 10 ? 2 : 1)}<span class="metric-unit"> Mbps</span>`;
+        if (Number.isFinite(value)) return `<span class="metric-unit">${formatSpeed(value)}</span>`;
         return animating ? '<i class="fa-solid fa-circle-notch fa-spin" aria-hidden="true"></i>' : '<small>no medido</small>';
       }
       function latencyMarkup(value, metric) {
@@ -930,36 +1127,72 @@
           });
         }
       }
-      async function shareWhatsApp() {
-        const container = document.querySelector('.dashboard');
-        if (!container) return;
-        const btn = document.getElementById('shareBtn');
-        if (btn) { btn.disabled = true; btn.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin" aria-hidden="true"></i> Generando…'; }
-        try {
-          const canvas = await html2canvas(container, { backgroundColor: '#090c12', scale: 1.5, logging: false, allowTaint: true });
-          const blob = await new Promise((resolve) => canvas.toBlob(resolve, 'image/png'));
-          const url = URL.createObjectURL(blob);
-          const a = document.createElement('a');
-          a.href = url; a.download = `connection-lab-resultado-${new Date().toISOString().slice(0,10)}.png`;
-          a.click();
-          URL.revokeObjectURL(url);
-        } catch (error) {
-          console.error('html2canvas error:', error);
-          // Screenshot opcional: aún se puede compartir por texto
-        } finally {
-          if (btn) { btn.disabled = false; btn.innerHTML = '<i class="fa-brands fa-whatsapp" aria-hidden="true"></i> Compartir en WhatsApp'; }
-        }
-        const download = Number.isFinite(resultLastDownload) ? formatted(resultLastDownload) : '—';
-        const upload = Number.isFinite(resultLastUpload) ? formatted(resultLastUpload) : '—';
+      function tierEmoji(tier) {
+        const map = { D: '\uD83D\uDD34', C: '\uD83D\uDDE0', B: '\uD83D\uDDE1', A: '\uD83D\uDDE2', S: '\uD83D\uDD35', SS: '\uD83D\uDC8E' };
+        return map[tier] || '\uD83D\uDCF6';
+      }
+      function shareWhatsApp() {
+        const download = Number.isFinite(resultLastDownload) ? formatSpeed(resultLastDownload) : '—';
+        const upload = Number.isFinite(resultLastUpload) ? formatSpeed(resultLastUpload) : '—';
         const ping = Number.isFinite(resultLastPing) ? formatted(resultLastPing, 0) : '—';
+        const jitter = Number.isFinite(resultLastJitter) ? formatted(resultLastJitter, 0) : '—';
         const tier = resultLastTier || '—';
         const score = Number.isFinite(resultLastScore) ? resultLastScore : '—';
+        const emoji = tierEmoji(tier);
+
+        // Puntuaciones por actividad
+        const activity = scoreSet({ download: resultLastDownload || 0, upload: resultLastUpload || 0, ping: resultLastPing || 0, jitter: resultLastJitter || 0 }).profiles;
+        const actById = {};
+        activity.forEach((p) => { actById[p.id] = p.score; });
+
+        const params = new URLSearchParams({
+          shared: '1',
+          download: resultLastDownload || '',
+          upload: resultLastUpload || '',
+          ping: resultLastPing || '',
+          jitter: resultLastJitter || '',
+          dlat: Number.isFinite(resultLastDownLatency) ? resultLastDownLatency.toFixed(1) : '',
+          ulat: Number.isFinite(resultLastUpLatency) ? resultLastUpLatency.toFixed(1) : '',
+          score: score,
+          tier: tier,
+          web: actById.web || '',
+          game: actById.game || '',
+          video: actById.video || '',
+          call: actById.call || ''
+        });
+        // La URL compartida siempre apunta a la versión publicada, nunca al entorno local
+        const sharedUrl = `https://rodrigosendinosanz.github.io/projects/connection-lab/?${params.toString()}`;
+
+        const actLine = (id, label) => {
+          const s = actById[id];
+          return s != null ? `*${label}:* ${s} / 100 · ${gradeFor(s).label}\n` : '';
+        };
         const text = encodeURIComponent(
-          'Resultado de Connection Lab:\n'
-          + `Descarga: ${download} Mbps · Subida: ${upload} Mbps · Ping: ${ping} ms · Tier: ${tier} · Puntuación: ${score}/100\n`
-          + `Web: https://rodrigosendinosanz.github.io/projects/connection-lab/`
+          '\uD83D\uDCF6 *Resultado compartido — Connection Lab*\n\n'
+          + `*Tier:* ${emoji} ${tier} · ${tierNameFor(tier)}\n`
+          + `*Puntuación:* ${score} / 100 · ${gradeFor(score).label}\n\n`
+          + `\u2B07\uFE0F *Descarga:* ${download}\n`
+          + `\u2B06\uFE0F *Subida:* ${upload}\n`
+          + `\uD83C\uDFD3 *Ping:* ${ping} ms\n`
+          + `\uD83D\uDCF6 *Jitter:* ${jitter} ms\n\n`
+          + '*Puntuación por actividad:*\n'
+          + actLine('web', 'Navegación')
+          + actLine('game', 'Juegos online')
+          + actLine('video', 'Streaming')
+          + actLine('call', 'Videollamadas')
+          + '\n'
+          + `\uD83C\uDD10 *Ver resultado compartido:*\n${sharedUrl}\n\n`
+          + `Este resultado fue compartido por otro usuario.\n`
+          + `*Haz tu propio análisis aquí:*\n`
+          + `https://rodrigosendinosanz.github.io/projects/connection-lab/`
         );
-        window.open(`https://wa.me/?text=${text}`, '_blank');
+        // Nota: wa.me corrompe los emoji (los sustituye por U+FFFD en su servidor);
+        // api.whatsapp.com/send conserva el texto intacto. Misma función de "click to chat".
+        window.open(`https://api.whatsapp.com/send/?text=${text}`, '_blank');
+      }
+      function tierNameFor(tier) {
+        const names = { D: 'Señal fragmentada', C: 'Frecuencia baja', B: 'Enlace estable', A: 'Banda ancha', S: 'Conexión élite', SS: 'Señal perfecta' };
+        return names[tier] || tier;
       }
       function metricRow(label, value) { return `<tr><th scope="row">${escapeHTML(label)}</th><td>${escapeHTML(value)}</td></tr>`; }
       function openHistoryDetail(index) {
@@ -1026,7 +1259,7 @@
       async function runTest() {
         if (animating) return;
         animating = true; els.button.disabled = true; els.button.setAttribute('aria-label', 'Test de velocidad en curso');
-        els.button.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin" aria-hidden="true"></i>';
+        els.button.innerHTML = '<span class="btn-icons" style="display:flex;align-items:center;justify-content:center;gap:2px"><i class="fa-solid fa-pause btn-icon-pause" aria-hidden="true" style="color:#041218;font-size:1.15rem"></i><i class="fa-solid fa-play btn-icon-play btn-icon-hidden" aria-hidden="true" style="color:#041218;font-size:1.15rem;display:none"></i><i class="fa-solid fa-rotate-right btn-icon-restart btn-icon-hidden" aria-hidden="true" style="color:#041218;font-size:1.15rem;display:none"></i></span>';
         els.light.className = 'status-light busy';
         stopMonitor();
         edgeInfo = null;
@@ -1035,7 +1268,7 @@
         setChartLabel('download');
         startTierScan();
         resetGauge('ANALIZANDO', '#899889');
-        const result = { measurementVersion: MEASUREMENT_VERSION, date: new Date().toISOString(), download: null, upload: null, ping: null, jitter: null, downloadLatency: null, uploadLatency: null, downloadLatencySamples: [], uploadLatencySamples: [], downloadSpeedSamples: [], uploadSpeedSamples: [], downloadDurationMs: null, uploadDurationMs: null, bytesDownloaded: null, bytesUploaded: null, downloadCapped: false, uploadCapped: false, downloadTimedOut: false, uploadTimedOut: false, downloadSkippedMs: null, uploadSkippedMs: null, warmUpBytes: PHASE_WARMUP_BYTES, minPhaseMs: PHASE_MIN_DURATION_MS, connection: getNetworkInfo(), networkLabel: $('networkLabel').value.trim(), network: navigator.connection?.effectiveType || '—', edge: null, derivedLatency: false, errors: {} };
+        const result = { measurementVersion: MEASUREMENT_VERSION, date: new Date().toISOString(), download: null, upload: null, ping: null, jitter: null, downloadLatency: null, uploadLatency: null, downloadLatencySamples: [], uploadLatencySamples: [], downloadSpeedSamples: [], uploadSpeedSamples: [], downloadDurationMs: null, uploadDurationMs: null, bytesDownloaded: null, bytesUploaded: null, downloadCapped: false, uploadCapped: false, downloadTimedOut: false, uploadTimedOut: false, downloadSkippedMs: null, uploadSkippedMs: null, warmUpBytes: PHASE_WARMUP_BYTES, minPhaseMs: PHASE_MIN_DURATION_MS, connectionType: getConnectionType(), connection: getNetworkInfo(), networkLabel: $('networkLabel').value.trim(), network: navigator.connection?.effectiveType || '—', edge: null, derivedLatency: false, errors: {} };
         renderMeasurement(result, { reveal: false });
         try {
           setStage('Preparando prueba'); setStatus('Preparando prueba…', 'busy');
@@ -1090,6 +1323,9 @@
           resultLastDownload = result.download;
           resultLastUpload = result.upload;
           resultLastPing = result.ping;
+          resultLastJitter = result.jitter;
+          resultLastDownLatency = result.downloadLatency;
+          resultLastUpLatency = result.uploadLatency;
           resultLastTier = result.tier;
           resultLastScore = result.overallScore;
           history = [result, ...history].slice(0, MAX_HISTORY);
@@ -1099,7 +1335,7 @@
           const partial = Object.keys(result.errors).length > 0;
           const capped = result.downloadCapped || result.uploadCapped;
           els.status.innerHTML = '<button id="shareBtn" type="button" aria-label="Compartir resultado en WhatsApp"><i class="fa-brands fa-whatsapp" aria-hidden="true"></i> Compartir en WhatsApp</button>';
-          document.getElementById('shareBtn')?.addEventListener('click', shareWhatsApp, { once: true });
+          document.getElementById('shareBtn')?.addEventListener('click', shareWhatsApp);
         } catch (error) {
           console.error('Error en test de conexión:', error);
           resetGauge('SIN CLASIFICAR');
@@ -1114,13 +1350,16 @@
           stopTierScan();
           animating = false;
           els.button.disabled = false;
-          els.button.innerHTML = 'GO';
-          els.button.setAttribute('aria-label', 'Iniciar test de velocidad');
+          els.button.innerHTML = '<span class="btn-icons" style="display:flex;align-items:center;justify-content:center;gap:2px"><i class="fa-solid fa-play btn-icon-play btn-icon-hidden" aria-hidden="true" style="color:#041218;font-size:1.15rem;display:none"></i><i class="fa-solid fa-pause btn-icon-pause btn-icon-hidden" aria-hidden="true" style="color:#041218;font-size:1.15rem;display:none"></i><i class="fa-solid fa-rotate-right btn-icon-restart" aria-hidden="true" style="color:#041218;font-size:1.15rem"></i></span>';
+          els.button.setAttribute('aria-label', 'Reiniciar test de velocidad');
+          els.server.textContent = 'Listo para medir';
+          els.light.className = 'status-light ready';
           startMonitor(1500);
         }
       }
       els.button.addEventListener('click', runTest);
       $('clearHistory').addEventListener('click', () => { history = []; safeStorage.write(history); renderHistory(); });
+      $('historyConnectionFilter').addEventListener('change', (event) => { currentHistoryFilter = event.target.value; renderHistory(); });
       const savedNetworkLabel = readNetworkLabel();
       $('networkLabel').value = savedNetworkLabel;
       $('networkLabel').addEventListener('input', () => {
@@ -1133,17 +1372,149 @@
       });
       $('closeDialog').addEventListener('click', () => $('historyDialog').close());
       $('historyDialog').addEventListener('click', (event) => { if (event.target === $('historyDialog')) $('historyDialog').close(); });
+      $('closeHelpDialog').addEventListener('click', () => $('helpDialog').close());
+      $('helpDialog').addEventListener('click', (event) => { if (event.target === $('helpDialog')) $('helpDialog').close(); });
+      $('retryOwnTest').addEventListener('click', () => { location.href = location.pathname; });
+      document.addEventListener('click', (event) => {
+        const help = event.target.closest('.metric-help');
+        if (help) {
+          event.preventDefault();
+          const title = help.getAttribute('aria-label') || 'Información';
+          const text = help.getAttribute('data-tooltip') || '';
+          $('helpDialogTitle').textContent = title;
+          $('helpDialogSubtitle').textContent = '';
+          $('helpDialogContent').innerHTML = `<p style="margin:0;color:var(--text);font:400 .78rem/1.6 var(--sans)">${escapeHTML(text)}</p>`;
+          $('helpDialog').showModal();
+        }
+      });
       document.addEventListener('visibilitychange', () => { if (!document.hidden && monitorRunning) scheduleMonitor(400); });
-      renderHistory(); renderNetworkInfo();
-      chartRaf = requestAnimationFrame(chartLoop);
-      if (history[0]?.measurementVersion === MEASUREMENT_VERSION) {
-        renderMeasurement(history[0]);
-        if (Number.isFinite(history[0].download)) pushChartPoint(history[0].download, 'monitor');
-        if (Number.isFinite(history[0].upload)) pushChartPoint(history[0].upload, 'monitor');
-        setStatus(`Última medición recuperada · ${formatDate(history[0].date)}`, 'ready');
+
+      /* ---------- Resultado compartido vía URL ---------- */
+      function applySharedResult(params) {
+        const dashboard = document.querySelector('.dashboard');
+        if (!dashboard) return;
+        dashboard.classList.add('is-shared');
+
+        const download = Number(params.get('download')) || null;
+        const upload = Number(params.get('upload')) || null;
+        const ping = Number(params.get('ping')) || null;
+        const jitter = Number(params.get('jitter')) || null;
+        const score = Number(params.get('score')) || null;
+        const tier = params.get('tier') || null;
+        const operator = params.get('operator') || '';
+        const server = params.get('server') || '';
+        const date = params.get('date') || '';
+
+        const tierObj = tier ? tierFor(score != null ? score : 0) : null;
+        const tierColor = tierObj ? tierObj.color : '#d3ff9b';
+        const tierLetter = tier || (tierObj ? tierObj.tier : 'SS');
+        const tierName = tierObj ? tierObj.name : 'Resultado compartido';
+
+        // Tier card
+        $('tierEmblem').textContent = tierLetter;
+        $('tierEmblem').style.setProperty('--tier-color', tierColor);
+        $('tierEmblem').setAttribute('aria-label', `Tier medio ${tierLetter}`);
+        $('tierTitle').textContent = tierName;
+        $('tierScore').textContent = `${score != null ? Math.round(score) : '—'}/100 · Resultado compartido`;
+        $('tierCard').style.setProperty('--tier-color', tierColor);
+        dashboard.dataset.tier = tierLetter;
+
+        // Gauge
+        if (score != null) {
+          $('overallScore').textContent = Math.round(score);
+          $('overallScore').style.setProperty('--score-color', tierColor);
+          $('gaugeNumber').textContent = Math.round(score);
+          $('gaugeValue').style.stroke = tierColor;
+          const pct = Math.max(0, Math.min(100, score));
+          $('gaugeValue').style.strokeDashoffset = String(377 * (1 - pct / 100));
+        }
+
+        // Métricas principales
+        if (download != null) {
+          $('downloadValue').innerHTML = `<span class="metric-unit">${formatSpeed(download)}</span>`;
+          const dg = gradeFor(scoreMetric('download', download));
+          $('downloadGrade').textContent = `${dg.label} · descarga`;
+          $('downloadGrade').style.color = dg.color;
+        }
+        if (upload != null) {
+          $('uploadValue').innerHTML = `<span class="metric-unit">${formatSpeed(upload)}</span>`;
+          const ug = gradeFor(scoreMetric('upload', upload));
+          $('uploadGrade').textContent = `${ug.label} · subida`;
+          $('uploadGrade').style.color = ug.color;
+        }
+        if (ping != null) {
+          $('pingValue').innerHTML = `${formatted(ping, 0)} <small>ms</small><small class="metric-grade" style="color:${gradeFor(scoreMetric('ping', ping)).color}">${gradeFor(scoreMetric('ping', ping)).label}</small>`;
+        }
+        if (jitter != null) {
+          $('jitterValue').innerHTML = `${formatted(jitter, 0)} <small>ms</small><small class="metric-grade" style="color:${gradeFor(scoreMetric('jitter', jitter)).color}">${gradeFor(scoreMetric('jitter', jitter)).label}</small>`;
+        }
+
+        // Puntuación general
+        if (score != null) {
+          const g = gradeFor(score);
+          $('overallGrade').textContent = g.label;
+          $('overallHint').textContent = 'Resultado compartido de otro usuario';
+          $('overallScore').textContent = Math.round(score);
+          $('overallScore').style.setProperty('--score-color', g.color);
+        }
+
+        // Puntuaciones por actividad (quality-row)
+        const actWeb = Number(params.get('web')) || null;
+        const actGame = Number(params.get('game')) || null;
+        const actVideo = Number(params.get('video')) || null;
+        const actCall = Number(params.get('call')) || null;
+        const actMap = { web: actWeb, game: actGame, video: actVideo, call: actCall };
+        Object.entries(actMap).forEach(([id, value]) => {
+          const el = $(`${id}Hint`);
+          const card = $(`${id}Card`);
+          if (!el || !card || value == null) return;
+          const g = gradeFor(value);
+          el.textContent = `${value} / 100 · ${g.label}`;
+          card.className = `quality-chip ${g.css}`;
+          card.dataset.grade = g.css;
+        });
+
+        // Latencias bajo carga (si viajan en la URL); si no, se ocultan
+        const dlatRaw = params.get('dlat');
+        const ulatRaw = params.get('ulat');
+        const dlat = dlatRaw ? Number(dlatRaw) : null;
+        const ulat = ulatRaw ? Number(ulatRaw) : null;
+        if (Number.isFinite(dlat)) {
+          $('downloadLatency').innerHTML = latencyMarkup(dlat, 'ping');
+        } else {
+          $('downloadLatency').closest('.detail').style.display = 'none';
+        }
+        if (Number.isFinite(ulat)) {
+          $('uploadLatency').innerHTML = latencyMarkup(ulat, 'ping');
+        } else {
+          $('uploadLatency').closest('.detail').style.display = 'none';
+        }
+
+        // Fast info no se muestra en modo compartido
+        const fastInfo = $('fastInfo');
+        if (fastInfo) fastInfo.style.display = 'none';
+
+        // Mostrar botón para hacer prueba propia
+        $('retryOwnTest').style.display = 'block';
+        $('startButton').style.display = 'none';
+        setStatus('Resultado compartido — haz tu propio test', 'ready');
+      }
+
+      const urlParams = new URLSearchParams(location.search);
+      if (urlParams.get('shared') === '1') {
+        applySharedResult(urlParams);
       } else {
-        renderTierScale();
-        if (history.length) setStatus('Hay resultados guardados con el método anterior. Repite el análisis para obtener una cifra corregida.', 'ready');
+        renderHistory(); renderNetworkInfo();
+        chartRaf = requestAnimationFrame(chartLoop);
+        if (history[0]?.measurementVersion === MEASUREMENT_VERSION) {
+          renderMeasurement(history[0]);
+          if (Number.isFinite(history[0].download)) pushChartPoint(history[0].download, 'monitor');
+          if (Number.isFinite(history[0].upload)) pushChartPoint(history[0].upload, 'monitor');
+          setStatus(`Última medición recuperada · ${formatDate(history[0].date)}`, 'ready');
+        } else {
+          renderTierScale();
+          if (history.length) setStatus('Hay resultados guardados con el método anterior. Repite el análisis para obtener una cifra corregida.', 'ready');
+        }
       }
     })();
   </script>

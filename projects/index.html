@@ -195,7 +195,11 @@
             }
         }
 
-        /* Fix: ensure the custom cursor is shown on desktop for the projects page */
+        /* Fix: ensure the custom cursor is shown on desktop only, hidden on mobile */
+        @media (max-width: 1024px), (pointer: coarse) {
+            .cursor { display: none !important; }
+            body:not(.no-cursor) { cursor: auto !important; }
+        }
         @media (min-width: 1025px) and (pointer: fine) {
             .cursor { display: block !important; }
             body:not(.no-cursor) { cursor: none !important; }
@@ -406,6 +410,11 @@
     try {
       var cursor = document.querySelector('.cursor');
       if (!cursor) return;
+      // Never force cursor visibility on mobile / coarse pointer devices
+      if (window.matchMedia('(max-width: 1024px)').matches || window.matchMedia('(pointer: coarse)').matches) {
+        cursor.style.display = 'none';
+        return;
+      }
       if (getComputedStyle(cursor).display === 'none') cursor.style.display = 'block';
       if (document.body.classList.contains('no-cursor')) return;
 
