@@ -8,7 +8,7 @@
   <link rel="shortcut icon" href="https://rodrigosendinosanz.github.io/img/favicon.png" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&family=VT323&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" integrity="sha512-Avb2QiuDEEvB4bZJYdft2mNjVShBftLdPG8FJ0V7irTLQ8Uo0qcPxh4Plq7G5tGm0rU+1SPhVotteLpBERwTkw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
   <title>Connection Lab — Rodrigo Sendino</title>
   <style>
@@ -26,7 +26,7 @@
     .history-item{display:block;padding:0;border-bottom:1px solid #343a2b}.history-item:last-child{border:0}.history-open{width:100%;display:grid;grid-template-columns:1fr auto auto;align-items:center;gap:12px;padding:12px 18px;border:0;background:transparent;color:inherit;text-align:left;cursor:pointer;transition:background .16s}.history-open:hover,.history-open:focus-visible{background:#ffffff0b;outline:1px solid var(--cyan);outline-offset:-1px}.history-open .history-ping{color:var(--green)}.history-open .mono-note{white-space:nowrap}.history-tier{display:inline-grid;place-items:center;min-width:30px;height:30px;margin-right:10px;border:1px solid var(--tier-color,#899889);color:var(--tier-color,#899889);font:700 .72rem var(--mono);box-shadow:0 0 10px color-mix(in srgb,var(--tier-color,#899889) 28%,transparent)}.history-meta-line{display:inline-flex;align-items:center;vertical-align:middle}.history-item.is-legacy .history-tier{--tier-color:#899889!important;box-shadow:none}
     .metric-help{position:relative;display:inline-flex;align-items:center;gap:7px;cursor:help;outline:none}.metric-help>i{font-size:.67rem;color:#9aa08e;transition:color .15s}.metric-help:hover>i,.metric-help:focus-visible>i{color:var(--cyan)}.metric-help:focus-visible{outline:1px dashed var(--cyan);outline-offset:4px}.metric-help::after{content:attr(data-tooltip);position:absolute;z-index:50;left:0;bottom:calc(100% + 10px);width:min(290px,calc(100vw - 52px));padding:11px 12px;border:1px solid #78815c;border-radius:3px;background:#0d100c;color:var(--text);box-shadow:4px 4px 0 #000;font:400 .68rem/1.55 var(--sans);letter-spacing:normal;text-transform:none;white-space:normal;opacity:0;visibility:hidden;transform:translateY(4px);transition:opacity .14s,transform .14s,visibility .14s;pointer-events:none}.metric-help::before{content:'';position:absolute;z-index:51;left:9px;bottom:calc(100% + 4px);border:6px solid transparent;border-top-color:#78815c;opacity:0;visibility:hidden;transition:opacity .14s,visibility .14s}.metric-help:hover::after,.metric-help:hover::before,.metric-help:focus-visible::after,.metric-help:focus-visible::before{opacity:1;visibility:visible;transform:translateY(0)}.metric-help.metric-help-right::after{left:auto;right:0}.metric-help.metric-help-right::before{left:auto;right:9px}.metric-heading .metric-help::after{font-weight:400}.metric-caption{min-height:1.2em}
     .tier-card{--tier-color:#899889;position:relative;display:grid;grid-template-columns:auto minmax(0,1fr);align-items:center;gap:16px;margin:0 22px 20px;padding:16px;border:1px solid color-mix(in srgb,var(--tier-color) 62%,#343a2b);background:linear-gradient(110deg,color-mix(in srgb,var(--tier-color) 9%,#171a14),#11130f 62%);overflow:hidden;transition:border-color .3s,background .3s,box-shadow .3s}.tier-card::after{content:'';position:absolute;inset:0;pointer-events:none;background:repeating-linear-gradient(0deg,transparent 0 3px,#ffffff07 3px 4px);opacity:.36}.tier-emblem{position:relative;z-index:1;width:62px;height:62px;display:grid;place-items:center;border:2px solid var(--tier-color);color:var(--tier-color);background:#0a0c09;box-shadow:4px 4px 0 color-mix(in srgb,var(--tier-color) 34%,#000);font:700 1.45rem var(--mono);clip-path:polygon(10px 0,calc(100% - 10px) 0,100% 10px,100% calc(100% - 10px),calc(100% - 10px) 100%,10px 100%,0 calc(100% - 10px),0 10px);transition:color .25s,border-color .25s,box-shadow .25s}.tier-copy{position:relative;z-index:1;min-width:0}.tier-title-row{display:flex;align-items:baseline;flex-wrap:wrap;gap:9px}.tier-title{margin:0;color:var(--tier-color);font:700 .8rem var(--mono);letter-spacing:.08em;text-transform:uppercase}.tier-score{color:var(--muted);font:500 .62rem var(--mono)}.tier-description{margin:5px 0 10px;color:#b8c0ac;font-size:.69rem;line-height:1.45}.tier-scale{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:5px}.tier-step{--step-color:#899889;position:relative;display:grid;place-items:center;min-height:25px;border:1px solid #353b2e;background:#10120e;color:#798171;font:700 .61rem var(--mono);transition:color .2s,border-color .2s,background .2s,transform .2s,box-shadow .2s}.tier-step.is-current{border-color:var(--step-color);background:color-mix(in srgb,var(--step-color) 19%,#10120e);color:var(--step-color);box-shadow:0 0 12px color-mix(in srgb,var(--step-color) 28%,transparent);transform:translateY(-2px)}.tier-step.is-scanning{border-color:var(--step-color);color:var(--step-color);box-shadow:0 0 12px color-mix(in srgb,var(--step-color) 28%,transparent)}.dashboard.is-scanning .tier-emblem{animation:tier-jackpot .72s steps(2,end) infinite}.dashboard.is-revealing .tier-emblem{animation:tier-reveal .95s cubic-bezier(.15,.8,.25,1) both}.dashboard.is-revealing .tier-card{animation:tier-card-flash .85s ease-out both}.dashboard .overall-score{--score-color:var(--tier-color)}.dashboard[data-tier="D"] .tier-card{--tier-color:#ff554f;box-shadow:0 0 8px #ff554f12}.dashboard[data-tier="C"] .tier-card{--tier-color:#ff8748;box-shadow:0 0 12px #ff874824}.dashboard[data-tier="B"] .tier-card{--tier-color:#f6d65d;box-shadow:0 0 16px #f6d65d2b}.dashboard[data-tier="A"] .tier-card{--tier-color:#a8ff60;box-shadow:0 0 20px #a8ff6038}.dashboard[data-tier="S"] .tier-card{--tier-color:#64e6c2;box-shadow:0 0 25px #64e6c244}.dashboard[data-tier="SS"] .tier-card{--tier-color:#d3ff9b;box-shadow:0 0 34px #d3ff9b5c,0 0 68px #d3ff9b22}.dashboard.is-revealing .tier-card{animation:tier-card-flash .85s ease-out both}@keyframes tier-jackpot{0%{transform:translate(0,0);filter:brightness(.9)}25%{transform:translate(2px,-1px);filter:brightness(1.35)}50%{transform:translate(-1px,1px);filter:brightness(1)}75%{transform:translate(1px,0);filter:brightness(1.5)}}@keyframes tier-reveal{0%{transform:scale(.58) rotate(-12deg);filter:brightness(2.2)}55%{transform:scale(1.18) rotate(5deg);filter:brightness(1.55)}78%{transform:scale(.94) rotate(-2deg)}100%{transform:scale(1) rotate(0);filter:brightness(1)}}@keyframes tier-card-flash{0%{box-shadow:0 0 0 transparent}35%{box-shadow:0 0 36px color-mix(in srgb,var(--tier-color) 38%,transparent)}100%{box-shadow:0 0 14px color-mix(in srgb,var(--tier-color) 14%,transparent)}}.tier-step[data-tier="D"]{--step-color:#ff554f}.tier-step[data-tier="C"]{--step-color:#ff8748}.tier-step[data-tier="B"]{--step-color:#f6d65d}.tier-step[data-tier="A"]{--step-color:#a8ff60}.tier-step[data-tier="S"]{--step-color:#64e6c2}.tier-step[data-tier="SS"]{--step-color:#d3ff9b}
-    @media(max-width:760px){.tier-card{margin:0 14px 16px;padding:13px;gap:12px}.tier-emblem{width:52px;height:52px;font-size:1.2rem}.tier-description{font-size:.65rem}}
+    @media(max-width:760px){.tier-card{margin:0 14px 16px;padding:13px;gap:12px}.tier-emblem{width:52px;height:52px;font-size:2.2rem}.tier-description{font-size:.65rem}}
     @media(prefers-reduced-motion:reduce){.dashboard.is-scanning .tier-emblem,.dashboard.is-revealing .tier-emblem,.dashboard.is-revealing .tier-card{animation:none!important}.tier-emblem,.tier-step{transition:none!important}}
     .detail-dialog{width:min(680px,calc(100% - 28px));max-height:min(88vh,820px);padding:0;border:1px solid #78815c;border-radius:5px;background:#10120e;color:var(--text);box-shadow:8px 8px 0 #000,0 20px 80px #000c}.detail-dialog::backdrop{background:#000b;backdrop-filter:blur(4px)}.dialog-head{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;padding:20px 22px;border-bottom:1px solid #343a2b}.dialog-head h2{margin:0;font-size:1.15rem}.dialog-head p{margin:5px 0 0;color:var(--muted);font:400 .68rem var(--mono)}.dialog-close{width:34px;height:34px;border:1px solid #414833;border-radius:3px;background:#191b15;color:var(--text);cursor:pointer}.dialog-content{padding:20px 22px 24px;overflow:auto}.dialog-overview{display:flex;align-items:center;gap:14px;padding:14px;background:#191b15;border:1px solid #343a2b}.dialog-overview .score-ring{width:60px;height:60px;flex-basis:60px;font-size:1.1rem}.dialog-overview strong{display:block}.dialog-overview span{color:var(--muted);font-size:.72rem}.dialog-section-title{margin:22px 0 10px;font:500 .67rem var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}.detail-table{width:100%;border-collapse:collapse;font-size:.76rem}.detail-table th,.detail-table td{padding:10px 8px;border-bottom:1px solid #343a2b;text-align:left}.detail-table th{width:48%;font-weight:500;color:var(--muted)}.detail-table td{font:500 .75rem var(--mono)}.dialog-scores{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}.dialog-score{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:11px;background:#191b15;border:1px solid #343a2b;font-size:.71rem}.dialog-score strong{color:var(--grade,var(--muted));font:600 .7rem var(--mono)}.score-legend{display:flex;flex-wrap:wrap;gap:8px;margin-top:13px}.score-legend span{padding:4px 7px;border:1px solid #343a2b;color:var(--muted);font:500 .58rem var(--mono)}.score-legend .legend-excellent{color:#8bd450}.score-legend .legend-good{color:#d0d85b}.score-legend .legend-fair{color:#f2b34d}.score-legend .legend-poor{color:#f06450}
     .legacy-warning{margin:0 0 16px;padding:12px;border:1px solid #ff8748;color:#ffcf9d;background:#ff874810;font-size:.73rem;line-height:1.5}.legacy-warning i{margin-right:7px;color:#ff8748}
@@ -43,10 +43,13 @@
     /* Prioridad visual al tier y compatibilidad; gauge decorativo detrás de medidas y acción. */
     .dashboard{--tier-color:#899889}
     .tier-card{margin:18px 22px 12px;padding:20px;box-shadow:0 0 22px color-mix(in srgb,var(--tier-color) 18%,transparent),4px 4px 0 #000}
-    .tier-emblem{width:78px;height:78px;font-size:1.8rem;box-shadow:0 0 22px color-mix(in srgb,var(--tier-color) 38%,transparent),4px 4px 0 color-mix(in srgb,var(--tier-color) 34%,#000)}
+    .tier-emblem{width:78px;height:78px;font-size:4.8rem;box-shadow:0 0 22px color-mix(in srgb,var(--tier-color) 38%,transparent),4px 4px 0 color-mix(in srgb,var(--tier-color) 34%,#000);font-family:'VT323',monospace;font-weight:400;letter-spacing:.05em;text-shadow:1px 1px 0 #000,-1px -1px 0 #000,1px -1px 0 #000,-1px 1px 0 #000}
     .tier-title{font-size:1rem}.tier-score{font-size:.68rem}.tier-description{font-size:.76rem}
+    .gauge-center-label{font-family:'VT323',monospace;letter-spacing:.08em;text-shadow:1px 1px 0 #000,-1px -1px 0 #000,1px -1px 0 #000,-1px 1px 0 #000}
     .quality-row{padding:12px 22px 18px;border-top:0;border-bottom:1px solid #343a2b;gap:8px}
     .quality-chip{min-height:74px;border-left:3px solid var(--grade,#899889);transition:transform .18s,border-color .18s,box-shadow .18s}
+    .quality-chip > div{display:flex;flex-direction:column;align-items:flex-start;gap:2px;font-size:.72rem;color:var(--muted)}
+    .chip-top{display:flex;align-items:center;gap:6px}
     .quality-chip[data-grade]:hover{transform:translateY(-2px);box-shadow:0 4px 14px color-mix(in srgb,var(--grade) 16%,transparent)}
     .measure-stage{position:relative;isolation:isolate;min-height:350px;display:flex;flex-direction:column;justify-content:center;overflow:hidden;padding:30px 22px 18px}
     .measure-chart{position:absolute;z-index:0;inset:0;overflow:hidden;opacity:.2;pointer-events:none}
@@ -69,13 +72,28 @@
     .measure-chart-meta{position:absolute;right:15px;bottom:10px;display:flex;gap:14px;color:#929b88;font:500 .56rem var(--mono);letter-spacing:.08em;text-transform:uppercase}
     @media(max-width:760px){.measure-chart{opacity:.12}.measure-chart-meta{right:10px;bottom:7px;font-size:.5rem}}
     @media(max-width:420px){.measure-chart{opacity:.1}.measure-chart-meta{font-size:.46rem}}
-    @media(max-width:760px){.tier-card{margin:14px 14px 10px;padding:15px}.tier-emblem{width:62px;height:62px;font-size:1.5rem}.quality-row{padding:10px 14px 14px}.measure-stage{min-height:315px;padding:26px 16px 16px}.gauge-wrap{width:min(500px,96vw);top:51%;transform:translate(-50%,-53%)}.gauge{opacity:.11}.gauge-readout{display:none}.main-measure{grid-template-columns:1fr 1fr;gap:6px;padding:12px 0 22px}.primary-metric{grid-row:auto;padding:9px 3px}.metric-number{font-size:clamp(1.65rem,7vw,2.5rem)}.action-area{margin:0}.go-button{width:72px;height:72px}}
-    @media(max-width:420px){.tier-card{grid-template-columns:54px minmax(0,1fr);gap:10px;padding:12px}.tier-emblem{width:50px;height:50px;font-size:1.25rem}.tier-title-row{gap:5px}.tier-title{font-size:.78rem}.tier-score{font-size:.58rem}.tier-description{font-size:.65rem}.tier-scale{gap:3px}.tier-step{min-height:22px}.quality-chip{min-height:68px}.measure-stage{min-height:290px;padding-inline:12px}.gauge-wrap{width:105vw;top:50%;transform:translate(-50%,-52%)}.gauge{opacity:.09}.gauge-readout{display:none}.metric-heading{font-size:.65rem}.metric-number{font-size:1.55rem}.metric-caption{font-size:.62rem}.go-button{width:64px;height:64px}}
+    @media(max-width:760px){.tier-card{margin:14px 14px 10px;padding:15px}.tier-emblem{width:62px;height:62px;font-size:2.5rem}.quality-row{padding:10px 14px 14px}.measure-stage{min-height:315px;padding:26px 16px 16px}.gauge-wrap{width:min(500px,96vw);top:51%;transform:translate(-50%,-53%)}.gauge{opacity:.11}.gauge-readout{display:none}.main-measure{grid-template-columns:1fr 1fr;gap:6px;padding:12px 0 22px}.primary-metric{grid-row:auto;padding:9px 3px}.metric-number{font-size:clamp(1.65rem,7vw,2.5rem)}.action-area{margin:0}.go-button{width:72px;height:72px}.fast-info{gap:6px;margin:0 14px 12px}.fast-row{padding:10px 14px;gap:10px}.fast-label{font-size:.62rem}.fast-row span:last-child{font-size:.7rem}}
+    @media(max-width:420px){.tier-card{grid-template-columns:54px minmax(0,1fr);gap:10px;padding:12px}.tier-emblem{width:50px;height:50px;font-size:2rem}.tier-title-row{gap:5px}.tier-title{font-size:.78rem}.tier-score{font-size:.58rem}.tier-description{font-size:.65rem}.tier-scale{gap:3px}.tier-step{min-height:22px}.quality-chip{min-height:68px}.measure-stage{min-height:290px;padding-inline:12px}.gauge-wrap{width:105vw;top:50%;transform:translate(-50%,-52%)}.gauge{opacity:.09}.gauge-readout{display:none}.metric-heading{font-size:.65rem}.metric-number{font-size:1.55rem}.metric-caption{font-size:.62rem}.go-button{width:64px;height:64px}.fast-info{gap:5px;margin:0 10px 10px}.fast-row{padding:9px 12px;gap:8px}.fast-label{font-size:.58rem}.fast-row span:last-child{font-size:.65rem}}
     /* Gauge en vivo: también visible en móvil mientras se mide. */
     .measure-chart{opacity:.1}
     @media(max-width:760px){.measure-chart{opacity:.08}.gauge{opacity:.22}.gauge-readout{display:block}.gauge-readout strong{font-size:clamp(1.6rem,8vw,2.2rem)}.gauge-center-label{font-size:.52rem}}
     @media(max-width:420px){.measure-chart{opacity:.07}.gauge{opacity:.18}.gauge-readout{display:block}.gauge-readout strong{font-size:1.45rem}}
+    .calc-panel{border:1px solid #ffffff12;border-radius:12px;margin:0 22px 18px;background:rgba(17,23,34,.6)}
+    .calc-summary{display:flex;align-items:center;gap:8px;padding:12px 18px;cursor:pointer;font:500 .72rem var(--mono);letter-spacing:.08em;text-transform:uppercase;color:#8492a6;border-bottom:1px solid #ffffff10}
+    .calc-summary i{color:#26c5dd}
+    .calc-body{padding:12px 18px 16px;font:400 .78rem/1.6 var(--sans);color:#a9b7c8}
+    .calc-item{margin:0 0 8px;padding-left:14px;border-left:2px solid #26c5dd33}
+    .calc-item strong{color:#26c5dd}
+    .calc-note{margin-top:10px;font-size:.68rem;color:#8492a6;border-top:1px solid #ffffff0f;padding-top:8px}
+    .fast-info{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:8px;margin:0 22px 16px}
+    .fast-row{display:flex;align-items:center;gap:14px;padding:13px 16px;background:#181a14;border:1px solid #343a2b;border-radius:3px}
+    .fast-label{color:#8492a6;font:500 .68rem var(--mono);letter-spacing:.06em;text-transform:uppercase}
+    .fast-row span:last-child{color:#eef4fb;font:500 .75rem var(--mono)}
+    #shareBtn{display:inline-flex;align-items:center;gap:8px;padding:10px 16px;border:1px solid #26c5dd;border-radius:8px;background:#26c5dd0c;color:#26c5dd;font:700 .75rem var(--mono);letter-spacing:.08em;cursor:pointer;margin-top:10px}
+    #shareBtn:hover{background:#26c5dd;color:#090c12}
+    #shareBtn i{font-size:.9rem}
   </style>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 </head>
 <body>
   <div class="shell">
@@ -97,10 +115,10 @@
           <div class="tier-copy"><div class="tier-title-row"><h2 class="tier-title" id="tierTitle">SIN CLASIFICAR</h2><span class="tier-score" id="tierScore">Ejecuta un análisis para descubrir el rango de tu conexión.</span></div><div class="tier-scale" id="tierScale" aria-label="Escala de tiers de conexión"></div></div>
         </div>
         <div class="quality-row" aria-label="Puntuación por actividad">
-          <div class="quality-chip" id="webCard"><i class="fa-solid fa-globe" aria-hidden="true"></i><div><strong>Navegación</strong><span class="score-detail" id="webHint">— / 100 · Sin analizar</span></div></div>
-          <div class="quality-chip" id="gameCard"><i class="fa-solid fa-gamepad" aria-hidden="true"></i><div><strong>Juegos online</strong><span class="score-detail" id="gameHint">— / 100 · Sin analizar</span></div></div>
-          <div class="quality-chip" id="videoCard"><i class="fa-solid fa-film" aria-hidden="true"></i><div><strong>Películas / streaming</strong><span class="score-detail" id="videoHint">— / 100 · Sin analizar</span></div></div>
-          <div class="quality-chip" id="callCard"><i class="fa-solid fa-video" aria-hidden="true"></i><div><strong>Videollamadas</strong><span class="score-detail" id="callHint">— / 100 · Sin analizar</span></div></div>
+          <div class="quality-chip" id="webCard"><i class="fa-solid fa-globe" aria-hidden="true"></i><div><div class="chip-top"><strong>Navegación</strong><span class="metric-help" tabindex="0" aria-label="Ayuda: puntuación navegación" data-tooltip="Descarga 50 % + Ping 50 %. Se premia una recepción rápida y respuesta baja al cargar páginas."><i class="fa-regular fa-circle-question" aria-hidden="true"></i></span></div><span class="score-detail" id="webHint">— / 100 · Sin analizar</span></div></div>
+          <div class="quality-chip" id="gameCard"><i class="fa-solid fa-gamepad" aria-hidden="true"></i><div><div class="chip-top"><strong>Juegos online</strong><span class="metric-help" tabindex="0" aria-label="Ayuda: puntuación juegos online" data-tooltip="Ping 70 % + Jitter 30 %. Lo que importa es la respuesta estable y baja, no el ancho de banda."><i class="fa-regular fa-circle-question" aria-hidden="true"></i></span></div><span class="score-detail" id="gameHint">— / 100 · Sin analizar</span></div></div>
+          <div class="quality-chip" id="videoCard"><i class="fa-solid fa-film" aria-hidden="true"></i><div><div class="chip-top"><strong>Películas / streaming</strong><span class="metric-help" tabindex="0" aria-label="Ayuda: puntuación streaming" data-tooltip="Descarga 100 %. Se valora la velocidad sostenida para reproducir sin interrupciones."><i class="fa-regular fa-circle-question" aria-hidden="true"></i></span></div><span class="score-detail" id="videoHint">— / 100 · Sin analizar</span></div></div>
+          <div class="quality-chip" id="callCard"><i class="fa-solid fa-video" aria-hidden="true"></i><div><div class="chip-top"><strong>Videollamadas</strong><span class="metric-help" tabindex="0" aria-label="Ayuda: puntuación videollamadas" data-tooltip="Descarga 20 % + Subida 35 % + Ping 30 % + Jitter 15 %. Equilibra enviar y recibir vídeo con respuesta baja."><i class="fa-regular fa-circle-question" aria-hidden="true"></i></span></div><span class="score-detail" id="callHint">— / 100 · Sin analizar</span></div></div>
         </div>
         <div class="measure-stage">
           <div class="measure-chart" aria-hidden="true"><canvas id="speedChart" aria-label="Gráfica de velocidad durante la prueba"></canvas><div class="measure-chart-meta"><span id="chartLabel">↓ Descarga en vivo</span><span id="chartScale">Mbps</span></div></div>
@@ -111,7 +129,7 @@
               <path class="gauge-value" id="gaugeValue" d="M30 175 A120 120 0 0 1 270 175" pathLength="377" />
               <g aria-hidden="true"><path class="gauge-tick" d="M31 168l10 2"/><path class="gauge-tick" d="M57 94l9 6"/><path class="gauge-tick" d="M108 54l4 10"/><path class="gauge-tick" d="M192 54l-4 10"/><path class="gauge-tick" d="M243 94l-9 6"/><path class="gauge-tick" d="M269 168l-10 2"/></g>
             </svg>
-            <div class="gauge-readout"><strong id="gaugeNumber">—</strong><span id="gaugeUnit">/100</span><div class="gauge-center-label" id="gaugeMode">PUNTUACIÓN</div></div>
+            <div class="gauge-readout"><strong id="gaugeNumber">—</strong><span id="gaugeUnit">/100</span></div>
           </div>
         <div class="main-measure">
           <div class="primary-metric">
@@ -129,7 +147,6 @@
           <button class="go-button" id="startButton" type="button" aria-label="Iniciar test de velocidad">GO</button>
           <div class="stage" id="testStage" aria-live="polite"></div>
           <div class="test-status" id="testStatus" aria-live="polite">Pulsa GO para analizar tu conexión</div>
-          <p class="test-advisory">Cada fase mide 10 s (tras un calentamiento descartado) o hasta 256 MiB para limitar el consumo. Tras el test, la gráfica sigue muestreando en segundo plano mientras la pestaña esté visible.</p>
         </div>
         </div>
         <div class="detail-grid" aria-label="Métricas de latencia y red">
@@ -143,6 +160,13 @@
           <div class="connection-card"><i class="fa-solid fa-wifi" aria-hidden="true"></i><div class="connection-copy"><span class="score-caption">Conexión / etiqueta personal</span><strong id="connectionName">Red activa · nombre no expuesto</strong><span id="connectionHint">Puedes asignar un alias local (por ejemplo, Wi-Fi casa o Ethernet).</span><input class="network-label" id="networkLabel" type="text" maxlength="80" placeholder="Wi-Fi casa / Ethernet (opcional)" autocomplete="off" aria-label="Etiqueta para identificar esta conexión"></div></div>
         </div>
         <p class="score-caption" style="padding:0 22px 18px;margin:0">BAREMO · 85–100 EXCELENTE · 70–84 BUENO · 45–69 REGULAR · 0–44 DEFICIENTE</p>
+        <div class="fast-info" id="fastInfo" aria-hidden="true">
+          <div class="fast-row"><span class="fast-label">Cliente</span><span id="fastClient">—</span></div>
+          <div class="fast-row"><span class="fast-label">Ubicación</span><span id="fastLocation">—</span></div>
+          <div class="fast-row"><span class="fast-label">Operador</span><span id="fastAsn">—</span></div>
+          <div class="fast-row"><span class="fast-label">Servidor</span><span id="fastServer">—</span></div>
+          <div class="fast-row"><span class="fast-label">Transferido</span><span id="fastTransferred">— MiB</span></div>
+        </div>
       </section>
       <section class="below-grid" aria-label="Gráfica e histórico de resultados">
         <article class="panel">
@@ -202,9 +226,10 @@
       const $ = (id) => document.getElementById(id);
       const els = {
         button: $('startButton'), status: $('testStatus'), stage: $('testStage'), light: $('statusLight'), server: $('serverLabel'),
-        down: $('downloadValue'), up: $('uploadValue'), gauge: $('gaugeValue'), gaugeNumber: $('gaugeNumber'), gaugeMode: $('gaugeMode'),
+        down: $('downloadValue'), up: $('uploadValue'), gauge: $('gaugeValue'), gaugeNumber: $('gaugeNumber'),
         ping: $('pingValue'), downLatency: $('downloadLatency'), upLatency: $('uploadLatency'), jitter: $('jitterValue'),
-        history: $('historyList'), historyCount: $('historyCount'), canvas: $('speedChart'), chartLabel: $('chartLabel'), chartScale: $('chartScale')
+        history: $('historyList'), historyCount: $('historyCount'), canvas: $('speedChart'), chartLabel: $('chartLabel'), chartScale: $('chartScale'),
+        fastClient: $('fastClient'), fastLocation: $('fastLocation'), fastAsn: $('fastAsn'), fastServer: $('fastServer'), fastTransferred: $('fastTransferred')
       };
       let chartPoints = [];
       let chartPeak = 10;
@@ -218,6 +243,8 @@
       let tierScanTimer = null;
       let tierRevealTimer = null;
       let edgeInfo = null;
+      let clientIp = null;
+      let resultLastDownload = null, resultLastUpload = null, resultLastPing = null, resultLastTier = null, resultLastScore = null;
       let uploadFiller = null;
       const liveSmooth = { download: null, upload: null };
       const gaugeState = { pct: 0, pctTarget: 0, display: null, displayTarget: null, kind: 'score', scoreColor: '#899889', tierLabel: 'PUNTUACIÓN', raf: 0 };
@@ -229,6 +256,28 @@
       let history = Array.isArray(initialHistory) ? initialHistory.filter((item) => item && (Number.isFinite(item.download) || Number.isFinite(item.upload))).slice(0, MAX_HISTORY) : [];
 
       function escapeHTML(value) { return String(value ?? '').replace(/[&<>"']/g, (char) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[char]); }
+      function ispNameFor(asn) {
+        if (!asn) return '—';
+        const map = { '3352': 'DIGI', '12357': 'Movistar', '12430': 'Orange', '20706': 'Vodafone', '15556': 'MásMóvil', '3303': 'Telefónica', '6730': 'Telefónica de España', '12479': 'Jazztel', '12338': 'R', '12389': 'Euskaltel', '15560': 'Virgin Telco', '50887': 'Digi Spain', '62165': 'Digi Mobil' };
+        const name = map[String(asn)];
+        return name ? `${name} (AS${asn})` : `AS${asn}`;
+      }
+      async function fetchLocationInfo(ip) {
+        if (!ip) return null;
+        try {
+          const response = await fetch(`https://ipwho.is/?ip=${encodeURIComponent(ip)}`, { cache: 'no-store', signal: AbortSignal.timeout(5000) });
+          if (!response.ok) return null;
+          const data = await response.json();
+          if (!data || !data.success) return null;
+          const city = data.city || '';
+          const region = data.region || '';
+          const country = data.country || '';
+          const isp = data.isp || '';
+          const location = [city, region, country].filter(Boolean).join(', ');
+          const operator = isp ? `${isp}` : '—';
+          return { location, operator };
+        } catch (_) { return null; }
+      }
       function scoreMetric(metric, value) {
         if (!Number.isFinite(value) || value < 0) return null;
         const points = SCORE_RULES[metric];
@@ -383,21 +432,17 @@
         if (gaugeState.display == null) {
           els.gaugeNumber.textContent = '—';
           $('gaugeUnit').textContent = '/100';
-          els.gaugeMode.textContent = gaugeState.tierLabel || 'PUNTUACIÓN';
           return;
         }
         if (gaugeState.kind === 'score') {
           els.gaugeNumber.textContent = String(Math.round(gaugeState.display));
           $('gaugeUnit').textContent = '/100';
-          els.gaugeMode.textContent = gaugeState.tierLabel || 'PUNTUACIÓN';
         } else if (gaugeState.kind === 'ping') {
           els.gaugeNumber.textContent = formatted(gaugeState.display, 0);
           $('gaugeUnit').textContent = 'ms';
-          els.gaugeMode.textContent = 'LATENCIA';
         } else {
           els.gaugeNumber.textContent = formatted(gaugeState.display, gaugeState.display < 10 ? 2 : 1);
           $('gaugeUnit').textContent = 'Mbps';
-          els.gaugeMode.textContent = gaugeState.kind === 'upload' ? 'SUBIDA' : 'DESCARGA';
         }
       }
       function gaugeTick() {
@@ -580,8 +625,10 @@
           const colo = response.headers.get('cf-meta-colo');
           const city = response.headers.get('cf-meta-city');
           const asn = response.headers.get('cf-meta-asn');
-          if (!colo && !city && !asn) return;
+          const ip = response.headers.get('cf-meta-ip');
+          if (!colo && !city && !asn && !ip) return;
           edgeInfo = { colo, city, asn, country: response.headers.get('cf-meta-country') };
+          clientIp = ip || null;
         } catch (_) { /* Cabeceras opcionales. */ }
       }
       function jitterFrom(values) {
@@ -613,6 +660,7 @@
             const sample = performance.now() - startedAt;
             times.push(sample);
             queueGauge('ping', sample);
+            if (i < 9) await wait(250);
           } catch (_) { /* Reintentamos con la siguiente muestra. */ }
           setStatus(`Midiendo respuesta… ${times.length}/10`, 'busy');
         }
@@ -860,6 +908,58 @@
         const scores = renderScores({ ...result, ping, jitter }, { interim: !reveal });
         if (reveal) revealTier(scores.overall, scores.coverage);
         renderNetworkInfo(result.connection);
+        if (reveal) renderFastInfo(result);
+      }
+      function renderFastInfo(result) {
+        const panel = $('fastInfo');
+        if (!panel) return;
+        panel.setAttribute('aria-hidden', 'false');
+        const edge = result.edge || edgeInfo || {};
+        if (els.fastClient) els.fastClient.textContent = clientIp || '—';
+        if (els.fastAsn) els.fastAsn.textContent = edge.asn ? ispNameFor(edge.asn) : '—';
+        if (els.fastServer) els.fastServer.textContent = edge.colo ? `Cloudflare · ${edge.city || edge.colo} (${edge.colo})` : '—';
+        if (els.fastTransferred) {
+          const total = (Number(result.bytesDownloaded || 0) + Number(result.bytesUploaded || 0));
+          els.fastTransferred.textContent = total > 0 ? `${(total / 1024 / 1024).toFixed(2)} MiB` : '— MiB';
+        }
+        // Fallback dinámico: si faltan ubicación/operador, consultar geolocalización IP
+        if ((!els.fastLocation || els.fastLocation.textContent === '—') && clientIp) {
+          fetchLocationInfo(clientIp).then((info) => {
+            if (info && els.fastLocation) els.fastLocation.textContent = info.location || '—';
+            if (info && els.fastAsn && (!edge.asn || els.fastAsn.textContent === '—')) els.fastAsn.textContent = info.operator || '—';
+          });
+        }
+      }
+      async function shareWhatsApp() {
+        const container = document.querySelector('.dashboard');
+        if (!container) return;
+        const btn = document.getElementById('shareBtn');
+        if (btn) { btn.disabled = true; btn.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin" aria-hidden="true"></i> Generando…'; }
+        try {
+          const canvas = await html2canvas(container, { backgroundColor: '#090c12', scale: 1.5, logging: false, allowTaint: true });
+          const blob = await new Promise((resolve) => canvas.toBlob(resolve, 'image/png'));
+          const url = URL.createObjectURL(blob);
+          const a = document.createElement('a');
+          a.href = url; a.download = `connection-lab-resultado-${new Date().toISOString().slice(0,10)}.png`;
+          a.click();
+          URL.revokeObjectURL(url);
+        } catch (error) {
+          console.error('html2canvas error:', error);
+          // Screenshot opcional: aún se puede compartir por texto
+        } finally {
+          if (btn) { btn.disabled = false; btn.innerHTML = '<i class="fa-brands fa-whatsapp" aria-hidden="true"></i> Compartir en WhatsApp'; }
+        }
+        const download = Number.isFinite(resultLastDownload) ? formatted(resultLastDownload) : '—';
+        const upload = Number.isFinite(resultLastUpload) ? formatted(resultLastUpload) : '—';
+        const ping = Number.isFinite(resultLastPing) ? formatted(resultLastPing, 0) : '—';
+        const tier = resultLastTier || '—';
+        const score = Number.isFinite(resultLastScore) ? resultLastScore : '—';
+        const text = encodeURIComponent(
+          'Resultado de Connection Lab:\n'
+          + `Descarga: ${download} Mbps · Subida: ${upload} Mbps · Ping: ${ping} ms · Tier: ${tier} · Puntuación: ${score}/100\n`
+          + `Web: https://rodrigosendinosanz.github.io/projects/connection-lab/`
+        );
+        window.open(`https://wa.me/?text=${text}`, '_blank');
       }
       function metricRow(label, value) { return `<tr><th scope="row">${escapeHTML(label)}</th><td>${escapeHTML(value)}</td></tr>`; }
       function openHistoryDetail(index) {
@@ -946,6 +1046,8 @@
             const ping = await measurePing();
             Object.assign(result, { ping: ping.ping, jitter: ping.jitter, pingP95: ping.p95, latencySamples: ping.samples });
             renderMeasurement(result, { reveal: false });
+            // Pausa breve para que se pueda leer la métrica de juegos online (ping + jitter)
+            await wait(1500);
           } catch (error) { result.errors.latency = error.message || String(error); }
           setStage('Descarga');
           setChartLabel('download');
@@ -985,13 +1087,19 @@
           result.tierName = finalTier?.name ?? null;
           result.tierColor = finalTier?.color ?? null;
           renderMeasurement(result, { reveal: true });
+          resultLastDownload = result.download;
+          resultLastUpload = result.upload;
+          resultLastPing = result.ping;
+          resultLastTier = result.tier;
+          resultLastScore = result.overallScore;
           history = [result, ...history].slice(0, MAX_HISTORY);
           const saved = safeStorage.write(history);
           renderHistory();
           setStage('');
           const partial = Object.keys(result.errors).length > 0;
           const capped = result.downloadCapped || result.uploadCapped;
-          setStatus(saved ? partial ? 'Prueba parcial · abre el registro para ver los datos e incidencias' : capped ? 'Análisis completo · alcanzó el límite de datos configurado' : 'Análisis completo · fases sostenidas y guardado' : 'Análisis completado · el navegador no permitió guardar el historial', saved ? partial ? 'error' : 'ready' : 'error');
+          els.status.innerHTML = '<button id="shareBtn" type="button" aria-label="Compartir resultado en WhatsApp"><i class="fa-brands fa-whatsapp" aria-hidden="true"></i> Compartir en WhatsApp</button>';
+          document.getElementById('shareBtn')?.addEventListener('click', shareWhatsApp, { once: true });
         } catch (error) {
           console.error('Error en test de conexión:', error);
           resetGauge('SIN CLASIFICAR');
