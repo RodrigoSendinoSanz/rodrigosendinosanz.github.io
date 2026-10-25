@@ -1,0 +1,1 @@
+Velocidad real, latencia y jitter, con un tier de D a SS y puntuación por actividad.

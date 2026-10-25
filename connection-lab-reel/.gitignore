@@ -1,0 +1,11 @@
+# Artefactos de render y estado interno de HyperFrames
+renders/
+.hyperframes/
+node_modules/
+
+# Locks de estado (cambian en cada operación)
+render-outputs-lock
+video-state-lock
+
+# Salidas de transcripción (regenerables)
+assets/transcript.json

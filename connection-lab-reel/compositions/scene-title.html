@@ -1,0 +1,96 @@
+<template>
+  <style>
+    #root {
+      position: absolute;
+      inset: 0;
+    }
+    .s1 {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 300px 80px 700px;
+    }
+    .s1-eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 16px;
+      color: var(--cyan);
+      font: 500 28px var(--mono);
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      margin-bottom: 48px;
+    }
+    .s1-dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      background: var(--green);
+      box-shadow: 0 0 28px var(--green);
+    }
+    .s1-title {
+      font-size: 158px;
+      font-weight: 700;
+      line-height: 0.94;
+      letter-spacing: -0.055em;
+      text-align: center;
+    }
+    .s1-title span {
+      display: block;
+      color: var(--cyan);
+    }
+    .s1-sub {
+      margin-top: 52px;
+      max-width: 860px;
+      text-align: center;
+      color: var(--muted);
+      font-size: 38px;
+      line-height: 1.5;
+    }
+  </style>
+
+  <div id="root" data-composition-id="scene-title" data-width="1080" data-height="1920">
+    <div class="s1">
+      <div class="s1-eyebrow" id="s1-eyebrow">
+        <span class="s1-dot"></span> Test de velocidad
+      </div>
+      <h1 class="s1-title" id="s1-title">Connection<span>Lab</span></h1>
+      <p class="s1-sub" id="s1-sub">
+        Mide tu internet más allá de los megas y los gigas.
+      </p>
+    </div>
+  </div>
+
+  <script>
+    const tl = gsap.timeline({ paused: true });
+
+    // Entrada: la palabra entra justo cuando la locución la pronuncia.
+    tl.fromTo(
+      "#s1-eyebrow",
+      { opacity: 0, y: -34 },
+      { opacity: 1, y: 0, duration: 0.6, ease: "power3.out" },
+      0.05,
+    )
+      .fromTo(
+        "#s1-title",
+        { opacity: 0, scale: 0.35 },
+        { opacity: 1, scale: 1, duration: 1.25, ease: "elastic.out(1, 0.6)" },
+        0.3,
+      )
+      .fromTo(
+        "#s1-sub",
+        { opacity: 0, y: 44 },
+        { opacity: 1, y: 0, duration: 0.7, ease: "power3.out" },
+        1.9,
+      )
+      // Salida limpia antes del corte de escena (la ventana cierra en 4.0).
+      .to("#s1-eyebrow", { opacity: 0, duration: 0.4, ease: "power2.in" }, 3.5)
+      .to("#s1-title", { opacity: 0, scale: 1.06, duration: 0.4, ease: "power2.in" }, 3.5)
+      .to("#s1-sub", { opacity: 0, duration: 0.4, ease: "power2.in" }, 3.5);
+
+    window.__timelines["scene-title"] = tl;
+    tl.seek(0);
+  </script>
+</template>

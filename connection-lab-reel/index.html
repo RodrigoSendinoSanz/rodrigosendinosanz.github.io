@@ -1,0 +1,215 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <style>
+      @font-face {
+        font-family: "Space Grotesk";
+        font-style: normal;
+        font-weight: 300 700;
+        font-display: block;
+        src: url("assets/fonts/SpaceGrotesk-latin.woff2") format("woff2");
+      }
+      @font-face {
+        font-family: "VT323";
+        font-style: normal;
+        font-weight: 400;
+        font-display: block;
+        src: url("assets/fonts/VT323-latin.woff2") format("woff2");
+      }
+
+      :root {
+        color-scheme: dark;
+        --bg: #090c12;
+        --panel: #111722;
+        --panel-2: #151d29;
+        --line: #253040;
+        --text: #eef4fb;
+        --muted: #8492a6;
+        --cyan: #26c5dd;
+        --blue: #4b8dff;
+        --green: #46dfad;
+        --violet: #a88bff;
+        --yellow: #f5c451;
+        --red: #ff7885;
+        --mono: "JetBrains Mono", monospace;
+        --sans: "Space Grotesk", sans-serif;
+      }
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      html,
+      body {
+        width: 1080px;
+        height: 1920px;
+        overflow: hidden;
+        background: var(--bg);
+      }
+
+      #root {
+        position: absolute;
+        inset: 0;
+        overflow: hidden;
+        color: var(--text);
+        font-family: var(--sans);
+      }
+
+      /* Lienzo: fondo + rejilla técnica, coherente con la estética "lab" del original */
+      #root-bg {
+        position: absolute;
+        inset: 0;
+        background:
+          radial-gradient(ellipse at 50% -25%, #152a3a 0, transparent 52%),
+          var(--bg);
+      }
+
+      #root-grid {
+        position: absolute;
+        inset: 0;
+        background-image:
+          linear-gradient(#ffffff08 1px, transparent 1px),
+          linear-gradient(90deg, #ffffff08 1px, transparent 1px);
+        background-size: 90px 90px;
+        -webkit-mask-image: radial-gradient(ellipse at 50% 40%, #000 20%, transparent 75%);
+        mask-image: radial-gradient(ellipse at 50% 40%, #000 20%, transparent 75%);
+        opacity: 0.5;
+      }
+
+      #root-mark {
+        position: absolute;
+        top: 210px;
+        left: 0;
+        right: 0;
+        text-align: center;
+        color: var(--muted);
+        font: 500 24px var(--mono);
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        opacity: 0.55;
+      }
+
+      /* Hosts de escena */
+      #scene-title,
+      #scene-dashboard,
+      #scene-cta {
+        position: absolute;
+        inset: 0;
+      }
+
+      /* Pista de audio de la locución */
+      .vo {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 1px;
+        height: 1px;
+        opacity: 0;
+      }
+    </style>
+  </head>
+  <body>
+    <div
+      id="root"
+      data-composition-id="main"
+      data-start="0"
+      data-duration="15"
+      data-width="1080"
+      data-height="1920"
+    >
+      <div id="root-bg"></div>
+      <div id="root-grid"></div>
+      <div id="root-mark" data-layout-ignore>rodrigosendinosanz · connection lab</div>
+
+      <!-- ESCENA 1 · 0–4 s -->
+      <div
+        id="scene-title"
+        data-composition-id="scene-title"
+        data-composition-src="compositions/scene-title.html"
+        data-start="0"
+        data-duration="4"
+        data-track-index="1"
+        data-width="1080"
+        data-height="1920"
+      ></div>
+
+      <!-- ESCENA 2 · 4–10 s -->
+      <div
+        id="scene-dashboard"
+        data-composition-id="scene-dashboard"
+        data-composition-src="compositions/scene-dashboard.html"
+        data-start="4"
+        data-duration="6"
+        data-track-index="2"
+        data-width="1080"
+        data-height="1920"
+      ></div>
+
+      <!-- ESCENA 3 · 10–15 s -->
+      <div
+        id="scene-cta"
+        data-composition-id="scene-cta"
+        data-composition-src="compositions/scene-cta.html"
+        data-start="10"
+        data-duration="5"
+        data-track-index="3"
+        data-width="1080"
+        data-height="1920"
+      ></div>
+
+      <!-- SUBTÍTULOS: una sola pista de captions para todo el vídeo -->
+      <div
+        id="scene-captions"
+        data-composition-id="scene-captions"
+        data-composition-src="compositions/scene-captions.html"
+        data-start="0"
+        data-duration="15"
+        data-track-index="4"
+        data-track-kind="captions"
+        data-width="1080"
+        data-height="1920"
+      ></div>
+
+      <!-- LOCUCIÓN: una pista por frase, alineada a su ventana de escena -->
+      <audio
+        id="vo1"
+        class="vo clip"
+        src="assets/line1.wav"
+        data-start="0.35"
+        data-duration="3.392"
+        data-track-index="4"
+        data-volume="1"
+      ></audio>
+      <audio
+        id="vo2"
+        class="vo clip"
+        src="assets/line2.wav"
+        data-start="4.3"
+        data-duration="4.864"
+        data-track-index="5"
+        data-volume="1"
+      ></audio>
+      <audio
+        id="vo3"
+        class="vo clip"
+        src="assets/line3.wav"
+        data-start="10.4"
+        data-duration="2.752"
+        data-track-index="6"
+        data-volume="1"
+      ></audio>
+    </div>
+
+    <script>
+      // El raíz solo coordina: cada escena se anima desde su propio archivo.
+      const tl = gsap.timeline({ paused: true });
+      window.__timelines["main"] = tl;
+      tl.seek(0);
+    </script>
+  </body>
+</html>

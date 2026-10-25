@@ -1,0 +1,86 @@
+[
+  {
+    "id": "w0",
+    "text": "Velocidad",
+    "start": 0.08,
+    "end": 0.56
+  },
+  {
+    "id": "w1",
+    "text": "real,",
+    "start": 0.56,
+    "end": 0.96
+  },
+  {
+    "id": "w2",
+    "text": "latencia",
+    "start": 0.96,
+    "end": 1.44
+  },
+  {
+    "id": "w3",
+    "text": "y",
+    "start": 1.44,
+    "end": 1.6
+  },
+  {
+    "id": "w4",
+    "text": "hitter,",
+    "start": 1.6,
+    "end": 2.24
+  },
+  {
+    "id": "w5",
+    "text": "con",
+    "start": 2.24,
+    "end": 2.32
+  },
+  {
+    "id": "w6",
+    "text": "un",
+    "start": 2.32,
+    "end": 2.48
+  },
+  {
+    "id": "w7",
+    "text": "tier",
+    "start": 2.48,
+    "end": 2.72
+  },
+  {
+    "id": "w8",
+    "text": "de",
+    "start": 2.72,
+    "end": 2.8
+  },
+  {
+    "id": "w9",
+    "text": "DAS",
+    "start": 2.8,
+    "end": 3.2
+  },
+  {
+    "id": "w10",
+    "text": "y",
+    "start": 3.52,
+    "end": 3.68
+  },
+  {
+    "id": "w11",
+    "text": "puntuación",
+    "start": 3.68,
+    "end": 4.16
+  },
+  {
+    "id": "w12",
+    "text": "por",
+    "start": 4.16,
+    "end": 4.4
+  },
+  {
+    "id": "w13",
+    "text": "actividad.",
+    "start": 4.4,
+    "end": 4.8
+  }
+]

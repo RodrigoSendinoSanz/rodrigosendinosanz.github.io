@@ -1,0 +1,467 @@
+<template>
+  <style>
+    #root {
+      position: absolute;
+      inset: 0;
+    }
+    .s2 {
+      position: absolute;
+      inset: 0;
+    }
+    .s2-dash {
+      position: absolute;
+      top: 200px;
+      left: 80px;
+      width: 920px;
+      border: 1px solid #ffffff12;
+      border-radius: 36px;
+      background: linear-gradient(145deg, #111722f5, #0e141df5);
+      box-shadow: 0 40px 120px #0008;
+      padding: 40px;
+    }
+    .s2-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-bottom: 24px;
+      margin-bottom: 24px;
+      border-bottom: 1px solid #ffffff10;
+      font: 500 22px var(--mono);
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+    .s2-head .left {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      color: #a9b7c8;
+    }
+    .s2-head .right {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      color: var(--muted);
+      font-size: 19px;
+      text-transform: none;
+      letter-spacing: 0;
+    }
+    .s2-light {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: var(--green);
+      box-shadow: 0 0 16px var(--green);
+    }
+
+    .s2-gaugerow {
+      display: flex;
+      align-items: center;
+      gap: 36px;
+      margin-bottom: 26px;
+    }
+    .s2-gauge {
+      position: relative;
+      width: 300px;
+      height: 196px;
+      flex: none;
+    }
+    .s2-gauge svg {
+      width: 300px;
+      height: 196px;
+      overflow: visible;
+    }
+    .s2-track {
+      fill: none;
+      stroke: #ffffff14;
+      stroke-width: 16;
+      stroke-linecap: round;
+    }
+    .s2-arc {
+      fill: none;
+      stroke: var(--green);
+      stroke-width: 16;
+      stroke-linecap: round;
+      stroke-dasharray: 377;
+      stroke-dashoffset: 377;
+    }
+    .s2-readout {
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      text-align: center;
+    }
+    .s2-readout strong {
+      font: 700 76px var(--mono);
+      line-height: 1;
+    }
+    .s2-readout span {
+      display: block;
+      color: var(--muted);
+      font: 500 22px var(--mono);
+      margin-top: 6px;
+    }
+
+    .s2-tierblock {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+    .s2-emblem {
+      width: 130px;
+      height: 130px;
+      display: grid;
+      place-items: center;
+      border: 2px solid var(--green);
+      border-radius: 50%;
+      color: var(--green);
+      font: 400 92px "VT323", monospace;
+      box-shadow: 0 0 46px rgba(70, 223, 173, 0.35);
+      margin: 0 auto;
+    }
+    .s2-tiername {
+      text-align: center;
+      font-size: 34px;
+      font-weight: 600;
+    }
+    .s2-tierscore {
+      text-align: center;
+      color: var(--muted);
+      font: 500 22px var(--mono);
+    }
+
+    .s2-speeds {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 22px;
+      margin-bottom: 26px;
+    }
+    .s2-card {
+      border: 1px solid #ffffff12;
+      border-radius: 24px;
+      background: #ffffff06;
+      padding: 24px;
+    }
+    .s2-card .lbl {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      color: var(--muted);
+      font: 500 20px var(--mono);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    .s2-card.down .lbl svg {
+      stroke: var(--cyan);
+    }
+    .s2-card.up .lbl svg {
+      stroke: var(--blue);
+    }
+    .s2-card .lbl svg {
+      width: 20px;
+      height: 20px;
+      fill: none;
+      stroke-width: 2.4;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+    .s2-val {
+      margin-top: 12px;
+      font: 700 66px var(--mono);
+      line-height: 1;
+      letter-spacing: -0.02em;
+    }
+    .s2-val small {
+      font-size: 28px;
+      font-weight: 500;
+      color: var(--muted);
+      margin-left: 8px;
+    }
+    .s2-card.down .s2-val {
+      color: var(--cyan);
+    }
+    .s2-card.up .s2-val {
+      color: var(--blue);
+    }
+
+    .s2-chart {
+      position: relative;
+      height: 148px;
+      margin-bottom: 24px;
+      border: 1px solid #ffffff12;
+      border-radius: 24px;
+      background: #ffffff05;
+      padding: 16px 22px;
+    }
+    .s2-chart svg {
+      width: 100%;
+      height: 100%;
+      overflow: visible;
+    }
+    .s2-line {
+      fill: none;
+      stroke: var(--green);
+      stroke-width: 5;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+    .s2-area {
+      fill: url(#s2-fill);
+      opacity: 0;
+    }
+    .s2-tag {
+      position: absolute;
+      top: 20px;
+      right: 26px;
+      color: var(--muted);
+      font: 500 18px var(--mono);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+
+    .s2-chips {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+    .s2-chip {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      border: 1px solid #ffffff12;
+      border-radius: 20px;
+      background: #ffffff06;
+      padding: 18px 20px;
+    }
+    .s2-chip svg {
+      width: 28px;
+      height: 28px;
+      flex: none;
+      fill: none;
+      stroke: var(--muted);
+      stroke-width: 1.9;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+    .s2-chip .meta {
+      flex: 1;
+      min-width: 0;
+    }
+    .s2-chip .nm {
+      font-size: 22px;
+      font-weight: 600;
+    }
+    .s2-chip .bar {
+      height: 8px;
+      border-radius: 6px;
+      background: #ffffff10;
+      margin-top: 10px;
+      overflow: hidden;
+    }
+    .s2-chip .bar i {
+      display: block;
+      height: 100%;
+      width: 0;
+      border-radius: 6px;
+      background: var(--green);
+    }
+    .s2-chip .sc {
+      font: 700 26px var(--mono);
+      color: var(--text);
+    }
+  </style>
+
+  <div id="root" data-composition-id="scene-dashboard" data-width="1080" data-height="1920">
+    <div class="s2">
+      <div class="s2-dash" id="s2-dash">
+        <div class="s2-head">
+          <div class="left">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#26c5dd"
+              stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 14l4-4" /><path d="M4.5 18a9 9 0 1 1 15 0" />
+            </svg>
+            Resultado
+          </div>
+          <div class="right"><span class="s2-light"></span> Listo para medir</div>
+        </div>
+
+        <div class="s2-gaugerow">
+          <div class="s2-gauge">
+            <svg viewBox="0 0 300 205">
+              <path class="s2-track" d="M30 175 A120 120 0 0 1 270 175"></path>
+              <path class="s2-arc" id="s2-arc" d="M30 175 A120 120 0 0 1 270 175"></path>
+            </svg>
+            <div class="s2-readout">
+              <strong id="s2-score">0</strong><span>/100</span>
+            </div>
+          </div>
+          <div class="s2-tierblock">
+            <div class="s2-emblem" id="s2-emblem">S</div>
+            <div class="s2-tiername">Conexión élite</div>
+            <div class="s2-tierscore"><span id="s2-tscore">0</span>/100 · Excelente</div>
+          </div>
+        </div>
+
+        <div class="s2-speeds">
+          <div class="s2-card down">
+            <div class="lbl">
+              <svg viewBox="0 0 24 24"><path d="M12 4v14" /><path d="M6 12l6 6 6-6" /></svg>
+              Descarga
+            </div>
+            <div class="s2-val"><span id="s2-down">0.00</span><small>Gbps</small></div>
+          </div>
+          <div class="s2-card up">
+            <div class="lbl">
+              <svg viewBox="0 0 24 24"><path d="M12 20V6" /><path d="M6 12l6-6 6 6" /></svg>
+              Subida
+            </div>
+            <div class="s2-val"><span id="s2-up">0.00</span><small>Gbps</small></div>
+          </div>
+        </div>
+
+        <div class="s2-chart">
+          <span class="s2-tag">descarga en vivo</span>
+          <svg viewBox="0 0 800 160" preserveAspectRatio="none">
+            <defs>
+              <linearGradient id="s2-fill" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0" stop-color="#46dfad" stop-opacity="0.45"></stop>
+                <stop offset="1" stop-color="#46dfad" stop-opacity="0"></stop>
+              </linearGradient>
+            </defs>
+            <path class="s2-area" id="s2-area"
+              d="M0 150 L0 120 L90 96 L180 104 L270 62 L360 74 L450 40 L540 52 L630 28 L720 36 L800 20 L800 150 Z"></path>
+            <path class="s2-line" id="s2-chartline" pathLength="1"
+              d="M0 120 L90 96 L180 104 L270 62 L360 74 L450 40 L540 52 L630 28 L720 36 L800 20"></path>
+          </svg>
+        </div>
+
+        <div class="s2-chips">
+          <div class="s2-chip">
+            <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" /><path d="M3 12h18" /><path d="M12 3a15 15 0 0 1 0 18a15 15 0 0 1 0-18" /></svg>
+            <div class="meta">
+              <div class="nm">Navegación</div>
+              <div class="bar"><i data-w="92"></i></div>
+            </div>
+            <div class="sc" data-v="92">0</div>
+          </div>
+          <div class="s2-chip">
+            <svg viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="10" rx="5" /><path d="M7 10v4" /><path d="M5 12h4" /><circle cx="16" cy="11" r="1" /><circle cx="18.5" cy="13.5" r="1" /></svg>
+            <div class="meta">
+              <div class="nm">Juegos online</div>
+              <div class="bar"><i data-w="77" style="background: var(--yellow)"></i></div>
+            </div>
+            <div class="sc" data-v="77">0</div>
+          </div>
+          <div class="s2-chip">
+            <svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="2" /><path d="M3 9h18" /><path d="M3 15h18" /><path d="M8 4v16" /><path d="M16 4v16" /></svg>
+            <div class="meta">
+              <div class="nm">Streaming</div>
+              <div class="bar"><i data-w="100"></i></div>
+            </div>
+            <div class="sc" data-v="100">0</div>
+          </div>
+          <div class="s2-chip">
+            <svg viewBox="0 0 24 24"><rect x="2" y="6" width="14" height="12" rx="2" /><path d="M16 10l6-3v10l-6-3" /></svg>
+            <div class="meta">
+              <div class="nm">Videollamadas</div>
+              <div class="bar"><i data-w="89"></i></div>
+            </div>
+            <div class="sc" data-v="89">0</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const tl = gsap.timeline({ paused: true });
+
+    tl.fromTo(
+      "#s2-dash",
+      { opacity: 0, y: 90, scale: 0.96 },
+      { opacity: 1, y: 0, scale: 1, duration: 0.8, ease: "power3.out" },
+      0,
+    )
+      // Arco del gauge y contadores, en paralelo.
+      .fromTo(
+        "#s2-arc",
+        { strokeDashoffset: 377 },
+        { strokeDashoffset: 377 * (1 - 89 / 100), duration: 1.8, ease: "power2.out" },
+        0.5,
+      )
+      .fromTo(
+        "#s2-score",
+        { innerText: 0 },
+        { innerText: 89, duration: 1.8, snap: { innerText: 1 }, ease: "power2.out" },
+        0.5,
+      )
+      .fromTo(
+        "#s2-tscore",
+        { innerText: 0 },
+        { innerText: 89, duration: 1.8, snap: { innerText: 1 }, ease: "power2.out" },
+        0.5,
+      )
+      .fromTo(
+        "#s2-emblem",
+        { opacity: 0, scale: 0 },
+        { opacity: 1, scale: 1, duration: 1, ease: "elastic.out(1, 0.5)" },
+        1,
+      )
+      .fromTo(
+        "#s2-down",
+        { innerText: 0 },
+        { innerText: 1.9, duration: 1.6, snap: { innerText: 0.01 }, ease: "power2.out" },
+        1.3,
+      )
+      .fromTo(
+        "#s2-up",
+        { innerText: 0 },
+        { innerText: 1.12, duration: 1.6, snap: { innerText: 0.01 }, ease: "power2.out" },
+        1.5,
+      )
+      // La línea del gráfico se traza con stroke-dashoffset (pathLength=1).
+      .fromTo(
+        "#s2-chartline",
+        { strokeDasharray: 1, strokeDashoffset: 1 },
+        { strokeDashoffset: 0, duration: 1.9, ease: "power2.out" },
+        1.8,
+      )
+      .fromTo("#s2-area", { opacity: 0 }, { opacity: 1, duration: 0.8 }, 1.8);
+
+    // Chips de actividad: entrada y conteo escalonados.
+    document.querySelectorAll(".s2-chip").forEach(function (chip, i) {
+      var at = 2.4 + i * 0.22;
+      var val = chip.querySelector(".sc");
+      var bar = chip.querySelector(".bar i");
+      tl.fromTo(
+        chip,
+        { opacity: 0, y: 30 },
+        { opacity: 1, y: 0, duration: 0.5, ease: "power2.out" },
+        at,
+      )
+        .fromTo(
+          val,
+          { innerText: 0 },
+          {
+            innerText: Number(val.dataset.v),
+            duration: 0.8,
+            snap: { innerText: 1 },
+            ease: "power2.out",
+          },
+          at,
+        )
+        .fromTo(
+          bar,
+          { width: "0%" },
+          { width: bar.dataset.w + "%", duration: 0.9, ease: "power2.out" },
+          at + 0.1,
+        );
+    });
+
+    tl.to("#s2-dash", { opacity: 0, duration: 0.4, ease: "power2.in" }, 5.6);
+
+    window.__timelines["scene-dashboard"] = tl;
+    tl.seek(0);
+  </script>
+</template>
